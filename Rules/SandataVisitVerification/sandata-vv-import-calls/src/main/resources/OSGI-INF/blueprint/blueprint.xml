@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+
+    <cm:property-placeholder id="importApp.blueprint.placeholder" persistent-id="com.sandata.lab.rules.vv.imports" update-strategy="reload"> 
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+            <cm:property name="activeMQ.username" value="admin" />
+            <cm:property name="activeMQ.password" value="admin" />
+            <cm:property name="activeMQ.concurrentConsumers" value="100" />
+            <cm:property name="rest.concurrentConsumers" value="20" />
+            <cm:property name="db.name" value="stxdev" />
+            <cm:property name="db.server" value="stxdevdb.sandata.com" />
+            <cm:property name="db.port" value="1526" />
+            <cm:property name="db.user" value="inbox" />
+            <cm:property name="db.password" value="santrax" />
+            <cm:property name="db.initial.pool.size" value="5" />
+            <cm:property name="db.min.pool.size" value="5" />
+            <cm:property name="db.max.pool.size" value="20" />
+            <cm:property name="db.max.statement.size" value="20" />
+            <cm:property name="db.inactive.timeout.seconds" value="60" />
+
+            <cm:property name="evv.group.keys" value="250;-4" /> <!--dev group "250;-4; Qa group 251;252" */20 * * * * ?-->
+            <cm:property name="import.calls.chron" value="0 0/5 * * * ?" />
+            <cm:property name="numberOfCallsToProcess" value="2000" />
+            <cm:property name="evv.callExportKey" value="118" />
+            <cm:property name="evv.callstore.path" value="target/data/mapdb/" />
+            <cm:property name="storeExpireSeconds" value="600" />
+            
+            <cm:property name="thread.pool.size" value="20" />
+            <cm:property name="thread.pool.max.size" value="100" />
+            <cm:property name="thread.pool.max.queue.size" value="-1" />
+            <cm:property name="webservice.url" value="/calls" />
+            <cm:property name="exchange.exception.redelivery.delay" value="1000" />
+            <cm:property name="exchange.exception.maximum.redeliveries" value="1" />
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+
+
+    <bean id="sandataOracleConnectionBean" class="com.sandata.lab.common.oracle.db.connection.SandataOracleConnection" init-method="initConnection" depends-on="importCallContext">
+        <property name="databaseName" value="${db.name}" />
+        <property name="serverName" value="${db.server}" />
+        <property name="portNumber" value="${db.port}" />
+        <property name="user" value="${db.user}" />
+        <property name="password" value="${db.password}" />
+        <property name="initialPoolSize" value="${db.initial.pool.size}" />
+        <property name="minPoolSize" value="${db.min.pool.size}" />
+        <property name="maxPoolSize" value="${db.max.pool.size}" />
+        <property name="maxStatementSize" value="${db.max.statement.size}" />
+        <property name="inactiveTimeoutSeconds" value="${db.inactive.timeout.seconds}" />
+    </bean>
+
+
+    <bean id="evvDataServiceApi" class="com.sandata.lab.rules.vv.imports.data.impl.EVVOracleDataService" depends-on="sandataOracleConnectionBean">
+        <property name="sandataOracleConnection" ref="sandataOracleConnectionBean" />
+        <property name="evvCallTransformer" ref="evvDataTransformer" />
+    </bean>
+
+    <bean id="dateTimeConverter" class="com.sandata.lab.rules.vv.imports.utils.date.DateTimeConverter"/>
+
+    <bean id="visitEventService" class="com.sandata.lab.rules.vv.imports.data.impl.VisitEventDataService" depends-on="evvDataServiceApi evvRedisCallStore">
+        <property name="evvOracleDataService" ref="evvDataServiceApi" />
+        <property name="evvCallTransformer" ref="evvDataTransformer" />
+        <!-- for REDIS -->
+        <property name="evvCallStore" ref="evvRedisCallStore" />
+        <!-- for memory cache -->
+        <!-- <property name="evvCallStore" ref="evvMapDBCallStore" /> -->
+    </bean>
+    
+
+    <bean id="evvDataTransformer" class="com.sandata.lab.rules.vv.imports.data.transformers.EVVCallTransformer">
+        <property name="dateTimeConverter" ref="dateTimeConverter" />
+    </bean>
+
+   <!-- <bean id="evvCallStore" class="com.sandata.lab.rules.vv.imports.data.impl.EVVMapDBCallStoreStore"/> -->
+
+    <!-- Redis Template -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate" depends-on="importCallContext" init-method="afterPropertiesSet">
+        <property name="connectionFactory">
+            <reference
+                    interface="com.sandata.lab.redis.connection.SandataRedisConnectionFactory"
+                    availability="mandatory" />
+        </property>
+    </bean>
+
+    <!-- Sandata Redis Cache Service -->
+    <bean id="sandataRedisCacheService" class="com.sandata.lab.redis.services.impl.SandataRedisCacheService" depends-on="redisTemplate">
+        <argument value="SandataVVImportCalls"/>
+        <argument value="600"/>
+        <argument ref="redisTemplate"/>
+    </bean>
+
+    <!-- EVV Redis Call Store -->
+    <bean id="evvRedisCallStore" class="com.sandata.lab.rules.vv.imports.data.impl.EVVRedisCallStore" depends-on="sandataRedisCacheService">
+        <property name="sandataRedisService" ref="sandataRedisCacheService"/>
+    </bean>
+
+    <bean id="mapDBCacheHandler" class="com.sandata.lab.rules.vv.imports.data.impl.MapDBCacheHandler" />
+    <!-- memory cache -->
+    <bean id="evvMapDBCallStore" class="com.sandata.lab.rules.vv.imports.data.impl.EVVMapDBCallStore" >
+        <property name="mapDBCacheHandler" ref="mapDBCacheHandler" />
+    </bean>
+
+       
+    <bean id="appContext" class="com.sandata.lab.rules.vv.imports.app.AppContext"
+          factory-method="initCamelContext" depends-on="importCallContext">
+        <argument ref="importCallContext" />
+    </bean>
+
+    <!-- connect to the local ActiveMQ broker -->
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="brokerURL" value="${activeMQ.uri}" />
+        <property name="userName" value="${activeMQ.username}" />
+        <property name="password" value="${activeMQ.password}" />
+        <property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+    </bean>
+
+
+    <bean id="traceFormatter" class="org.apache.camel.processor.interceptor.DefaultTraceFormatter">
+        <property name="showBody" value="false"/>
+        <property name="showHeaders" value="false"/>
+    </bean>
+    
+    <bean id="formatTransformer" class="com.sandata.lab.common.utils.data.transformer.FormatTransformer" depends-on="importCallContext" />
+    
+     <bean id="gsonProvider" class="com.sandata.lab.rules.vv.imports.data.transformers.CustomGSONProvider"/>
+     <bean id="authenticationInterceptor" class="org.apache.cxf.jaxrs.security.JAASAuthenticationFilter">
+        <!-- Name of the JAAS Context -->
+        <property name="contextName" value="karaf"/>
+    </bean>
+    
+     <cxf:rsServer id="rsServer" address="${webservice.url}"
+                  serviceClass="com.sandata.lab.rules.vv.imports.services.RestfulService"
+                  loggingFeatureEnabled="true"
+                  loggingSizeLimit="20">
+           
+            <cxf:providers>
+                 <ref component-id="authenticationInterceptor"/>
+                 <ref component-id="gsonProvider"/>
+        </cxf:providers>
+    </cxf:rsServer>
+
+    <camelContext id="importCallContext" trace="true" streamCache="true" useBlueprintPropertyResolver="true" xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- using Camel properties component and refer to the OSGI-INF.blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <!-- <propertyPlaceholder id="properties" location="OSGI-INF.blueprint:dhs.OSGI-INF.blueprint.placeholder"/>-->
+        <propertyPlaceholder id="properties" location="blueprint:importApp.blueprint.placeholder"/>
+        <package>com.sandata.lab.rules.vv.imports.routes</package>
+        <threadPoolProfile id="importCallContextThreadPool" poolSize="{{thread.pool.size}}" maxPoolSize="{{thread.pool.max.size}}" maxQueueSize="{{thread.pool.max.queue.size}}"/>
+    </camelContext>
+</blueprint>

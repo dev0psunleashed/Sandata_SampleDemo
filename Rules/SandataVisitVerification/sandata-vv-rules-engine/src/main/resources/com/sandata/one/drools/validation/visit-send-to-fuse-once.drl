@@ -1,0 +1,16 @@
+//created on: Jan 24, 2017
+package com.sandata.one.drools.validation
+
+import function com.sandata.one.drools.utils.CommonUtils.helper;
+
+dialect  "mvel"
+
+rule "Run all the time to control and send to FUSE once."
+
+    salience 10
+    when
+
+    then
+		helper(drools);
+end;
+

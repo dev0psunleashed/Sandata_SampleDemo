@@ -1,0 +1,113 @@
+package com.sandata.lab.rules.staff;
+
+import com.sandata.lab.rules.call.model.StaffFact;
+import com.sandata.lab.rules.call.model.OraStaffFact;
+import com.sandata.lab.rules.call.model.State;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+dialect "java"
+//global com.sandata.lab.rules.calls.model.CallPreferences callPreferences;
+
+function boolean staffXOfNine(int x, String staffIdFingerd, String staffId2) {
+	boolean matched = false;
+	int pos = 10 - x;
+	for(int i = 0; i < pos; i++) {
+		if(staffId2.indexOf(staffIdFingerd.substring(i,i+x)) != -1 ) {
+			matched = true;
+			break;
+		}
+	}
+	return matched;
+}
+
+rule "cep-engine-staff-9-of-9"
+    agenda-group "staff-matching"
+    salience 100
+    when
+        $dbStaff : OraStaffFact( state == State.AGG_INSERTED_FROM_RESPONSE)
+        $staff : StaffFact( state == State.LOADED, staffIdFingered.equalsIgnoreCase($dbStaff.getStaffId()))
+    then
+        LoggerFactory.getLogger("Rules").info("MATCHED");
+        $staff.setState(State.STAFF_MATCHED_9_OF_9);
+        $dbStaff.setState(State.STAFF_MATCHED_9_OF_9);
+        update($staff);
+        update($dbStaff);
+end
+
+rule "cep-engine-staff-9-of-9-failed"
+    agenda-group "staff-matching"
+    salience 95
+    when
+        $dbStaff : OraStaffFact( state == State.AGG_INSERTED_FROM_RESPONSE)
+        $staff : StaffFact( state == State.LOADED, !staffIdFingered.equalsIgnoreCase($dbStaff.getStaffId()))
+    then
+        $dbStaff.setState(State.FAILED_9_OF_9_MATCH);
+        update($dbStaff);
+    end
+
+rule "cep-engine-staff-7-of-9"
+    agenda-group "staff-matching"
+    salience 90
+    when
+        $dbStaff : OraStaffFact( state == State.FAILED_9_OF_9_MATCH)
+        $staff : StaffFact( state == State.LOADED, staffXOfNine(7, staffIdFingered,$dbStaff.getStaffId()))
+    then
+        $staff.setState(State.STAFF_MATCHED_7_OF_9);
+        $dbStaff.setState(State.STAFF_MATCHED_7_OF_9);
+        update($staff);
+        update($dbStaff);
+end
+
+rule "cep-engine-staff-7-of-9-failed"
+    agenda-group "staff-matching"
+    salience 85
+    when
+        $dbStaff : OraStaffFact( state == State.FAILED_9_OF_9_MATCH)
+        $staff : StaffFact( state == State.LOADED, !staffXOfNine(7, staffIdFingered,$dbStaff.getStaffId()))
+    then
+        $dbStaff.setState(State.FAILED_7_OF_9_MATCH);
+        update($dbStaff);
+end
+
+
+rule "cep-engine-staff-6-of-9"
+    agenda-group "staff-matching"
+    salience 80
+    when
+        $dbStaff : OraStaffFact( state == State.FAILED_7_OF_9_MATCH)
+        $staff : StaffFact( state == State.LOADED, staffXOfNine(6, staffIdFingered,$dbStaff.getStaffId()))
+    then
+        $staff.setState(State.STAFF_MATCHED_6_OF_9);
+        $dbStaff.setState(State.STAFF_MATCHED_6_OF_9);
+        update($staff);
+        update($dbStaff);
+end
+
+rule "cep-engine-staff-6-of-9-failed"
+    agenda-group "staff-matching"
+    salience 75
+    when
+        $dbStaff : OraStaffFact( state == State.FAILED_7_OF_9_MATCH)
+        $staff : StaffFact( state == State.LOADED, !staffXOfNine(6, staffIdFingered,$dbStaff.getStaffId()))
+    then
+        $dbStaff.setState(State.FAILED_6_OF_9_MATCH);
+        update($dbStaff);
+end
+
+/***
+This is not neccessary at all and will be handled by the engine!
+rule "cep-engine-staff-remove-no-match"
+    agenda-group "staff-matching"
+    salience 70
+    when
+        $dbStaff : OraStaffFact( state == State.FAILED_6_OF_9_MATCH)
+    then
+        $dbStaff.setState(State.RETRACTED);
+        update($dbStaff);
+        retract($dbStaff);
+end
+***/
+
+

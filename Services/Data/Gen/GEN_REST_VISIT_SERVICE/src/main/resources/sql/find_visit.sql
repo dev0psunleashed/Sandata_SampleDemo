@@ -1,0 +1,235 @@
+SELECT *
+FROM
+  (SELECT ROWNUM ROW_NUMBER,
+    COUNT(*) OVER() TOTAL_ROWS,
+    R1.*
+  FROM
+    (SELECT *
+    FROM (
+      (SELECT T4.SCHED_SK,
+        T1.VISIT_SK,
+        T1.SCHED_EVNT_SK,
+        T1.STAFF_ID,
+        T1.PT_ID,
+        T1.VISIT_ACT_START_TMSTP,
+        T1.VISIT_ACT_END_TMSTP,
+        T1.VISIT_ADJ_START_TMSTP,
+        T1.VISIT_ADJ_END_TMSTP,
+        NVL(T1.VISIT_APRVD_IND, 0)         AS VISIT_APRVD_IND,
+        NVL(T1.VISIT_VFYD_BY_SCHED_IND, 0) AS VISIT_VFYD_BY_SCHED_IND,
+        T1.VISIT_PAY_HRS,
+        T1.VISIT_BILL_HRS,
+        T1.VISIT_OT_ABS_HRS,
+        T1.USER_NAME,
+        NVL(T1.VISIT_CANCELLED_IND, 0) AS VISIT_CANCELLED_IND,
+        T1.VISIT_CANCELLATION_REASON,
+        T1.MEMO,
+        NVL(T1.VISIT_PAY_BY_SCHED_IND, 0) AS VISIT_PAY_BY_SCHED_IND,
+        T1.CHANGE_REASON_MEMO,
+        T1.REC_CREATED_BY,
+        T1.REC_UPDATED_BY,
+        T1.CHANGE_VERSION_ID,
+        T1.REC_UPDATE_TMSTP,
+        T1.REC_CREATE_TMSTP,
+        ROUND(((T4.SCHED_EVNT_END_DTIME-T4.SCHED_EVNT_START_DTIME)*24),2) SCD_HRS,
+        ROUND(((T1.VISIT_ACT_END_TMSTP -T1.VISIT_ACT_START_TMSTP)*24),2) CALL_HRS,
+        ROUND(((T1.VISIT_ADJ_END_TMSTP -T1.VISIT_ADJ_START_TMSTP)*24),2) ADJ_HRS,
+        T2.STAFF_FIRST_NAME,
+        T2.STAFF_LAST_NAME,
+        T3.PT_FIRST_NAME,
+        T3.PT_LAST_NAME,
+        P2.PT_PHONE,
+        T4.SCHED_EVNT_START_DTIME,
+        T4.SCHED_EVNT_END_DTIME,
+        T8.SVC_NAME,
+        (SELECT COUNT(*)
+        FROM VISIT_TASK_LST
+        WHERE T1.VISIT_SK = VISIT_TASK_LST.VISIT_SK
+        ) TASK_COUNT,
+        (SELECT COUNT(*)
+        FROM VISIT_EXCP
+        WHERE T1.VISIT_SK = VISIT_EXCP.VISIT_SK
+        AND rownum        = 1
+        ) VISIT_EXCP_COUNT,
+        T1.BE_ID,
+        A1.ADMIN_STAFF_ID           AS STAFF_COORDINATOR_ID,
+        A1.ADMIN_STAFF_FIRST_NAME   AS STAFF_COORDINATOR_FIRST_NAME,
+        A1.ADMIN_STAFF_LAST_NAME    AS STAFF_COORDINATOR_LAST_NAME,
+        A1.ADMIN_STAFF_MOBILE_PHONE AS STAFF_COORDINATOR_MOBILE_PHONE,
+        A4.ADMIN_STAFF_ID           AS PT_COORDINATOR_ID,
+        A4.ADMIN_STAFF_FIRST_NAME   AS PT_COORDINATOR_FIRST_NAME,
+        A4.ADMIN_STAFF_LAST_NAME    AS PT_COORDINATOR_LAST_NAME,
+        A4.ADMIN_STAFF_MOBILE_PHONE AS PT_COORDINATOR_MOBILE_PHONE
+      FROM VISIT T1
+      LEFT JOIN
+        (SELECT BE_ID,
+          PT_ID,
+          PT_FIRST_NAME,
+          PT_LAST_NAME,
+          REC_TERM_TMSTP,
+          CURR_REC_IND
+        FROM PT
+        WHERE (TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+        AND CURR_REC_IND                             = 1)
+        ) T3
+      ON T1.PT_ID  = T3.PT_ID
+      AND T1.BE_ID = T3.BE_ID
+      LEFT JOIN
+        (SELECT BE_ID,
+          PT_ID,
+          PT_PHONE_PRMY_IND,
+          PT_PHONE,
+          REC_TERM_TMSTP,
+          CURR_REC_IND
+        FROM PT_CONT_PHONE
+        WHERE (TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+        AND CURR_REC_IND                             = 1)
+        ) P2
+      ON T3.PT_ID           = P2.PT_ID
+      AND T3.BE_ID          = P2.BE_ID
+      AND PT_PHONE_PRMY_IND = 1
+      LEFT JOIN
+        (SELECT BE_ID,
+          STAFF_ID,
+          STAFF_FIRST_NAME,
+          STAFF_LAST_NAME,
+          REC_TERM_TMSTP,
+          CURR_REC_IND
+        FROM STAFF
+        WHERE (TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+        AND CURR_REC_IND                             = 1)
+        ) T2
+      ON T1.STAFF_ID = T2.STAFF_ID
+      AND T1.BE_ID   = T2.BE_ID
+      LEFT JOIN
+        (SELECT SCHED_EVNT_SK,
+          BE_ID,
+          SCHED_SK,
+          SCHED_EVNT_START_DTIME,
+          SCHED_EVNT_END_DTIME,
+          REC_TERM_TMSTP,
+          CURR_REC_IND
+        FROM SCHED_EVNT
+        WHERE (TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+        AND CURR_REC_IND                             = 1)
+        ) T4
+      ON T1.SCHED_EVNT_SK = T4.SCHED_EVNT_SK
+      AND T1.BE_ID        = T4.BE_ID
+      LEFT JOIN
+        (SELECT SCHED_SK,SVC_SK FROM SCHED_SVC
+        ) T7
+      ON T4.SCHED_SK = T7.SCHED_SK
+      LEFT JOIN
+        (SELECT SVC_SK,BE_ID,SVC_NAME FROM SVC
+        ) T8
+      ON T7.SVC_SK = T8.SVC_SK
+      LEFT JOIN
+        (SELECT J1.BE_ID,
+          J1.ADMIN_STAFF_ID,
+          J1.STAFF_ID,
+          J1.ADMIN_STAFF_STAFF_EFF_DATE,
+          J1.ADMIN_STAFF_STAFF_TERM_DATE,
+          J1.REC_TERM_TMSTP,
+          J1.CURR_REC_IND,
+          J2.ADMIN_STAFF_REL_EFF_DATE,
+          J2.ADMIN_STAFF_REL_TERM_DATE,
+          J3.ADMIN_STAFF_FIRST_NAME,
+          J3.ADMIN_STAFF_LAST_NAME,
+          J3.ADMIN_STAFF_MOBILE_PHONE
+        FROM ADMIN_STAFF_STAFF_XREF J1
+        INNER JOIN
+          (SELECT BE_ID,
+            ADMIN_STAFF_ID,
+            ADMIN_STAFF_REL_EFF_DATE,
+            ADMIN_STAFF_REL_TERM_DATE
+          FROM ADMIN_STAFF_REL
+          WHERE UPPER(ADMIN_STAFF_REL_TYP_NAME)      = 'COORDINATOR'
+          AND (TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+          AND CURR_REC_IND                           = 1)
+          ) J2
+        ON J1.BE_ID           = J2.BE_ID
+        AND J1.ADMIN_STAFF_ID = J2.ADMIN_STAFF_ID
+        INNER JOIN
+          (SELECT BE_ID,
+            ADMIN_STAFF_ID,
+            ADMIN_STAFF_FIRST_NAME,
+            ADMIN_STAFF_LAST_NAME,
+            ADMIN_STAFF_MOBILE_PHONE,
+            REC_TERM_TMSTP,
+            CURR_REC_IND
+          FROM ADMIN_STAFF
+          WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+          AND CURR_REC_IND                            = 1
+          ) J3
+        ON J1.BE_ID                                     = J3.BE_ID
+        AND J1.ADMIN_STAFF_ID                           = J3.ADMIN_STAFF_ID
+        WHERE (TO_CHAR(J1.REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+        AND J1.CURR_REC_IND                             = 1 )
+        ) A1 ON T1.STAFF_ID                             = A1.STAFF_ID
+      AND T1.BE_ID                                      = A1.BE_ID
+      AND T4.SCHED_EVNT_START_DTIME BETWEEN A1.ADMIN_STAFF_STAFF_EFF_DATE AND A1.ADMIN_STAFF_STAFF_TERM_DATE
+      AND T4.SCHED_EVNT_START_DTIME BETWEEN A1.ADMIN_STAFF_REL_EFF_DATE AND A1.ADMIN_STAFF_REL_TERM_DATE
+      LEFT JOIN
+        (SELECT J1.BE_ID,
+          J1.ADMIN_STAFF_ID,
+          J1.PT_ID,
+          J1.ADMIN_STAFF_PT_EFF_DATE,
+          J1.ADMIN_STAFF_PT_TERM_DATE,
+          J1.REC_TERM_TMSTP,
+          J1.CURR_REC_IND,
+          J2.ADMIN_STAFF_REL_EFF_DATE,
+          J2.ADMIN_STAFF_REL_TERM_DATE,
+          J3.ADMIN_STAFF_FIRST_NAME,
+          J3.ADMIN_STAFF_LAST_NAME,
+          J3.ADMIN_STAFF_MOBILE_PHONE
+        FROM ADMIN_STAFF_PT J1
+        INNER JOIN
+          (SELECT BE_ID,
+            ADMIN_STAFF_ID,
+            ADMIN_STAFF_REL_EFF_DATE,
+            ADMIN_STAFF_REL_TERM_DATE
+          FROM ADMIN_STAFF_REL
+          WHERE UPPER(ADMIN_STAFF_REL_TYP_NAME)      = 'COORDINATOR'
+          AND (TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+          AND CURR_REC_IND                           = 1)
+          ) J2
+        ON J1.BE_ID           = J2.BE_ID
+        AND J1.ADMIN_STAFF_ID = J2.ADMIN_STAFF_ID
+        INNER JOIN
+          (SELECT BE_ID,
+            ADMIN_STAFF_ID,
+            ADMIN_STAFF_FIRST_NAME,
+            ADMIN_STAFF_LAST_NAME,
+            ADMIN_STAFF_MOBILE_PHONE,
+            REC_TERM_TMSTP,
+            CURR_REC_IND
+          FROM ADMIN_STAFF
+          WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+          AND CURR_REC_IND                            = 1
+          ) J3
+        ON J1.BE_ID                                     = J3.BE_ID
+        AND J1.ADMIN_STAFF_ID                           = J3.ADMIN_STAFF_ID
+        WHERE (TO_CHAR(J1.REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+        AND J1.CURR_REC_IND                             = 1 )
+        ) A4 ON T3.PT_ID                                = A4.PT_ID
+      AND T3.BE_ID                                      = A4.BE_ID
+      AND T4.SCHED_EVNT_START_DTIME BETWEEN A4.ADMIN_STAFF_PT_EFF_DATE AND A4.ADMIN_STAFF_PT_TERM_DATE
+      AND T4.SCHED_EVNT_START_DTIME BETWEEN A4.ADMIN_STAFF_REL_EFF_DATE AND A4.ADMIN_STAFF_REL_TERM_DATE
+           WHERE
+              ((T1.VISIT_ACT_START_TMSTP BETWEEN TO_DATE('0001-01-01 00:00', 'YYYY-MM-DD HH24:MI') AND
+                TO_DATE('9999-12-31 23:59', 'YYYY-MM-DD HH24:MI') OR
+                (T1.VISIT_ACT_START_TMSTP IS NULL AND T1.VISIT_ACT_END_TMSTP BETWEEN TO_DATE('0001-01-01 00:00', 'YYYY-MM-DD HH24:MI') AND
+                TO_DATE('9999-12-31 23:59', 'YYYY-MM-DD HH24:MI')) OR
+                (T1.VISIT_ACT_START_TMSTP IS NULL AND T1.VISIT_ACT_END_TMSTP IS NULL AND T4.SCHED_EVNT_START_DTIME BETWEEN TO_DATE('0001-01-01', 'YYYY-MM-DD HH24:MI') AND
+                TO_DATE('9999-12-31 23:59', 'YYYY-MM-DD HH24:MI')))) AND
+                T1.BE_ID = '1'
+
+                and visit_sk = 621
+
+            ORDER BY UPPER(PT_LAST_NAME) DESC
+        )
+  )
+
+) R1)
+
+ WHERE ROW_NUMBER BETWEEN 1 AND 100;

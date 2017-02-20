@@ -1,0 +1,3 @@
+set ORACLE_HOME=C:\app\Oracle\product\11.2.0\client_1
+C:\app\oracle\product\11.2.0\client_1\BIN\sqlplus.exe coredata/z3U0kCdbdN@stxdevdb.sandata.com:1526/sdbdev1
+C:\app\oracle\product\11.2.0\client_1\BIN\sqlplus.exe coredata/YO47aJD3tP@stxqadb.sandata.com:1526/sdbqa1

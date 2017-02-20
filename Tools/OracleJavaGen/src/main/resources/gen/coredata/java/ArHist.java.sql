@@ -1,0 +1,129 @@
+CREATE OR REPLACE AND COMPILE JAVA SOURCE NAMED "ArHist" AS 
+import com.sandata.lab.db.oracle.common.handler.OracleQueryHandler;
+import oracle.sql.STRUCT;
+import oracle.sql.ARRAY;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
+public class ArHist {
+
+	private static String TABLE_NAME = "AR_HIST";
+
+	private static String SEQUENCE_KEY_COLUMN_NAME = "AR_HIST_SK";
+
+	private static int PRIMARY_KEY_INDEX = 1;
+
+	private static int REC_TERM_TMSTP_INDEX = -1;
+
+	private static int CURR_REC_IND_INDEX = -1;
+
+	private static int TABLE_ID_COLUMN_INDEX = -1;
+
+	private static int CHANGE_VERSION_ID_INDEX = 11;
+
+	private static String INSERT_STATEMENT = "INSERT INTO AR_HIST(AR_HIST_SK,REC_CREATE_TMSTP_HIST,ACTION_CODE,AR_SK,REC_CREATE_TMSTP,REC_UPDATE_TMSTP,REC_CREATED_BY,REC_UPDATED_BY,CHANGE_REASON_CODE,CHANGE_REASON_MEMO,CHANGE_VERSION_ID,BE_LOB_ID,BE_LOC_ID,AR_TXN_BATCH_DET_SK,AR_TXN_CODE,AR_REMIT_CODE,AR_TXN_AMT,AR_TXN_TOTAL_UNIT,AR_TXN_UNIT_RATE,BE_ID,PAYER_ID,CONTR_ID,AUTH_ID,PT_ID,PT_INS_ID_NUM,INV_NUM,INV_STATUS_CODE,INV_SUBM_TYP_CODE,INV_START_DATE,INV_END_DATE,INV_DATE,INV_TYP_QLFR,INV_FMT_TYP_NAME,ICD_DX_CODE_REVISION_QLFR,ICD_DX_CODE_PRMY,ICD_DX_CODE_2,ICD_DX_CODE_3,ICD_DX_CODE_4,ICD_DX_CODE_5,ICD_DX_CODE_6,ICD_DX_CODE_7,ICD_DX_CODE_8,ICD_DX_CODE_9,ICD_DX_CODE_10,ICD_DX_CODE_11,ICD_DX_CODE_12,REFING_HCP_NPI,RENDER_PROFNL_NPI,INV_TOTAL_AMT,INV_TOTAL_UNIT,INV_BILL_TYP_CODE,INV_MANUAL_OVERRIDE_IND,USER_NAME,USER_GUID,MEMO,SVC_UNIT_NAME,RATE_AMT,INV_DET_ID,INV_DET_TOTAL_UNIT,INV_DET_TOTAL_AMT,INV_DET_SPLIT_BILLING_ALWD_IND,VENDOR_NAME,SVC_NAME,BILLING_CODE,MDFR_1_CODE,MDFR_2_CODE,MDFR_3_CODE,MDFR_4_CODE,REV_CODE,INV_DET_DATE,INV_SUBM_STATUS,INV_DET_STATUS_CODE,RATE_TYP_NAME,RATE_QLFR_CODE,AR_NOTE_TYP_CODE,AR_NOTE,CRN,AR_UNAPPLIED_BALANCE_IND) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+	public static ResultSet getArHist(String bsnEntId) throws SQLException {
+
+			StringBuilder errLog = new StringBuilder("ArHist: getArHist: ");
+
+			try {
+
+					String sql = String.format("SELECT AR_HIST_SK,REC_CREATE_TMSTP_HIST,ACTION_CODE,AR_SK,REC_CREATE_TMSTP,REC_UPDATE_TMSTP,REC_CREATED_BY,REC_UPDATED_BY,CHANGE_REASON_CODE,CHANGE_REASON_MEMO,CHANGE_VERSION_ID,BE_LOB_ID,BE_LOC_ID,AR_TXN_BATCH_DET_SK,AR_TXN_CODE,AR_REMIT_CODE,AR_TXN_AMT,AR_TXN_TOTAL_UNIT,AR_TXN_UNIT_RATE,BE_ID,PAYER_ID,CONTR_ID,AUTH_ID,PT_ID,PT_INS_ID_NUM,INV_NUM,INV_STATUS_CODE,INV_SUBM_TYP_CODE,INV_START_DATE,INV_END_DATE,INV_DATE,INV_TYP_QLFR,INV_FMT_TYP_NAME,ICD_DX_CODE_REVISION_QLFR,ICD_DX_CODE_PRMY,ICD_DX_CODE_2,ICD_DX_CODE_3,ICD_DX_CODE_4,ICD_DX_CODE_5,ICD_DX_CODE_6,ICD_DX_CODE_7,ICD_DX_CODE_8,ICD_DX_CODE_9,ICD_DX_CODE_10,ICD_DX_CODE_11,ICD_DX_CODE_12,REFING_HCP_NPI,RENDER_PROFNL_NPI,INV_TOTAL_AMT,INV_TOTAL_UNIT,INV_BILL_TYP_CODE,INV_MANUAL_OVERRIDE_IND,USER_NAME,USER_GUID,MEMO,SVC_UNIT_NAME,RATE_AMT,INV_DET_ID,INV_DET_TOTAL_UNIT,INV_DET_TOTAL_AMT,INV_DET_SPLIT_BILLING_ALWD_IND,VENDOR_NAME,SVC_NAME,BILLING_CODE,MDFR_1_CODE,MDFR_2_CODE,MDFR_3_CODE,MDFR_4_CODE,REV_CODE,INV_DET_DATE,INV_SUBM_STATUS,INV_DET_STATUS_CODE,RATE_TYP_NAME,RATE_QLFR_CODE,AR_NOTE_TYP_CODE,AR_NOTE,CRN,AR_UNAPPLIED_BALANCE_IND FROM %s WHERE BE_ID = ?", TABLE_NAME);
+
+					return  new OracleQueryHandler().execute(sql, new Object[]{bsnEntId});
+
+			} catch (Exception e) {
+					errLog.append("[Exception: " + e.getClass().getName() + ": [Message: " + e.getMessage() + "]");
+					throw new SQLException(errLog.toString());
+
+			}
+	}
+
+	public static ResultSet getArHist(ARRAY params) throws SQLException {
+
+			StringBuilder errLog = new StringBuilder("ArHist: getArHist: ");
+
+			try {
+
+					String selectPattern = "SELECT AR_HIST_SK,REC_CREATE_TMSTP_HIST,ACTION_CODE,AR_SK,REC_CREATE_TMSTP,REC_UPDATE_TMSTP,REC_CREATED_BY,REC_UPDATED_BY,CHANGE_REASON_CODE,CHANGE_REASON_MEMO,CHANGE_VERSION_ID,BE_LOB_ID,BE_LOC_ID,AR_TXN_BATCH_DET_SK,AR_TXN_CODE,AR_REMIT_CODE,AR_TXN_AMT,AR_TXN_TOTAL_UNIT,AR_TXN_UNIT_RATE,BE_ID,PAYER_ID,CONTR_ID,AUTH_ID,PT_ID,PT_INS_ID_NUM,INV_NUM,INV_STATUS_CODE,INV_SUBM_TYP_CODE,INV_START_DATE,INV_END_DATE,INV_DATE,INV_TYP_QLFR,INV_FMT_TYP_NAME,ICD_DX_CODE_REVISION_QLFR,ICD_DX_CODE_PRMY,ICD_DX_CODE_2,ICD_DX_CODE_3,ICD_DX_CODE_4,ICD_DX_CODE_5,ICD_DX_CODE_6,ICD_DX_CODE_7,ICD_DX_CODE_8,ICD_DX_CODE_9,ICD_DX_CODE_10,ICD_DX_CODE_11,ICD_DX_CODE_12,REFING_HCP_NPI,RENDER_PROFNL_NPI,INV_TOTAL_AMT,INV_TOTAL_UNIT,INV_BILL_TYP_CODE,INV_MANUAL_OVERRIDE_IND,USER_NAME,USER_GUID,MEMO,SVC_UNIT_NAME,RATE_AMT,INV_DET_ID,INV_DET_TOTAL_UNIT,INV_DET_TOTAL_AMT,INV_DET_SPLIT_BILLING_ALWD_IND,VENDOR_NAME,SVC_NAME,BILLING_CODE,MDFR_1_CODE,MDFR_2_CODE,MDFR_3_CODE,MDFR_4_CODE,REV_CODE,INV_DET_DATE,INV_SUBM_STATUS,INV_DET_STATUS_CODE,RATE_TYP_NAME,RATE_QLFR_CODE,AR_NOTE_TYP_CODE,AR_NOTE,CRN,AR_UNAPPLIED_BALANCE_IND FROM AR_HIST %s";
+
+					String whereClause = "WHERE BE_ID=?";
+
+					return new OracleQueryHandler().execute(selectPattern, whereClause, params);
+
+			} catch (Exception e) {
+					errLog.append("[Exception: " + e.getClass().getName() + ": [Message: " + e.getMessage() + "]");
+					throw new SQLException(errLog.toString());
+
+			}
+	}
+
+	public static ResultSet getArHist(long primaryKey) throws SQLException {
+
+			StringBuilder errLog = new StringBuilder("ArHist: getArHist: ");
+
+			try {
+
+					String sql = String.format("SELECT AR_HIST_SK,REC_CREATE_TMSTP_HIST,ACTION_CODE,AR_SK,REC_CREATE_TMSTP,REC_UPDATE_TMSTP,REC_CREATED_BY,REC_UPDATED_BY,CHANGE_REASON_CODE,CHANGE_REASON_MEMO,CHANGE_VERSION_ID,BE_LOB_ID,BE_LOC_ID,AR_TXN_BATCH_DET_SK,AR_TXN_CODE,AR_REMIT_CODE,AR_TXN_AMT,AR_TXN_TOTAL_UNIT,AR_TXN_UNIT_RATE,BE_ID,PAYER_ID,CONTR_ID,AUTH_ID,PT_ID,PT_INS_ID_NUM,INV_NUM,INV_STATUS_CODE,INV_SUBM_TYP_CODE,INV_START_DATE,INV_END_DATE,INV_DATE,INV_TYP_QLFR,INV_FMT_TYP_NAME,ICD_DX_CODE_REVISION_QLFR,ICD_DX_CODE_PRMY,ICD_DX_CODE_2,ICD_DX_CODE_3,ICD_DX_CODE_4,ICD_DX_CODE_5,ICD_DX_CODE_6,ICD_DX_CODE_7,ICD_DX_CODE_8,ICD_DX_CODE_9,ICD_DX_CODE_10,ICD_DX_CODE_11,ICD_DX_CODE_12,REFING_HCP_NPI,RENDER_PROFNL_NPI,INV_TOTAL_AMT,INV_TOTAL_UNIT,INV_BILL_TYP_CODE,INV_MANUAL_OVERRIDE_IND,USER_NAME,USER_GUID,MEMO,SVC_UNIT_NAME,RATE_AMT,INV_DET_ID,INV_DET_TOTAL_UNIT,INV_DET_TOTAL_AMT,INV_DET_SPLIT_BILLING_ALWD_IND,VENDOR_NAME,SVC_NAME,BILLING_CODE,MDFR_1_CODE,MDFR_2_CODE,MDFR_3_CODE,MDFR_4_CODE,REV_CODE,INV_DET_DATE,INV_SUBM_STATUS,INV_DET_STATUS_CODE,RATE_TYP_NAME,RATE_QLFR_CODE,AR_NOTE_TYP_CODE,AR_NOTE,CRN,AR_UNAPPLIED_BALANCE_IND FROM %s WHERE %s=?", TABLE_NAME, SEQUENCE_KEY_COLUMN_NAME);
+
+					return new OracleQueryHandler().execute(sql, new Object[]{primaryKey});
+
+			} catch (Exception e) {
+					errLog.append("[Exception: " + e.getClass().getName() + ": [Message: " + e.getMessage() + "]");
+					throw new SQLException(errLog.toString());
+
+			}
+	}
+
+	public static long insertArHist(STRUCT struct) throws SQLException {
+
+			StringBuilder errLog = new StringBuilder("ArHist: insertArHist: ");
+
+			try {
+
+					return new OracleQueryHandler().executeInsert(TABLE_NAME, INSERT_STATEMENT, PRIMARY_KEY_INDEX, REC_TERM_TMSTP_INDEX, CURR_REC_IND_INDEX, TABLE_ID_COLUMN_INDEX, CHANGE_VERSION_ID_INDEX, struct);
+
+			} catch (Exception e) {
+					errLog.append("[Exception: " + e.getClass().getName() + ": [Message: " + e.getMessage() + "]");
+					throw new SQLException(errLog.toString());
+
+			}
+	}
+
+	public static long updateArHist(STRUCT struct) throws SQLException {
+
+			StringBuilder errLog = new StringBuilder("ArHist: updateArHist: ");
+
+			try {
+
+					return new OracleQueryHandler().executeUpdate(TABLE_NAME, SEQUENCE_KEY_COLUMN_NAME, CHANGE_VERSION_ID_INDEX, struct);
+
+			} catch (Exception e) {
+					errLog.append("[Exception: " + e.getClass().getName() + ": [Message: " + e.getMessage() + "]");
+					throw new SQLException(errLog.toString());
+
+			}
+	}
+
+	public static long deleteArHist(long primaryKey) throws SQLException {
+
+			StringBuilder errLog = new StringBuilder("ArHist: deleteArHist: ");
+
+			try {
+
+					return  new OracleQueryHandler().executeDelete(TABLE_NAME, SEQUENCE_KEY_COLUMN_NAME, primaryKey, false);
+
+			} catch (Exception e) {
+					errLog.append("[Exception: " + e.getClass().getName() + ": [Message: " + e.getMessage() + "]");
+					throw new SQLException(errLog.toString());
+
+			}
+	}
+
+
+
+}
+;
+/

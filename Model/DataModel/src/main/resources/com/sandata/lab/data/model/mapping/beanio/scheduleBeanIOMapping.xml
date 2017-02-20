@@ -1,0 +1,64 @@
+<beanio xmlns="http://www.beanio.org/2012/03"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
+    <typeHandler name="dateHandler" type="java.util.Date" format="csv" class="org.beanio.types.DateTypeHandler">
+        <property name="pattern" value="yyyy-MM-dd" />
+    </typeHandler>
+    <typeHandler name="dateTimeHandler" type="java.util.Date" format="csv" class="org.beanio.types.DateTypeHandler">
+        <property name="pattern" value="yyyy-MM-dd HH:mm:ss" />
+    </typeHandler>
+
+    <stream name="scheduleFile" format="csv" >
+        <record name="schedule" class="com.sandata.lab.data.model.schedule.Schedule" minOccurs="0">
+            <field name="scheduleId"  minOccurs="1"/>
+            <field name="patientId"  minOccurs="1"/>
+            <field name="staffId"  minOccurs="1"/>
+            <field name="startDate"  typeHandler="dateHandler" minOccurs="1"/>
+            <field name="endDate"  typeHandler="dateHandler" minOccurs="1"/>
+            <field name="fromTime"  type="string" maxLength="4" minOccurs="1"/>
+            <field name="endTime"  type="string" maxLength="4" minOccurs="1"/>
+            <field name="restrictions"  minOccurs="1"/>
+            <field name="frequencyId"  minOccurs="1"/>
+            <field name="numberOfOccurrences"  minOccurs="1"/>
+            <field name="dayOfMonth"  minOccurs="1"/>
+            <field name="updateFlag" ignore="true"/>
+            <field name="scheduleWeekDays" type="int" collection="list" minOccurs="1" maxOccurs="7"/>
+        </record>
+        <!--<record name="HCPlusSchedule" class="com.sandata.lab.data.model.schedule.HCPlusSchedule">
+            <field name="payerId"  />
+            <field name="agencyId" />
+            <field name="scheduleId"  />
+            <field name="startDate"  typeHandler="dateHandler"/>
+            <field name="patientId"  />
+            <field name="patientNumber"  type="string" />
+            <field name="startTime"  type="string" maxLength="4" />
+            <field name="endTime"  type="string" maxLength="4" />
+            <field name="updateTypeFlag"  type="string" maxLength="1" ignore = "true" />
+        </record>-->
+    </stream>
+</beanio>
+<!-- private int scheduleId;
+    //agencyId was part of highpoint model and also most schedule imports currently
+    //in use.  Not currently part of George. TMD
+    private int agencyId;
+    //payerId was part of highpoint model and also most schedule imports currently
+    //in use.  Not currently part of George. TMD
+    private int payerId;
+    //taskID was part of highpoint model and also part of POC imports currently ask for HCPlus DB
+    //Not currently part of George. TMD
+    private List<Integer> taskList;
+    //serviceId was part of highpoint model and also most schedule imports currently
+    //in use.  Not currently part of George. TMD
+    private int serviceId;
+    private int staffId;
+    private int patientId;
+    private Date startDate;
+    private Date endDate;
+    private String startTime;
+    private String endTime;
+    private String restrictions;
+    private Integer frequencyId;
+    private Integer numberOfOccurrences;
+    private Integer dayOfMonth;
+    private List<Integer> scheduleWeekDays;
+-->

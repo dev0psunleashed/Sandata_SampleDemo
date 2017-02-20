@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:camel="http://camel.apache.org/schema/blueprint"
+	xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+   xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+       http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd">
+
+	<!-- property files in fuse/etc/com.sandata.lab.callmatching.cfg -->
+	<!--<cm:property-placeholder id="cep.engine.blueprint.placeholder" persistent-id="com.sandata.lab.rules.cep.engine" update-strategy="none">
+		<cm:default-properties>
+			<cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+			<cm:property name="activeMQ.username" value="admin" />
+			<cm:property name="activeMQ.password" value="admin" />
+			<cm:property name="activeMQ.concurrentConsumers" value="100" />
+		</cm:default-properties>
+	</cm:property-placeholder>-->
+
+	<bean id="appContext" class="com.sandata.lab.rules.call.matching.app.AppContext" factory-method="InitCamelContext"
+          depends-on="callMatchingContext">
+        <argument ref="callMatchingContext" />
+    </bean>
+	<reference id="callPreferencesSvc"
+			   interface="com.sandata.lab.rules.cache.service.ICallPreferencesSvc" />
+	<bean id="client" class="com.sandata.lab.rules.cache.client.CacheClient"
+		  init-method="startUp"  >
+			<property name="callPreferencesSvc" ref="callPreferencesSvc"/>
+	</bean>
+
+
+	<!-- connect to the local ActiveMQ broker -->
+	<bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="${activeMQ.uri}" />
+		<property name="userName" value="${activeMQ.username}" />
+		<property name="password" value="${activeMQ.password}" />
+	</bean>
+	<bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+		<property name="connectionFactory" ref="connectionFactory"/>
+	</bean>
+	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent" depends-on="jmsConfig">
+		<property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+		<property name="configuration" ref="jmsConfig"/>
+	</bean>
+
+
+	<bean id="producer" class="com.sandata.lab.rules.call.matching.listeners.CEPWML" />
+
+	<bean id="scheduleEventRequester" class="com.sandata.lab.rules.call.matching.drools.BatchExecuter"/>
+	<bean id="commandProducer" class="com.sandata.lab.rules.call.matching.processors.ProducerPojo"
+		  depends-on="callMatchingContext">
+		<argument ref="callMatchingContext" />
+	</bean>
+	<bean id="scheduleEventResponseProducer" class="com.sandata.lab.rules.call.matching.processors.ScheduleEventResponseProcessor" />
+
+  <camel:camelContext id="callMatchingContext" useBlueprintPropertyResolver="true" useMDCLogging="true" trace="true" streamCache="true" allowUseOriginalMessage="false">
+	  	<!-- using Camel properties component and refer to the blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <camel:propertyPlaceholder id="properties" location="blueprint:cep.engine.processor.blueprint.placeholder" />
+        <camel:package>com.sandata.lab.rules.call.matching.routes</camel:package>
+
+  </camel:camelContext>
+
+</blueprint>

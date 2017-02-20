@@ -1,0 +1,846 @@
+Jul 31, 2015 2:50:37 PM org.apache.karaf.main.SimpleFileLock lock
+INFO: locking
+14:50:37,752 | INFO  | FelixStartLevel  | fileinstall                      | 7 - org.apache.felix.fileinstall - 3.3.11.redhat-610379 | Installed C:\Fuse\jboss-fuse-6.1.0.redhat-379\etc\com.sandata.up.core--qa.cfg
+14:50:37,763 | INFO  | FelixStartLevel  | fileinstall                      | 7 - org.apache.felix.fileinstall - 3.3.11.redhat-610379 | Installed C:\Fuse\jboss-fuse-6.1.0.redhat-379\etc\org.apache.servicemix.nmr.cfg
+14:50:37,806 | INFO  | FelixStartLevel  | BlueprintExtender                | 9 - org.apache.aries.blueprint.core - 1.0.1.redhat-610379 | No quiesce support is available, so blueprint components will not participate in quiesce operations
+14:50:49,199 | INFO  | FelixStartLevel  | ActivateCommandComponent         | 73 - org.apache.karaf.shell.scr - 2.3.0.redhat-610379 | Activating the Apache Karaf SCR Activate Command
+14:50:49,201 | INFO  | FelixStartLevel  | DetailsCommandComponent          | 73 - org.apache.karaf.shell.scr - 2.3.0.redhat-610379 | Activating the Apache Karaf SCR Details Command
+14:50:49,203 | INFO  | FelixStartLevel  | DeactivateCommandComponent       | 73 - org.apache.karaf.shell.scr - 2.3.0.redhat-610379 | Activating the Apache Karaf SCR Deactivate Command
+14:50:49,205 | INFO  | FelixStartLevel  | ListCommandComponent             | 73 - org.apache.karaf.shell.scr - 2.3.0.redhat-610379 | Activating the Apache Karaf SCR List Command
+14:50:49,275 | INFO  | FelixStartLevel  | AbstractComponent                | 62 - io.fabric8.fabric-api - 1.0.0.redhat-379 | activateComponent: DataStoreTemplateRegistry{callback=null}
+14:50:49,277 | INFO  | FelixStartLevel  | AbstractComponent                | 62 - io.fabric8.fabric-api - 1.0.0.redhat-379 | activateComponent: io.fabric8.zookeeper.bootstrap.RuntimePropertiesService@64868d8
+14:50:49,281 | INFO  | FelixStartLevel  | AbstractComponent                | 62 - io.fabric8.fabric-api - 1.0.0.redhat-379 | activateComponent: io.fabric8.zookeeper.curator.CuratorACLManager@5f5e8baa
+14:50:49,353 | WARN  | FelixStartLevel  | LogQueryActivator                | 59 - org.fusesource.insight.insight-log - 1.0.0.redhat-379 | Could not find MBeanServer in the OSGi registry so using the platform MBeanServer instead
+14:50:49,520 | INFO  | FelixStartLevel  | AbstractComponent                | 62 - io.fabric8.fabric-api - 1.0.0.redhat-379 | activateComponent: io.fabric8.service.PortPlaceholderResolver@5b0b28df
+14:50:49,523 | INFO  | FelixStartLevel  | AbstractComponent                | 62 - io.fabric8.fabric-api - 1.0.0.redhat-379 | activateComponent: io.fabric8.service.ProfilePropertyPointerResolver@693775d4
+14:50:49,525 | INFO  | FelixStartLevel  | AbstractComponent                | 62 - io.fabric8.fabric-api - 1.0.0.redhat-379 | activateComponent: io.fabric8.service.VersionPropertyPointerResolver@3e5f3179
+14:50:49,537 | INFO  | FelixStartLevel  | AbstractComponent                | 62 - io.fabric8.fabric-api - 1.0.0.redhat-379 | activateComponent: io.fabric8.service.ComponentConfigurer@315d00bb
+14:50:49,553 | INFO  | FelixStartLevel  | AbstractComponent                | 62 - io.fabric8.fabric-api - 1.0.0.redhat-379 | activateComponent: io.fabric8.zookeeper.bootstrap.BootstrapConfiguration@3c9db373
+14:50:49,598 | ERROR | FelixStartLevel  | fabric-git                       | 77 - io.fabric8.fabric-git - 1.0.0.redhat-379 | [io.fabric8.git.service(13)] The activate method has thrown an exception
+org.eclipse.jgit.api.errors.JGitInternalException: Creating directory C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\git\local\fabric\.git\logs failed
+	at org.eclipse.jgit.api.InitCommand.call(InitCommand.java:95)
+	at io.fabric8.git.internal.FabricGitServiceImpl.openOrInit(FabricGitServiceImpl.java:82)
+	at io.fabric8.git.internal.FabricGitServiceImpl.activate(FabricGitServiceImpl.java:67)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)[:1.7.0_67]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)[:1.7.0_67]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)[:1.7.0_67]
+	at java.lang.reflect.Method.invoke(Method.java:606)[:1.7.0_67]
+	at org.apache.felix.scr.impl.helper.BaseMethod.invokeMethod(BaseMethod.java:231)
+	at org.apache.felix.scr.impl.helper.BaseMethod.access$500(BaseMethod.java:39)
+	at org.apache.felix.scr.impl.helper.BaseMethod$Resolved.invoke(BaseMethod.java:624)
+	at org.apache.felix.scr.impl.helper.BaseMethod.invoke(BaseMethod.java:508)
+	at org.apache.felix.scr.impl.helper.ActivateMethod.invoke(ActivateMethod.java:149)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.createImplementationObject(SingleComponentManager.java:315)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.createComponent(SingleComponentManager.java:127)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:879)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:846)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.activateInternal(AbstractComponentManager.java:874)
+	at org.apache.felix.scr.impl.manager.DependencyManager$SingleStaticCustomizer.addedService(DependencyManager.java:931)
+	at org.apache.felix.scr.impl.manager.DependencyManager$SingleStaticCustomizer.addedService(DependencyManager.java:895)
+	at org.apache.felix.scr.impl.manager.ServiceTracker$Tracked.customizerAdded(ServiceTracker.java:1480)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.ServiceTracker$Tracked.customizerAdded(ServiceTracker.java:1401)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.ServiceTracker$AbstractTracked.trackAdding(ServiceTracker.java:1210)
+	at org.apache.felix.scr.impl.manager.ServiceTracker$AbstractTracked.track(ServiceTracker.java:1148)
+	at org.apache.felix.scr.impl.manager.ServiceTracker$Tracked.serviceChanged(ServiceTracker.java:1432)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.framework.util.EventDispatcher.invokeServiceListenerCallback(EventDispatcher.java:934)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireEventImmediately(EventDispatcher.java:795)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireServiceEvent(EventDispatcher.java:544)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.fireServiceEvent(Felix.java:4666)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.registerService(Felix.java:3674)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleContextImpl.registerService(BundleContextImpl.java:347)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager$3.register(AbstractComponentManager.java:1027)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager$3.register(AbstractComponentManager.java:1016)
+	at org.apache.felix.scr.impl.manager.RegistrationManager.changeRegistration(RegistrationManager.java:134)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.registerService(AbstractComponentManager.java:1068)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.activateInternal(AbstractComponentManager.java:865)
+	at org.apache.felix.scr.impl.manager.DependencyManager$SingleStaticCustomizer.addedService(DependencyManager.java:931)
+	at org.apache.felix.scr.impl.manager.DependencyManager$SingleStaticCustomizer.addedService(DependencyManager.java:895)
+	at org.apache.felix.scr.impl.manager.ServiceTracker$Tracked.customizerAdded(ServiceTracker.java:1480)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.ServiceTracker$Tracked.customizerAdded(ServiceTracker.java:1401)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.ServiceTracker$AbstractTracked.trackAdding(ServiceTracker.java:1210)
+	at org.apache.felix.scr.impl.manager.ServiceTracker$AbstractTracked.track(ServiceTracker.java:1148)
+	at org.apache.felix.scr.impl.manager.ServiceTracker$Tracked.serviceChanged(ServiceTracker.java:1432)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.framework.util.EventDispatcher.invokeServiceListenerCallback(EventDispatcher.java:934)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireEventImmediately(EventDispatcher.java:795)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireServiceEvent(EventDispatcher.java:544)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.fireServiceEvent(Felix.java:4666)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.registerService(Felix.java:3674)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleContextImpl.registerService(BundleContextImpl.java:347)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager$3.register(AbstractComponentManager.java:1027)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager$3.register(AbstractComponentManager.java:1016)
+	at org.apache.felix.scr.impl.manager.RegistrationManager.changeRegistration(RegistrationManager.java:134)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.registerService(AbstractComponentManager.java:1068)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.activateInternal(AbstractComponentManager.java:865)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.enable(AbstractComponentManager.java:425)
+	at org.apache.felix.scr.impl.config.ConfigurableComponentHolder.enableComponents(ConfigurableComponentHolder.java:376)
+	at org.apache.felix.scr.impl.BundleComponentActivator.initialize(BundleComponentActivator.java:172)
+	at org.apache.felix.scr.impl.BundleComponentActivator.<init>(BundleComponentActivator.java:120)
+	at org.apache.felix.scr.impl.Activator.loadComponents(Activator.java:258)
+	at org.apache.felix.scr.impl.Activator.access$000(Activator.java:45)
+	at org.apache.felix.scr.impl.Activator$ScrExtension.start(Activator.java:185)
+	at org.apache.felix.utils.extender.AbstractExtender.createExtension(AbstractExtender.java:261)
+	at org.apache.felix.utils.extender.AbstractExtender.modifiedBundle(AbstractExtender.java:234)
+	at org.osgi.util.tracker.BundleTracker$Tracked.customizerModified(BundleTracker.java:479)[karaf.jar:2.3.0.redhat-610379]
+	at org.osgi.util.tracker.BundleTracker$Tracked.customizerModified(BundleTracker.java:414)[karaf.jar:2.3.0.redhat-610379]
+	at org.osgi.util.tracker.AbstractTracked.track(AbstractTracked.java:232)[karaf.jar:2.3.0.redhat-610379]
+	at org.osgi.util.tracker.BundleTracker$Tracked.bundleChanged(BundleTracker.java:443)[karaf.jar:2.3.0.redhat-610379]
+	at org.apache.felix.framework.util.EventDispatcher.invokeBundleListenerCallback(EventDispatcher.java:870)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireEventImmediately(EventDispatcher.java:791)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireBundleEvent(EventDispatcher.java:515)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.fireBundleEvent(Felix.java:4650)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix$4.run(Felix.java:2123)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2147)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.startBundle(Felix.java:2121)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleImpl.start(BundleImpl.java:955)
+	at org.apache.felix.framework.BundleImpl.start(BundleImpl.java:942)
+	at org.apache.karaf.features.internal.FeaturesServiceImpl.installFeatures(FeaturesServiceImpl.java:474)
+	at org.apache.karaf.features.internal.FeaturesServiceImpl.start(FeaturesServiceImpl.java:1107)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)[:1.7.0_67]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)[:1.7.0_67]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)[:1.7.0_67]
+	at java.lang.reflect.Method.invoke(Method.java:606)[:1.7.0_67]
+	at org.apache.aries.blueprint.utils.ReflectionUtils.invoke(ReflectionUtils.java:297)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.invoke(BeanRecipe.java:958)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.runBeanProcInit(BeanRecipe.java:712)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.internalCreate2(BeanRecipe.java:824)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.internalCreate(BeanRecipe.java:787)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.di.AbstractRecipe$1.call(AbstractRecipe.java:79)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)[:1.7.0_67]
+	at org.apache.aries.blueprint.di.AbstractRecipe.create(AbstractRecipe.java:88)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintRepository.createInstances(BlueprintRepository.java:245)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintRepository.createAll(BlueprintRepository.java:183)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintContainerImpl.instantiateEagerComponents(BlueprintContainerImpl.java:676)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintContainerImpl.doRun(BlueprintContainerImpl.java:374)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintContainerImpl.run(BlueprintContainerImpl.java:261)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintExtender.createContainer(BlueprintExtender.java:270)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintExtender.modifiedBundle(BlueprintExtender.java:233)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.customizerModified(BundleHookBundleTracker.java:500)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.customizerModified(BundleHookBundleTracker.java:433)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$AbstractTracked.track(BundleHookBundleTracker.java:725)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.bundleChanged(BundleHookBundleTracker.java:463)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$BundleEventHook.event(BundleHookBundleTracker.java:422)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.felix.framework.util.SecureAction.invokeBundleEventHook(SecureAction.java:1103)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.createWhitelistFromHooks(EventDispatcher.java:696)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireBundleEvent(EventDispatcher.java:484)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.fireBundleEvent(Felix.java:4650)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix$4.run(Felix.java:2123)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2147)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.startBundle(Felix.java:2121)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.setActiveStartLevel(Felix.java:1317)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.FrameworkStartLevelImpl.run(FrameworkStartLevelImpl.java:304)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at java.lang.Thread.run(Thread.java:745)[:1.7.0_67]
+Caused by: java.io.IOException: Creating directory C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\git\local\fabric\.git\logs failed
+	at org.eclipse.jgit.util.FileUtils.mkdir(FileUtils.java:270)
+	at org.eclipse.jgit.util.FileUtils.mkdir(FileUtils.java:248)
+	at org.eclipse.jgit.internal.storage.file.ReflogWriter.create(ReflogWriter.java:144)
+	at org.eclipse.jgit.internal.storage.file.RefDirectory.create(RefDirectory.java:195)
+	at org.eclipse.jgit.internal.storage.file.FileRepository.create(FileRepository.java:252)
+	at org.eclipse.jgit.api.InitCommand.call(InitCommand.java:92)
+	... 110 more
+14:50:49,614 | ERROR | FelixStartLevel  | fabric-git                       | 77 - io.fabric8.fabric-git - 1.0.0.redhat-379 | [io.fabric8.git.service(13)] Failed creating the component instance; see log for reason
+14:50:49,619 | INFO  | FelixStartLevel  | AbstractComponent                | 62 - io.fabric8.fabric-api - 1.0.0.redhat-379 | activateComponent: io.fabric8.internal.ZooKeeperClusterBootstrapImpl@2bd0f497
+14:50:49,625 | INFO  | FelixStartLevel  | AbstractComponent                | 62 - io.fabric8.fabric-api - 1.0.0.redhat-379 | activateComponent: io.fabric8.zookeeper.curator.ManagedCuratorFramework@5130f58e
+14:50:49,731 | INFO  | FelixStartLevel  | Activator                        | 91 - org.ops4j.pax.web.pax-web-runtime - 3.0.6 | EventAdmin support enabled, servlet events will be postet to topics.
+14:50:49,733 | INFO  | FelixStartLevel  | Activator                        | 91 - org.ops4j.pax.web.pax-web-runtime - 3.0.6 | LogService support enabled, log events will be created.
+14:50:49,735 | INFO  | FelixStartLevel  | Activator                        | 91 - org.ops4j.pax.web.pax-web-runtime - 3.0.6 | Pax Web started
+14:50:49,785 | ERROR | FelixStartLevel  | fabric-git                       | 77 - io.fabric8.fabric-git - 1.0.0.redhat-379 | [io.fabric8.git.service(13)] The activate method has thrown an exception
+org.eclipse.jgit.api.errors.JGitInternalException: Creating directory C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\git\local\fabric\.git\refs failed
+	at org.eclipse.jgit.api.InitCommand.call(InitCommand.java:95)
+	at io.fabric8.git.internal.FabricGitServiceImpl.openOrInit(FabricGitServiceImpl.java:82)
+	at io.fabric8.git.internal.FabricGitServiceImpl.activate(FabricGitServiceImpl.java:67)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)[:1.7.0_67]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)[:1.7.0_67]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)[:1.7.0_67]
+	at java.lang.reflect.Method.invoke(Method.java:606)[:1.7.0_67]
+	at org.apache.felix.scr.impl.helper.BaseMethod.invokeMethod(BaseMethod.java:231)
+	at org.apache.felix.scr.impl.helper.BaseMethod.access$500(BaseMethod.java:39)
+	at org.apache.felix.scr.impl.helper.BaseMethod$Resolved.invoke(BaseMethod.java:624)
+	at org.apache.felix.scr.impl.helper.BaseMethod.invoke(BaseMethod.java:508)
+	at org.apache.felix.scr.impl.helper.ActivateMethod.invoke(ActivateMethod.java:149)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.createImplementationObject(SingleComponentManager.java:315)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.createComponent(SingleComponentManager.java:127)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:879)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:846)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:785)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getFactoryUnchecked(ServiceRegistrationImpl.java:345)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.access$100(ServiceRegistrationImpl.java:47)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl$1.call(ServiceRegistrationImpl.java:249)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2188)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getService(ServiceRegistrationImpl.java:238)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistry.getService(ServiceRegistry.java:328)
+	at org.apache.felix.framework.Felix.getService(Felix.java:3819)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleContextImpl.getService(BundleContextImpl.java:470)
+	at org.apache.felix.scr.impl.helper.BindMethod.getServiceObject(BindMethod.java:572)
+	at org.apache.felix.scr.impl.manager.DependencyManager.getServiceObject(DependencyManager.java:2006)
+	at org.apache.felix.scr.impl.manager.DependencyManager$SingleStaticCustomizer.prebind(DependencyManager.java:1004)
+	at org.apache.felix.scr.impl.manager.DependencyManager.prebind(DependencyManager.java:1433)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.collectDependencies(AbstractComponentManager.java:1143)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:815)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.activateInternal(AbstractComponentManager.java:874)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.enable(AbstractComponentManager.java:425)
+	at org.apache.felix.scr.impl.config.ConfigurableComponentHolder.enableComponents(ConfigurableComponentHolder.java:376)
+	at org.apache.felix.scr.impl.BundleComponentActivator.initialize(BundleComponentActivator.java:172)
+	at org.apache.felix.scr.impl.BundleComponentActivator.<init>(BundleComponentActivator.java:120)
+	at org.apache.felix.scr.impl.Activator.loadComponents(Activator.java:258)
+	at org.apache.felix.scr.impl.Activator.access$000(Activator.java:45)
+	at org.apache.felix.scr.impl.Activator$ScrExtension.start(Activator.java:185)
+	at org.apache.felix.utils.extender.AbstractExtender.createExtension(AbstractExtender.java:261)
+	at org.apache.felix.utils.extender.AbstractExtender.modifiedBundle(AbstractExtender.java:234)
+	at org.osgi.util.tracker.BundleTracker$Tracked.customizerModified(BundleTracker.java:479)[karaf.jar:2.3.0.redhat-610379]
+	at org.osgi.util.tracker.BundleTracker$Tracked.customizerModified(BundleTracker.java:414)[karaf.jar:2.3.0.redhat-610379]
+	at org.osgi.util.tracker.AbstractTracked.track(AbstractTracked.java:232)[karaf.jar:2.3.0.redhat-610379]
+	at org.osgi.util.tracker.BundleTracker$Tracked.bundleChanged(BundleTracker.java:443)[karaf.jar:2.3.0.redhat-610379]
+	at org.apache.felix.framework.util.EventDispatcher.invokeBundleListenerCallback(EventDispatcher.java:870)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireEventImmediately(EventDispatcher.java:791)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireBundleEvent(EventDispatcher.java:515)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.fireBundleEvent(Felix.java:4650)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix$4.run(Felix.java:2123)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2147)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.startBundle(Felix.java:2121)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleImpl.start(BundleImpl.java:955)
+	at org.apache.felix.framework.BundleImpl.start(BundleImpl.java:942)
+	at org.apache.karaf.features.internal.FeaturesServiceImpl.installFeatures(FeaturesServiceImpl.java:474)
+	at org.apache.karaf.features.internal.FeaturesServiceImpl.start(FeaturesServiceImpl.java:1107)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)[:1.7.0_67]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)[:1.7.0_67]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)[:1.7.0_67]
+	at java.lang.reflect.Method.invoke(Method.java:606)[:1.7.0_67]
+	at org.apache.aries.blueprint.utils.ReflectionUtils.invoke(ReflectionUtils.java:297)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.invoke(BeanRecipe.java:958)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.runBeanProcInit(BeanRecipe.java:712)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.internalCreate2(BeanRecipe.java:824)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.internalCreate(BeanRecipe.java:787)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.di.AbstractRecipe$1.call(AbstractRecipe.java:79)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)[:1.7.0_67]
+	at org.apache.aries.blueprint.di.AbstractRecipe.create(AbstractRecipe.java:88)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintRepository.createInstances(BlueprintRepository.java:245)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintRepository.createAll(BlueprintRepository.java:183)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintContainerImpl.instantiateEagerComponents(BlueprintContainerImpl.java:676)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintContainerImpl.doRun(BlueprintContainerImpl.java:374)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintContainerImpl.run(BlueprintContainerImpl.java:261)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintExtender.createContainer(BlueprintExtender.java:270)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintExtender.modifiedBundle(BlueprintExtender.java:233)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.customizerModified(BundleHookBundleTracker.java:500)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.customizerModified(BundleHookBundleTracker.java:433)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$AbstractTracked.track(BundleHookBundleTracker.java:725)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.bundleChanged(BundleHookBundleTracker.java:463)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$BundleEventHook.event(BundleHookBundleTracker.java:422)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.felix.framework.util.SecureAction.invokeBundleEventHook(SecureAction.java:1103)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.createWhitelistFromHooks(EventDispatcher.java:696)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireBundleEvent(EventDispatcher.java:484)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.fireBundleEvent(Felix.java:4650)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix$4.run(Felix.java:2123)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2147)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.startBundle(Felix.java:2121)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.setActiveStartLevel(Felix.java:1317)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.FrameworkStartLevelImpl.run(FrameworkStartLevelImpl.java:304)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at java.lang.Thread.run(Thread.java:745)[:1.7.0_67]
+Caused by: java.io.IOException: Creating directory C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\git\local\fabric\.git\refs failed
+	at org.eclipse.jgit.util.FileUtils.mkdir(FileUtils.java:270)
+	at org.eclipse.jgit.util.FileUtils.mkdir(FileUtils.java:248)
+	at org.eclipse.jgit.internal.storage.file.RefDirectory.create(RefDirectory.java:192)
+	at org.eclipse.jgit.internal.storage.file.FileRepository.create(FileRepository.java:252)
+	at org.eclipse.jgit.api.InitCommand.call(InitCommand.java:92)
+	... 89 more
+14:50:49,795 | ERROR | FelixStartLevel  | fabric-git                       | 77 - io.fabric8.fabric-git - 1.0.0.redhat-379 | [io.fabric8.git.service(13)] Failed creating the component instance; see log for reason
+14:50:49,796 | ERROR | FelixStartLevel  | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.BootstrapCompleteService(40)] Cannot create component instance due to failure to bind reference aclManagerAvailable
+14:50:49,796 | ERROR | FelixStartLevel  | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.BootstrapCompleteService(40)] Failed creating the component instance; see log for reason
+14:50:49,803 | ERROR | FelixStartLevel  | fabric-git                       | 77 - io.fabric8.fabric-git - 1.0.0.redhat-379 | [io.fabric8.git.service(13)] The activate method has thrown an exception
+org.eclipse.jgit.api.errors.JGitInternalException: Creating directory C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\git\local\fabric\.git\refs failed
+	at org.eclipse.jgit.api.InitCommand.call(InitCommand.java:95)
+	at io.fabric8.git.internal.FabricGitServiceImpl.openOrInit(FabricGitServiceImpl.java:82)
+	at io.fabric8.git.internal.FabricGitServiceImpl.activate(FabricGitServiceImpl.java:67)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)[:1.7.0_67]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)[:1.7.0_67]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)[:1.7.0_67]
+	at java.lang.reflect.Method.invoke(Method.java:606)[:1.7.0_67]
+	at org.apache.felix.scr.impl.helper.BaseMethod.invokeMethod(BaseMethod.java:231)
+	at org.apache.felix.scr.impl.helper.BaseMethod.access$500(BaseMethod.java:39)
+	at org.apache.felix.scr.impl.helper.BaseMethod$Resolved.invoke(BaseMethod.java:624)
+	at org.apache.felix.scr.impl.helper.BaseMethod.invoke(BaseMethod.java:508)
+	at org.apache.felix.scr.impl.helper.ActivateMethod.invoke(ActivateMethod.java:149)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.createImplementationObject(SingleComponentManager.java:315)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.createComponent(SingleComponentManager.java:127)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:879)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:846)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:785)
+	at org.apache.felix.framework.ServiceRegistrationImpl.getFactoryUnchecked(ServiceRegistrationImpl.java:345)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.access$100(ServiceRegistrationImpl.java:47)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl$1.call(ServiceRegistrationImpl.java:249)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2188)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getService(ServiceRegistrationImpl.java:238)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistry.getService(ServiceRegistry.java:328)
+	at org.apache.felix.framework.Felix.getService(Felix.java:3819)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleContextImpl.getService(BundleContextImpl.java:470)
+	at org.apache.felix.scr.impl.helper.BindMethod.getServiceObject(BindMethod.java:572)
+	at org.apache.felix.scr.impl.manager.DependencyManager.getServiceObject(DependencyManager.java:2006)
+	at org.apache.felix.scr.impl.manager.DependencyManager$SingleStaticCustomizer.prebind(DependencyManager.java:1004)
+	at org.apache.felix.scr.impl.manager.DependencyManager.prebind(DependencyManager.java:1433)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.collectDependencies(AbstractComponentManager.java:1143)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:815)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:785)
+	at org.apache.felix.framework.ServiceRegistrationImpl.getFactoryUnchecked(ServiceRegistrationImpl.java:345)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.access$100(ServiceRegistrationImpl.java:47)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl$1.call(ServiceRegistrationImpl.java:249)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2188)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getService(ServiceRegistrationImpl.java:238)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistry.getService(ServiceRegistry.java:328)
+	at org.apache.felix.framework.Felix.getService(Felix.java:3819)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleContextImpl.getService(BundleContextImpl.java:470)
+	at org.apache.felix.scr.impl.helper.BindMethod.getServiceObject(BindMethod.java:572)
+	at org.apache.felix.scr.impl.manager.DependencyManager.getServiceObject(DependencyManager.java:2006)
+	at org.apache.felix.scr.impl.manager.DependencyManager$SingleStaticCustomizer.prebind(DependencyManager.java:1004)
+	at org.apache.felix.scr.impl.manager.DependencyManager.prebind(DependencyManager.java:1433)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.collectDependencies(AbstractComponentManager.java:1143)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:815)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.activateInternal(AbstractComponentManager.java:874)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.enable(AbstractComponentManager.java:425)
+	at org.apache.felix.scr.impl.config.ConfigurableComponentHolder.enableComponents(ConfigurableComponentHolder.java:376)
+	at org.apache.felix.scr.impl.BundleComponentActivator.initialize(BundleComponentActivator.java:172)
+	at org.apache.felix.scr.impl.BundleComponentActivator.<init>(BundleComponentActivator.java:120)
+	at org.apache.felix.scr.impl.Activator.loadComponents(Activator.java:258)
+	at org.apache.felix.scr.impl.Activator.access$000(Activator.java:45)
+	at org.apache.felix.scr.impl.Activator$ScrExtension.start(Activator.java:185)
+	at org.apache.felix.utils.extender.AbstractExtender.createExtension(AbstractExtender.java:261)
+	at org.apache.felix.utils.extender.AbstractExtender.modifiedBundle(AbstractExtender.java:234)
+	at org.osgi.util.tracker.BundleTracker$Tracked.customizerModified(BundleTracker.java:479)[karaf.jar:2.3.0.redhat-610379]
+	at org.osgi.util.tracker.BundleTracker$Tracked.customizerModified(BundleTracker.java:414)[karaf.jar:2.3.0.redhat-610379]
+	at org.osgi.util.tracker.AbstractTracked.track(AbstractTracked.java:232)[karaf.jar:2.3.0.redhat-610379]
+	at org.osgi.util.tracker.BundleTracker$Tracked.bundleChanged(BundleTracker.java:443)[karaf.jar:2.3.0.redhat-610379]
+	at org.apache.felix.framework.util.EventDispatcher.invokeBundleListenerCallback(EventDispatcher.java:870)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireEventImmediately(EventDispatcher.java:791)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireBundleEvent(EventDispatcher.java:515)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.fireBundleEvent(Felix.java:4650)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix$4.run(Felix.java:2123)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2147)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.startBundle(Felix.java:2121)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleImpl.start(BundleImpl.java:955)
+	at org.apache.felix.framework.BundleImpl.start(BundleImpl.java:942)
+	at org.apache.karaf.features.internal.FeaturesServiceImpl.installFeatures(FeaturesServiceImpl.java:474)
+	at org.apache.karaf.features.internal.FeaturesServiceImpl.start(FeaturesServiceImpl.java:1107)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)[:1.7.0_67]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)[:1.7.0_67]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)[:1.7.0_67]
+	at java.lang.reflect.Method.invoke(Method.java:606)[:1.7.0_67]
+	at org.apache.aries.blueprint.utils.ReflectionUtils.invoke(ReflectionUtils.java:297)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.invoke(BeanRecipe.java:958)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.runBeanProcInit(BeanRecipe.java:712)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.internalCreate2(BeanRecipe.java:824)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.internalCreate(BeanRecipe.java:787)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.di.AbstractRecipe$1.call(AbstractRecipe.java:79)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)[:1.7.0_67]
+	at org.apache.aries.blueprint.di.AbstractRecipe.create(AbstractRecipe.java:88)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintRepository.createInstances(BlueprintRepository.java:245)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintRepository.createAll(BlueprintRepository.java:183)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintContainerImpl.instantiateEagerComponents(BlueprintContainerImpl.java:676)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintContainerImpl.doRun(BlueprintContainerImpl.java:374)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintContainerImpl.run(BlueprintContainerImpl.java:261)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintExtender.createContainer(BlueprintExtender.java:270)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintExtender.modifiedBundle(BlueprintExtender.java:233)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.customizerModified(BundleHookBundleTracker.java:500)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.customizerModified(BundleHookBundleTracker.java:433)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$AbstractTracked.track(BundleHookBundleTracker.java:725)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.bundleChanged(BundleHookBundleTracker.java:463)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$BundleEventHook.event(BundleHookBundleTracker.java:422)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.felix.framework.util.SecureAction.invokeBundleEventHook(SecureAction.java:1103)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.createWhitelistFromHooks(EventDispatcher.java:696)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireBundleEvent(EventDispatcher.java:484)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.fireBundleEvent(Felix.java:4650)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix$4.run(Felix.java:2123)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2147)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.startBundle(Felix.java:2121)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.setActiveStartLevel(Felix.java:1317)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.FrameworkStartLevelImpl.run(FrameworkStartLevelImpl.java:304)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at java.lang.Thread.run(Thread.java:745)[:1.7.0_67]
+Caused by: java.io.IOException: Creating directory C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\git\local\fabric\.git\refs failed
+	at org.eclipse.jgit.util.FileUtils.mkdir(FileUtils.java:270)
+	at org.eclipse.jgit.util.FileUtils.mkdir(FileUtils.java:248)
+	at org.eclipse.jgit.internal.storage.file.RefDirectory.create(RefDirectory.java:192)
+	at org.eclipse.jgit.internal.storage.file.FileRepository.create(FileRepository.java:252)
+	at org.eclipse.jgit.api.InitCommand.call(InitCommand.java:92)
+	... 104 more
+14:50:49,825 | ERROR | FelixStartLevel  | fabric-git                       | 77 - io.fabric8.fabric-git - 1.0.0.redhat-379 | [io.fabric8.git.service(13)] Failed creating the component instance; see log for reason
+14:50:49,826 | ERROR | FelixStartLevel  | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.BootstrapCompleteService(40)] Cannot create component instance due to failure to bind reference aclManagerAvailable
+14:50:49,826 | ERROR | FelixStartLevel  | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.BootstrapCompleteService(40)] Failed creating the component instance; see log for reason
+14:50:49,826 | ERROR | FelixStartLevel  | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.commands.CreateCommand(41)] Cannot create component instance due to failure to bind reference bootComplete
+14:50:49,827 | ERROR | FelixStartLevel  | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.commands.CreateCommand(41)] Failed creating the component instance; see log for reason
+14:50:49,832 | ERROR | FelixStartLevel  | fabric-git                       | 77 - io.fabric8.fabric-git - 1.0.0.redhat-379 | [io.fabric8.git.service(13)] The activate method has thrown an exception
+org.eclipse.jgit.api.errors.JGitInternalException: Creating directory C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\git\local\fabric\.git\refs failed
+	at org.eclipse.jgit.api.InitCommand.call(InitCommand.java:95)
+	at io.fabric8.git.internal.FabricGitServiceImpl.openOrInit(FabricGitServiceImpl.java:82)
+	at io.fabric8.git.internal.FabricGitServiceImpl.activate(FabricGitServiceImpl.java:67)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)[:1.7.0_67]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)[:1.7.0_67]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)[:1.7.0_67]
+	at java.lang.reflect.Method.invoke(Method.java:606)[:1.7.0_67]
+	at org.apache.felix.scr.impl.helper.BaseMethod.invokeMethod(BaseMethod.java:231)
+	at org.apache.felix.scr.impl.helper.BaseMethod.access$500(BaseMethod.java:39)
+	at org.apache.felix.scr.impl.helper.BaseMethod$Resolved.invoke(BaseMethod.java:624)
+	at org.apache.felix.scr.impl.helper.BaseMethod.invoke(BaseMethod.java:508)
+	at org.apache.felix.scr.impl.helper.ActivateMethod.invoke(ActivateMethod.java:149)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.createImplementationObject(SingleComponentManager.java:315)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.createComponent(SingleComponentManager.java:127)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:879)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:846)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:785)
+	at org.apache.felix.framework.ServiceRegistrationImpl.getFactoryUnchecked(ServiceRegistrationImpl.java:345)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.access$100(ServiceRegistrationImpl.java:47)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl$1.call(ServiceRegistrationImpl.java:249)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2188)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getService(ServiceRegistrationImpl.java:238)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistry.getService(ServiceRegistry.java:328)
+	at org.apache.felix.framework.Felix.getService(Felix.java:3819)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleContextImpl.getService(BundleContextImpl.java:470)
+	at org.apache.felix.scr.impl.helper.BindMethod.getServiceObject(BindMethod.java:572)
+	at org.apache.felix.scr.impl.manager.DependencyManager.getServiceObject(DependencyManager.java:2006)
+	at org.apache.felix.scr.impl.manager.DependencyManager$SingleStaticCustomizer.prebind(DependencyManager.java:1004)
+	at org.apache.felix.scr.impl.manager.DependencyManager.prebind(DependencyManager.java:1433)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.collectDependencies(AbstractComponentManager.java:1143)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:815)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:785)
+	at org.apache.felix.framework.ServiceRegistrationImpl.getFactoryUnchecked(ServiceRegistrationImpl.java:345)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.access$100(ServiceRegistrationImpl.java:47)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl$1.call(ServiceRegistrationImpl.java:249)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2188)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getService(ServiceRegistrationImpl.java:238)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistry.getService(ServiceRegistry.java:328)
+	at org.apache.felix.framework.Felix.getService(Felix.java:3819)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleContextImpl.getService(BundleContextImpl.java:470)
+	at org.apache.felix.scr.impl.helper.BindMethod.getServiceObject(BindMethod.java:572)
+	at org.apache.felix.scr.impl.manager.DependencyManager.getServiceObject(DependencyManager.java:2006)
+	at org.apache.felix.scr.impl.manager.DependencyManager$SingleStaticCustomizer.prebind(DependencyManager.java:1004)
+	at org.apache.felix.scr.impl.manager.DependencyManager.prebind(DependencyManager.java:1433)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.collectDependencies(AbstractComponentManager.java:1143)
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:815)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.activateInternal(AbstractComponentManager.java:874)
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.enable(AbstractComponentManager.java:425)
+	at org.apache.felix.scr.impl.config.ConfigurableComponentHolder.enableComponents(ConfigurableComponentHolder.java:376)
+	at org.apache.felix.scr.impl.BundleComponentActivator.initialize(BundleComponentActivator.java:172)
+	at org.apache.felix.scr.impl.BundleComponentActivator.<init>(BundleComponentActivator.java:120)
+	at org.apache.felix.scr.impl.Activator.loadComponents(Activator.java:258)
+	at org.apache.felix.scr.impl.Activator.access$000(Activator.java:45)
+	at org.apache.felix.scr.impl.Activator$ScrExtension.start(Activator.java:185)
+	at org.apache.felix.utils.extender.AbstractExtender.createExtension(AbstractExtender.java:261)
+	at org.apache.felix.utils.extender.AbstractExtender.modifiedBundle(AbstractExtender.java:234)
+	at org.osgi.util.tracker.BundleTracker$Tracked.customizerModified(BundleTracker.java:479)[karaf.jar:2.3.0.redhat-610379]
+	at org.osgi.util.tracker.BundleTracker$Tracked.customizerModified(BundleTracker.java:414)[karaf.jar:2.3.0.redhat-610379]
+	at org.osgi.util.tracker.AbstractTracked.track(AbstractTracked.java:232)[karaf.jar:2.3.0.redhat-610379]
+	at org.osgi.util.tracker.BundleTracker$Tracked.bundleChanged(BundleTracker.java:443)[karaf.jar:2.3.0.redhat-610379]
+	at org.apache.felix.framework.util.EventDispatcher.invokeBundleListenerCallback(EventDispatcher.java:870)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireEventImmediately(EventDispatcher.java:791)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireBundleEvent(EventDispatcher.java:515)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.fireBundleEvent(Felix.java:4650)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix$4.run(Felix.java:2123)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2147)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.startBundle(Felix.java:2121)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleImpl.start(BundleImpl.java:955)
+	at org.apache.felix.framework.BundleImpl.start(BundleImpl.java:942)
+	at org.apache.karaf.features.internal.FeaturesServiceImpl.installFeatures(FeaturesServiceImpl.java:474)
+	at org.apache.karaf.features.internal.FeaturesServiceImpl.start(FeaturesServiceImpl.java:1107)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)[:1.7.0_67]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)[:1.7.0_67]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)[:1.7.0_67]
+	at java.lang.reflect.Method.invoke(Method.java:606)[:1.7.0_67]
+	at org.apache.aries.blueprint.utils.ReflectionUtils.invoke(ReflectionUtils.java:297)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.invoke(BeanRecipe.java:958)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.runBeanProcInit(BeanRecipe.java:712)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.internalCreate2(BeanRecipe.java:824)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BeanRecipe.internalCreate(BeanRecipe.java:787)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.di.AbstractRecipe$1.call(AbstractRecipe.java:79)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)[:1.7.0_67]
+	at org.apache.aries.blueprint.di.AbstractRecipe.create(AbstractRecipe.java:88)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintRepository.createInstances(BlueprintRepository.java:245)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintRepository.createAll(BlueprintRepository.java:183)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintContainerImpl.instantiateEagerComponents(BlueprintContainerImpl.java:676)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintContainerImpl.doRun(BlueprintContainerImpl.java:374)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintContainerImpl.run(BlueprintContainerImpl.java:261)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintExtender.createContainer(BlueprintExtender.java:270)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.blueprint.container.BlueprintExtender.modifiedBundle(BlueprintExtender.java:233)[9:org.apache.aries.blueprint.core:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.customizerModified(BundleHookBundleTracker.java:500)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.customizerModified(BundleHookBundleTracker.java:433)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$AbstractTracked.track(BundleHookBundleTracker.java:725)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$Tracked.bundleChanged(BundleHookBundleTracker.java:463)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.aries.util.tracker.hook.BundleHookBundleTracker$BundleEventHook.event(BundleHookBundleTracker.java:422)[11:org.apache.aries.util:1.0.1.redhat-610379]
+	at org.apache.felix.framework.util.SecureAction.invokeBundleEventHook(SecureAction.java:1103)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.createWhitelistFromHooks(EventDispatcher.java:696)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.util.EventDispatcher.fireBundleEvent(EventDispatcher.java:484)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.fireBundleEvent(Felix.java:4650)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix$4.run(Felix.java:2123)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2147)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.startBundle(Felix.java:2121)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.setActiveStartLevel(Felix.java:1317)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.FrameworkStartLevelImpl.run(FrameworkStartLevelImpl.java:304)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at java.lang.Thread.run(Thread.java:745)[:1.7.0_67]
+Caused by: java.io.IOException: Creating directory C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\git\local\fabric\.git\refs failed
+	at org.eclipse.jgit.util.FileUtils.mkdir(FileUtils.java:270)
+	at org.eclipse.jgit.util.FileUtils.mkdir(FileUtils.java:248)
+	at org.eclipse.jgit.internal.storage.file.RefDirectory.create(RefDirectory.java:192)
+	at org.eclipse.jgit.internal.storage.file.FileRepository.create(FileRepository.java:252)
+	at org.eclipse.jgit.api.InitCommand.call(InitCommand.java:92)
+	... 104 more
+14:50:49,835 | INFO  | pool-4-thread-1  | Server                           | 85 - org.eclipse.jetty.aggregate.jetty-all-server - 8.1.14.v20131031 | jetty-8.1.14.v20131031
+14:50:49,847 | ERROR | FelixStartLevel  | fabric-git                       | 77 - io.fabric8.fabric-git - 1.0.0.redhat-379 | [io.fabric8.git.service(13)] Failed creating the component instance; see log for reason
+14:50:49,847 | ERROR | FelixStartLevel  | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.BootstrapCompleteService(40)] Cannot create component instance due to failure to bind reference aclManagerAvailable
+14:50:49,848 | ERROR | FelixStartLevel  | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.BootstrapCompleteService(40)] Failed creating the component instance; see log for reason
+14:50:49,848 | ERROR | FelixStartLevel  | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.commands.JoinCommand(42)] Cannot create component instance due to failure to bind reference bootComplete
+14:50:49,848 | ERROR | FelixStartLevel  | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.commands.JoinCommand(42)] Failed creating the component instance; see log for reason
+14:50:49,876 | INFO  | pool-4-thread-1  | AbstractConnector                | 85 - org.eclipse.jetty.aggregate.jetty-all-server - 8.1.14.v20131031 | Started SelectChannelConnector@0.0.0.0:8181
+14:50:49,876 | INFO  | pool-4-thread-1  | JettyServerImpl                  | 93 - org.ops4j.pax.web.pax-web-jetty - 3.0.6 | Pax Web available at [0.0.0.0]:[8181]
+14:50:49,882 | INFO  | pool-4-thread-1  | HttpServiceFactoryImpl           | 91 - org.ops4j.pax.web.pax-web-runtime - 3.0.6 | Binding bundle: [io.fabric8.fabric-redirect [96]] to http service
+14:50:49,948 | INFO  | pool-4-thread-1  | AbstractComponent                | 62 - io.fabric8.fabric-api - 1.0.0.redhat-379 | activateComponent: io.fabric8.redirect.RedirectRegistration@4b3669e1
+14:50:50,065 | INFO  | FelixStartLevel  | DeploymentAgent                  | 60 - io.fabric8.fabric-agent - 1.0.0.redhat-379 | Starting DeploymentAgent
+14:50:50,104 | INFO  | .fabric8.agent]) | DeploymentAgent                  | 60 - io.fabric8.fabric-agent - 1.0.0.redhat-379 | DeploymentAgent updated with null
+14:50:50,851 | INFO  | .fabric.server]) | ActiveMQServiceFactory           | 130 - org.jboss.amq.mq-fabric - 6.1.0.redhat-379 | Standalone broker amq is starting.
+14:50:50,851 | INFO  | .fabric.server]) | ActiveMQServiceFactory           | 130 - org.jboss.amq.mq-fabric - 6.1.0.redhat-379 | Broker amq is being started.
+14:50:50,854 | INFO  | FelixStartLevel  | ActiveMQConnectionFactoryService | 130 - org.jboss.amq.mq-fabric - 6.1.0.redhat-379 | Configuring org.fusesource.mq.fabric.cf.ActiveMQConnectionFactoryService@281062d6 with brokerUrl: discovery:(fabric:default) and user: admin
+14:50:50,856 | INFO  | pool-8-thread-1  | ActiveMQServiceFactory           | 130 - org.jboss.amq.mq-fabric - 6.1.0.redhat-379 | booting up a broker from: C:\Fuse\jboss-fuse-6.1.0.redhat-379/etc/activemq.xml
+14:50:50,869 | INFO  | FelixStartLevel  | Activator                        | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Camel activator starting
+14:50:50,880 | INFO  | pool-8-thread-1  | ActiveMQServiceFactory$$anon$1   | 108 - org.apache.servicemix.bundles.spring-context - 3.2.8.RELEASE_1 | Refreshing org.fusesource.mq.fabric.ActiveMQServiceFactory$$anon$1@4e840988: startup date [Fri Jul 31 14:50:50 EDT 2015]; root of context hierarchy
+14:50:50,924 | INFO  | FelixStartLevel  | Activator                        | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Camel activator started
+14:50:50,943 | INFO  | pool-8-thread-1  | XBeanXmlBeanDefinitionReader     | 111 - org.apache.servicemix.bundles.spring-beans - 3.2.8.RELEASE_1 | Loading XML bean definitions from file [C:\Fuse\jboss-fuse-6.1.0.redhat-379\etc\activemq.xml]
+14:50:51,026 | INFO  | FelixStartLevel  | ContextLoaderListener            | 137 - org.springframework.osgi.extender - 1.2.1 | Starting [org.springframework.osgi.extender] bundle v.[1.2.1]
+14:50:51,092 | WARN  | FelixStartLevel  | NamespaceManager                 | 137 - org.springframework.osgi.extender - 1.2.1 | Bundle Apache XBean :: Classloader (org.apache.xbean.classloader) cannot see class [org.springframework.beans.factory.xml.NamespaceHandlerResolver]; ignoring its namespace handlers
+14:50:51,115 | INFO  | FelixStartLevel  | ExtenderConfiguration            | 137 - org.springframework.osgi.extender - 1.2.1 | No custom extender configuration detected; using defaults...
+14:50:51,123 | INFO  | FelixStartLevel  | TimerTaskExecutor                | 108 - org.apache.servicemix.bundles.spring-context - 3.2.8.RELEASE_1 | Initializing Timer
+14:50:51,168 | INFO  | pool-8-thread-1  | DefaultListableBeanFactory       | 111 - org.apache.servicemix.bundles.spring-beans - 3.2.8.RELEASE_1 | Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@2770e695: defining beans [org.springframework.beans.factory.config.PropertyPlaceholderConfigurer#0,org.apache.activemq.xbean.XBeanBrokerService#0]; root of factory hierarchy
+14:50:51,276 | INFO  | FelixStartLevel  | BlueprintContainerImpl           | 9 - org.apache.aries.blueprint.core - 1.0.1.redhat-610379 | Bundle org.fusesource.patch.patch-commands is waiting for dependencies [(objectClass=org.fusesource.patch.Service)]
+14:50:51,326 | INFO  | pool-8-thread-1  | BrokerService                    | 118 - org.apache.activemq.activemq-osgi - 5.9.0.redhat-610379 | Loaded the Bouncy Castle security provider.
+14:50:51,404 | INFO  | pool-8-thread-1  | PListStoreImpl                   | 118 - org.apache.activemq.activemq-osgi - 5.9.0.redhat-610379 | PListStore:[C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\amq\amq\tmp_storage] started
+14:50:51,446 | INFO  | pool-8-thread-1  | BrokerService                    | 118 - org.apache.activemq.activemq-osgi - 5.9.0.redhat-610379 | Using Persistence Adapter: KahaDBPersistenceAdapter[C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\amq\kahadb]
+14:50:51,605 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-management (158) [org.apache.cxf.management.InstrumentationManager]
+14:50:51,639 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-bindings-xml (161) [org.apache.cxf.binding.xml.XMLBindingFactory, org.apache.cxf.binding.xml.wsdl11.XMLWSDLExtensionLoader]
+14:50:51,646 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-bindings-soap (162) [org.apache.cxf.binding.soap.SoapBindingFactory, org.apache.cxf.binding.soap.SoapTransportFactory]
+14:50:51,675 | INFO  | pool-8-thread-1  | BrokerService                    | 118 - org.apache.activemq.activemq-osgi - 5.9.0.redhat-610379 | Apache ActiveMQ 5.9.0.redhat-610379 (amq, ID:rusty-dev-51902-1438368651557-0:1) is starting
+14:50:51,683 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-ws-policy (183) [org.apache.cxf.ws.policy.PolicyEngine, org.apache.cxf.policy.PolicyDataEngine, org.apache.cxf.ws.policy.AssertionBuilderRegistry, org.apache.cxf.ws.policy.PolicyInterceptorProviderRegistry, org.apache.cxf.ws.policy.PolicyBuilder, org.apache.cxf.ws.policy.PolicyAnnotationListener, org.apache.cxf.ws.policy.attachment.ServiceModelPolicyProvider, org.apache.cxf.ws.policy.attachment.external.DomainExpressionBuilderRegistry, org.apache.cxf.ws.policy.attachment.external.EndpointReferenceDomainExpressionBuilder, org.apache.cxf.ws.policy.attachment.wsdl11.Wsdl11AttachmentPolicyProvider, org.apache.cxf.ws.policy.mtom.MTOMAssertionBuilder, org.apache.cxf.ws.policy.mtom.MTOMPolicyInterceptorProvider]
+14:50:51,684 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-transports-http (165) [org.apache.cxf.transport.http.HTTPTransportFactory, org.apache.cxf.transport.http.HTTPWSDLExtensionLoader, org.apache.cxf.transport.http.policy.HTTPClientAssertionBuilder, org.apache.cxf.transport.http.policy.HTTPServerAssertionBuilder, org.apache.cxf.transport.http.policy.NoOpPolicyInterceptorProvider]
+14:50:51,687 | INFO  | pool-8-thread-1  | TransportServerThreadSupport     | 118 - org.apache.activemq.activemq-osgi - 5.9.0.redhat-610379 | Listening for connections at: tcp://rusty-dev:61616?maximumConnections=1000
+14:50:51,688 | INFO  | pool-8-thread-1  | TransportConnector               | 118 - org.apache.activemq.activemq-osgi - 5.9.0.redhat-610379 | Connector openwire started
+14:50:51,688 | INFO  | pool-8-thread-1  | BrokerService                    | 118 - org.apache.activemq.activemq-osgi - 5.9.0.redhat-610379 | Apache ActiveMQ 5.9.0.redhat-610379 (amq, ID:rusty-dev-51902-1438368651557-0:1) started
+14:50:51,688 | INFO  | pool-8-thread-1  | BrokerService                    | 118 - org.apache.activemq.activemq-osgi - 5.9.0.redhat-610379 | For help or more information please see: http://activemq.apache.org
+14:50:51,689 | WARN  | pool-8-thread-1  | BrokerService                    | 118 - org.apache.activemq.activemq-osgi - 5.9.0.redhat-610379 | Store limit is 102400 mb (current store usage is 0 mb). The data directory: C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\amq\kahadb only has 56236 mb of usable space - resetting to maximum available disk space: 56236 mb
+14:50:51,705 | INFO  | pool-8-thread-1  | ActiveMQServiceFactory           | 130 - org.jboss.amq.mq-fabric - 6.1.0.redhat-379 | Broker amq has started.
+14:50:51,720 | INFO  | FelixStartLevel  | HttpServiceFactoryImpl           | 91 - org.ops4j.pax.web.pax-web-runtime - 3.0.6 | Binding bundle: [org.apache.cxf.cxf-rt-transports-http [165]] to http service
+14:50:51,760 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-frontend-jaxws (167) [org.apache.cxf.jaxws.context.WebServiceContextResourceResolver]
+14:50:51,831 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-bindings-corba (174) [org.apache.cxf.binding.corba.CorbaBindingFactory, org.apache.cxf.binding.corba.wsdl.WSDLExtensionRegister]
+14:50:51,848 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-transports-local (176) [org.apache.cxf.transport.local.LocalTransportFactory]
+14:50:51,855 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-bindings-object (177) [org.apache.cxf.binding.object.ObjectBindingFactory]
+14:50:51,867 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-transports-http-jetty (178) [org.apache.cxf.transport.http_jetty.JettyDestinationFactory, org.apache.cxf.transport.http_jetty.JettyHTTPServerEngineFactory, org.apache.cxf.transport.http.ContinuationProviderFactory]
+14:50:51,897 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-transports-jms (179) [org.apache.cxf.transport.jms.JMSTransportFactory, org.apache.cxf.transport.jms.wsdl11.JMSWSDLExtensionLoader]
+14:50:51,904 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-transports-udp (180) [org.apache.cxf.transport.udp.UDPTransportFactory]
+14:50:52,004 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-ws-addr (188) [org.apache.cxf.ws.addressing.policy.AddressingAssertionBuilder, org.apache.cxf.ws.addressing.policy.UsingAddressingAssertionBuilder, org.apache.cxf.ws.addressing.policy.AddressingPolicyInterceptorProvider, org.apache.cxf.ws.addressing.impl.AddressingWSDLExtensionLoader, org.apache.cxf.ws.addressing.WSAddressingFeature$WSAddressingFeatureApplier, org.apache.cxf.ws.addressing.MAPAggregator$MAPAggregatorLoader]
+14:50:52,026 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-ws-security (190) [org.apache.cxf.ws.security.policy.WSSecurityPolicyLoader, org.apache.cxf.ws.security.cache.CacheCleanupListener]
+14:50:52,027 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-ws-mex (192) [org.apache.cxf.ws.mex.MEXServerListener]
+14:50:52,035 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-ws-rm (191) [org.apache.cxf.ws.rm.RMManager, org.apache.cxf.ws.rm.policy.RMPolicyInterceptorProvider, org.apache.cxf.ws.rm.policy.RMAssertionBuilder, org.apache.cxf.ws.rm.policy.RM11AssertionBuilder]
+14:50:52,051 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.cxf.cxf-rt-javascript (193) [org.apache.cxf.javascript.JavascriptQueryHandler]
+14:50:52,091 | INFO  | FelixStartLevel  | CXFActivator                     | 157 - org.apache.cxf.cxf-rt-core - 2.7.0.redhat-610379 | Adding the extensions from bundle org.apache.camel.camel-cxf-transport (198) [org.apache.camel.component.cxf.transport.CamelTransportFactory]
+14:50:52,296 | INFO  | FelixStartLevel  | Activator                        | 216 - org.apache.camel.camel-script - 2.12.0.redhat-610379 | Camel-Script activator starting
+14:50:52,336 | INFO  | FelixStartLevel  | Activator                        | 216 - org.apache.camel.camel-script - 2.12.0.redhat-610379 | Found ScriptEngineFactory in groovy-all
+14:50:52,338 | INFO  | FelixStartLevel  | Activator                        | 216 - org.apache.camel.camel-script - 2.12.0.redhat-610379 | Camel-Script activator started
+14:50:53,539 | INFO  | FelixStartLevel  | ScrServiceMBeanImpl              | 74 - org.apache.karaf.management.mbeans.scr - 2.3.0.redhat-610379 | Activating the Apache Karaf SCR Service MBean
+14:50:53,546 | INFO  | FelixStartLevel  | AbstractComponent                | 62 - io.fabric8.fabric-api - 1.0.0.redhat-379 | activateComponent: io.fabric8.api.jmx.ClusterBootstrapManager@3e24e1bf
+14:50:54,138 | INFO  | FelixStartLevel  | KarArtifactInstaller             | 39 - org.apache.karaf.deployer.kar - 2.3.0.redhat-610379 | Karaf archives will be extracted to C:\Fuse\jboss-fuse-6.1.0.redhat-379/system
+14:50:54,138 | INFO  | FelixStartLevel  | KarArtifactInstaller             | 39 - org.apache.karaf.deployer.kar - 2.3.0.redhat-610379 | Timestamps for Karaf archives will be extracted to C:\Fuse\jboss-fuse-6.1.0.redhat-379/system\.timestamps
+14:50:54,269 | INFO  | FelixStartLevel  | core                             | 45 - org.apache.aries.jmx.core - 1.0.1.redhat-610379 | Starting JMX OSGi agent
+14:50:54,281 | INFO  | FelixStartLevel  | core                             | 45 - org.apache.aries.jmx.core - 1.0.1.redhat-610379 | Registering MBean with ObjectName [osgi.compendium:service=cm,version=1.3,framework=org.apache.felix.framework,uuid=05a15d09-405b-42fb-8c54-67656fbe7b25] for service with service.id [13]
+14:50:54,283 | INFO  | JMX OSGi Agent   | core                             | 45 - org.apache.aries.jmx.core - 1.0.1.redhat-610379 | Registering org.osgi.jmx.service.cm.ConfigurationAdminMBean to MBeanServer com.sun.jmx.mbeanserver.JmxMBeanServer@6d3c121b with name osgi.compendium:service=cm,version=1.3,framework=org.apache.felix.framework,uuid=05a15d09-405b-42fb-8c54-67656fbe7b25
+14:50:54,284 | INFO  | JMX OSGi Agent   | core                             | 45 - org.apache.aries.jmx.core - 1.0.1.redhat-610379 | Registering org.osgi.jmx.framework.ServiceStateMBean to MBeanServer com.sun.jmx.mbeanserver.JmxMBeanServer@6d3c121b with name osgi.core:type=serviceState,version=1.7,framework=org.apache.felix.framework,uuid=05a15d09-405b-42fb-8c54-67656fbe7b25
+14:50:54,287 | INFO  | JMX OSGi Agent   | core                             | 45 - org.apache.aries.jmx.core - 1.0.1.redhat-610379 | Registering org.osgi.jmx.framework.PackageStateMBean to MBeanServer com.sun.jmx.mbeanserver.JmxMBeanServer@6d3c121b with name osgi.core:type=packageState,version=1.5,framework=org.apache.felix.framework,uuid=05a15d09-405b-42fb-8c54-67656fbe7b25
+14:50:54,287 | INFO  | JMX OSGi Agent   | core                             | 45 - org.apache.aries.jmx.core - 1.0.1.redhat-610379 | Registering org.osgi.jmx.framework.BundleStateMBean to MBeanServer com.sun.jmx.mbeanserver.JmxMBeanServer@6d3c121b with name osgi.core:type=bundleState,version=1.7,framework=org.apache.felix.framework,uuid=05a15d09-405b-42fb-8c54-67656fbe7b25
+14:50:54,287 | INFO  | JMX OSGi Agent   | core                             | 45 - org.apache.aries.jmx.core - 1.0.1.redhat-610379 | Registering org.osgi.jmx.framework.FrameworkMBean to MBeanServer com.sun.jmx.mbeanserver.JmxMBeanServer@6d3c121b with name osgi.core:type=framework,version=1.7,framework=org.apache.felix.framework,uuid=05a15d09-405b-42fb-8c54-67656fbe7b25
+14:50:54,288 | INFO  | JMX OSGi Agent   | core                             | 45 - org.apache.aries.jmx.core - 1.0.1.redhat-610379 | Registering org.osgi.jmx.framework.wiring.BundleWiringStateMBean to MBeanServer com.sun.jmx.mbeanserver.JmxMBeanServer@6d3c121b with name osgi.core:type=wiringState,version=1.1,framework=org.apache.felix.framework,uuid=05a15d09-405b-42fb-8c54-67656fbe7b25
+14:50:54,357 | INFO  | FelixStartLevel  | SecurityUtils                    | 30 - org.apache.sshd.core - 0.9.0 | BouncyCastle already registered as a JCE provider
+14:51:02,885 | ERROR | l Console Thread | fabric-git                       | 77 - io.fabric8.fabric-git - 1.0.0.redhat-379 | [io.fabric8.git.service(13)] The activate method has thrown an exception
+org.eclipse.jgit.api.errors.JGitInternalException: Creating directory C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\git\local\fabric\.git\refs failed
+	at org.eclipse.jgit.api.InitCommand.call(InitCommand.java:95)
+	at io.fabric8.git.internal.FabricGitServiceImpl.openOrInit(FabricGitServiceImpl.java:82)
+	at io.fabric8.git.internal.FabricGitServiceImpl.activate(FabricGitServiceImpl.java:67)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)[:1.7.0_67]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)[:1.7.0_67]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)[:1.7.0_67]
+	at java.lang.reflect.Method.invoke(Method.java:606)[:1.7.0_67]
+	at org.apache.felix.scr.impl.helper.BaseMethod.invokeMethod(BaseMethod.java:231)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.helper.BaseMethod.access$500(BaseMethod.java:39)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.helper.BaseMethod$Resolved.invoke(BaseMethod.java:624)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.helper.BaseMethod.invoke(BaseMethod.java:508)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.helper.ActivateMethod.invoke(ActivateMethod.java:149)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.createImplementationObject(SingleComponentManager.java:315)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.createComponent(SingleComponentManager.java:127)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:879)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:846)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:785)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getFactoryUnchecked(ServiceRegistrationImpl.java:345)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.access$100(ServiceRegistrationImpl.java:47)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl$1.call(ServiceRegistrationImpl.java:249)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2188)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getService(ServiceRegistrationImpl.java:238)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistry.getService(ServiceRegistry.java:328)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.getService(Felix.java:3819)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleContextImpl.getService(BundleContextImpl.java:470)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.scr.impl.helper.BindMethod.getServiceObject(BindMethod.java:572)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.DependencyManager.getServiceObject(DependencyManager.java:2006)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.DependencyManager$SingleStaticCustomizer.prebind(DependencyManager.java:1004)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.DependencyManager.prebind(DependencyManager.java:1433)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.collectDependencies(AbstractComponentManager.java:1143)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:815)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:785)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getFactoryUnchecked(ServiceRegistrationImpl.java:345)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.access$100(ServiceRegistrationImpl.java:47)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl$1.call(ServiceRegistrationImpl.java:249)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2188)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getService(ServiceRegistrationImpl.java:238)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistry.getService(ServiceRegistry.java:328)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.getService(Felix.java:3819)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleContextImpl.getService(BundleContextImpl.java:470)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.scr.impl.helper.BindMethod.getServiceObject(BindMethod.java:572)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.DependencyManager.getServiceObject(DependencyManager.java:2006)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.DependencyManager$SingleStaticCustomizer.prebind(DependencyManager.java:1004)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.DependencyManager.prebind(DependencyManager.java:1433)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.collectDependencies(AbstractComponentManager.java:1143)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:815)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:785)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getFactoryUnchecked(ServiceRegistrationImpl.java:345)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.access$100(ServiceRegistrationImpl.java:47)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl$1.call(ServiceRegistrationImpl.java:249)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2188)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getService(ServiceRegistrationImpl.java:238)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistry.getService(ServiceRegistry.java:328)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.getService(Felix.java:3819)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleContextImpl.getService(BundleContextImpl.java:470)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.karaf.shell.console.completer.CommandsCompleter.unProxy(CommandsCompleter.java:146)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at org.apache.karaf.shell.console.completer.CommandsCompleter.checkData(CommandsCompleter.java:100)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at org.apache.karaf.shell.console.completer.CommandsCompleter.complete(CommandsCompleter.java:75)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at org.apache.karaf.shell.console.jline.CompleterAsCompletor.complete(CompleterAsCompletor.java:32)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at jline.console.ConsoleReader.complete(ConsoleReader.java:3077)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at jline.console.ConsoleReader.readLine(ConsoleReader.java:2501)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at jline.console.ConsoleReader.readLine(ConsoleReader.java:2162)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at org.apache.karaf.shell.console.jline.Console.readAndParseCommand(Console.java:256)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at org.apache.karaf.shell.console.jline.Console.run(Console.java:185)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at org.apache.karaf.shell.console.jline.DelayedStarted.run(DelayedStarted.java:61)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+Caused by: java.io.IOException: Creating directory C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\git\local\fabric\.git\refs failed
+	at org.eclipse.jgit.util.FileUtils.mkdir(FileUtils.java:270)
+	at org.eclipse.jgit.util.FileUtils.mkdir(FileUtils.java:248)
+	at org.eclipse.jgit.internal.storage.file.RefDirectory.create(RefDirectory.java:192)
+	at org.eclipse.jgit.internal.storage.file.FileRepository.create(FileRepository.java:252)
+	at org.eclipse.jgit.api.InitCommand.call(InitCommand.java:92)
+	... 64 more
+14:51:02,888 | ERROR | l Console Thread | fabric-git                       | 77 - io.fabric8.fabric-git - 1.0.0.redhat-379 | [io.fabric8.git.service(13)] Failed creating the component instance; see log for reason
+14:51:02,889 | ERROR | l Console Thread | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.BootstrapCompleteService(40)] Cannot create component instance due to failure to bind reference aclManagerAvailable
+14:51:02,889 | ERROR | l Console Thread | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.BootstrapCompleteService(40)] Failed creating the component instance; see log for reason
+14:51:02,889 | ERROR | l Console Thread | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.commands.JoinCommand(42)] Cannot create component instance due to failure to bind reference bootComplete
+14:51:02,889 | ERROR | l Console Thread | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.commands.JoinCommand(42)] Failed creating the component instance; see log for reason
+14:51:02,925 | ERROR | l Console Thread | fabric-git                       | 77 - io.fabric8.fabric-git - 1.0.0.redhat-379 | [io.fabric8.git.service(13)] The activate method has thrown an exception
+org.eclipse.jgit.api.errors.JGitInternalException: Creating directory C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\git\local\fabric\.git\refs failed
+	at org.eclipse.jgit.api.InitCommand.call(InitCommand.java:95)
+	at io.fabric8.git.internal.FabricGitServiceImpl.openOrInit(FabricGitServiceImpl.java:82)
+	at io.fabric8.git.internal.FabricGitServiceImpl.activate(FabricGitServiceImpl.java:67)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)[:1.7.0_67]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)[:1.7.0_67]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)[:1.7.0_67]
+	at java.lang.reflect.Method.invoke(Method.java:606)[:1.7.0_67]
+	at org.apache.felix.scr.impl.helper.BaseMethod.invokeMethod(BaseMethod.java:231)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.helper.BaseMethod.access$500(BaseMethod.java:39)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.helper.BaseMethod$Resolved.invoke(BaseMethod.java:624)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.helper.BaseMethod.invoke(BaseMethod.java:508)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.helper.ActivateMethod.invoke(ActivateMethod.java:149)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.createImplementationObject(SingleComponentManager.java:315)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.createComponent(SingleComponentManager.java:127)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:879)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:846)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:785)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getFactoryUnchecked(ServiceRegistrationImpl.java:345)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.access$100(ServiceRegistrationImpl.java:47)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl$1.call(ServiceRegistrationImpl.java:249)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2188)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getService(ServiceRegistrationImpl.java:238)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistry.getService(ServiceRegistry.java:328)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.getService(Felix.java:3819)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleContextImpl.getService(BundleContextImpl.java:470)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.scr.impl.helper.BindMethod.getServiceObject(BindMethod.java:572)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.DependencyManager.getServiceObject(DependencyManager.java:2006)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.DependencyManager$SingleStaticCustomizer.prebind(DependencyManager.java:1004)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.DependencyManager.prebind(DependencyManager.java:1433)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.collectDependencies(AbstractComponentManager.java:1143)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:815)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:785)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getFactoryUnchecked(ServiceRegistrationImpl.java:345)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.access$100(ServiceRegistrationImpl.java:47)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl$1.call(ServiceRegistrationImpl.java:249)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2188)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getService(ServiceRegistrationImpl.java:238)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistry.getService(ServiceRegistry.java:328)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.getService(Felix.java:3819)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleContextImpl.getService(BundleContextImpl.java:470)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.scr.impl.helper.BindMethod.getServiceObject(BindMethod.java:572)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.DependencyManager.getServiceObject(DependencyManager.java:2006)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.DependencyManager$SingleStaticCustomizer.prebind(DependencyManager.java:1004)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.DependencyManager.prebind(DependencyManager.java:1433)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.AbstractComponentManager.collectDependencies(AbstractComponentManager.java:1143)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getServiceInternal(SingleComponentManager.java:815)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.scr.impl.manager.SingleComponentManager.getService(SingleComponentManager.java:785)[72:org.apache.felix.scr:1.8.0.redhat-610379]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getFactoryUnchecked(ServiceRegistrationImpl.java:345)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.access$100(ServiceRegistrationImpl.java:47)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl$1.call(ServiceRegistrationImpl.java:249)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.runInContext(Felix.java:2188)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistrationImpl.getService(ServiceRegistrationImpl.java:238)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.ServiceRegistry.getService(ServiceRegistry.java:328)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.Felix.getService(Felix.java:3819)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.felix.framework.BundleContextImpl.getService(BundleContextImpl.java:470)[org.apache.felix.framework-4.0.3.redhat-610379.jar:]
+	at org.apache.karaf.shell.console.completer.CommandsCompleter.unProxy(CommandsCompleter.java:146)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at org.apache.karaf.shell.console.completer.CommandsCompleter.checkData(CommandsCompleter.java:100)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at org.apache.karaf.shell.console.completer.CommandsCompleter.complete(CommandsCompleter.java:75)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at org.apache.karaf.shell.console.jline.CompleterAsCompletor.complete(CompleterAsCompletor.java:32)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at jline.console.ConsoleReader.complete(ConsoleReader.java:3077)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at jline.console.ConsoleReader.readLine(ConsoleReader.java:2501)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at jline.console.ConsoleReader.readLine(ConsoleReader.java:2162)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at org.apache.karaf.shell.console.jline.Console.readAndParseCommand(Console.java:256)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at org.apache.karaf.shell.console.jline.Console.run(Console.java:185)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+	at org.apache.karaf.shell.console.jline.DelayedStarted.run(DelayedStarted.java:61)[17:org.apache.karaf.shell.console:2.3.0.redhat-610379]
+Caused by: java.io.IOException: Creating directory C:\Fuse\jboss-fuse-6.1.0.redhat-379\data\git\local\fabric\.git\refs failed
+	at org.eclipse.jgit.util.FileUtils.mkdir(FileUtils.java:270)
+	at org.eclipse.jgit.util.FileUtils.mkdir(FileUtils.java:248)
+	at org.eclipse.jgit.internal.storage.file.RefDirectory.create(RefDirectory.java:192)
+	at org.eclipse.jgit.internal.storage.file.FileRepository.create(FileRepository.java:252)
+	at org.eclipse.jgit.api.InitCommand.call(InitCommand.java:92)
+	... 64 more
+14:51:02,928 | ERROR | l Console Thread | fabric-git                       | 77 - io.fabric8.fabric-git - 1.0.0.redhat-379 | [io.fabric8.git.service(13)] Failed creating the component instance; see log for reason
+14:51:02,929 | ERROR | l Console Thread | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.BootstrapCompleteService(40)] Cannot create component instance due to failure to bind reference aclManagerAvailable
+14:51:02,929 | ERROR | l Console Thread | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.BootstrapCompleteService(40)] Failed creating the component instance; see log for reason
+14:51:02,929 | ERROR | l Console Thread | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.commands.CreateCommand(41)] Cannot create component instance due to failure to bind reference bootComplete
+14:51:02,929 | ERROR | l Console Thread | fabric-boot-commands             | 63 - io.fabric8.fabric-boot-commands - 1.0.0.redhat-379 | [io.fabric8.boot.commands.CreateCommand(41)] Failed creating the component instance; see log for reason
+14:51:28,551 | WARN  | l Console Thread | MavenRepositoryURL               | 1 - org.ops4j.pax.url.mvn - 1.3.7 | Repository spec http://mnt-up-repo01:8081/nexus/content/groups/public/ does not contain an identifier. This is deprecated & discouraged & just evil.
+14:51:38,057 | INFO  | l Console Thread | AppActivator                     | 246 - sandata-wcf-export-services - 1.0.0.1 | Started: [sandata-wcf-export-services] [1.0.0-1]: Sandata WCF Export Services
+14:51:38,232 | WARN  | Thread-44        | BndUtils                         | 2 - org.ops4j.pax.url.wrap - 1.3.7 | Bundle cannot be generated
+java.io.IOException: Pipe closed
+	at java.io.PipedInputStream.checkStateForReceive(PipedInputStream.java:261)[:1.7.0_67]
+	at java.io.PipedInputStream.receive(PipedInputStream.java:202)[:1.7.0_67]
+	at java.io.PipedOutputStream.write(PipedOutputStream.java:122)[:1.7.0_67]
+	at java.util.zip.ZipOutputStream.writeInt(ZipOutputStream.java:590)[:1.7.0_67]
+	at java.util.zip.ZipOutputStream.writeEXT(ZipOutputStream.java:427)[:1.7.0_67]
+	at java.util.zip.ZipOutputStream.closeEntry(ZipOutputStream.java:262)[:1.7.0_67]
+	at aQute.lib.osgi.Jar.writeResource(Jar.java:305)[2:org.ops4j.pax.url.wrap:1.3.7]
+	at aQute.lib.osgi.Jar.write(Jar.java:211)[2:org.ops4j.pax.url.wrap:1.3.7]
+	at org.ops4j.pax.swissbox.bnd.BndUtils$1.run(BndUtils.java:174)[2:org.ops4j.pax.url.wrap:1.3.7]
+14:51:38,858 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Apache Camel 2.12.0.redhat-610379 (CamelContext: appCamelContext) is starting
+14:51:38,859 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | StreamCaching is enabled on CamelContext: appCamelContext
+14:51:38,859 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Tracing is enabled on CamelContext: appCamelContext
+14:51:38,860 | INFO  | l Console Thread | ManagedManagementStrategy        | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | JMX is enabled
+14:51:38,971 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+14:51:38,978 | INFO  | l Console Thread | DefaultStreamCachingStrategy     | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | StreamCaching in use with spool directory: C:\Fuse\jboss-fuse-6.1.0.redhat-379\bin\..\data\tmp\camel\camel-tmp-5ff66ba8-caa5-49f0-bcd9-79ce1d85b9be and rules: [Spool > 128K body size]
+14:51:38,985 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Total 0 routes, of which 0 is started.
+14:51:38,986 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Apache Camel 2.12.0.redhat-610379 (CamelContext: appCamelContext) started in 0.127 seconds
+14:52:07,611 | INFO  | l Console Thread | AppActivator                     | 247 - sandata-cache-services - 1.0.0.2 | Started: [sandata-cache-services] [1.0.0-2]: Sandata Cache Services
+14:52:07,689 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Apache Camel 2.12.0.redhat-610379 (CamelContext: appCamelContext) is starting
+14:52:07,689 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | StreamCaching is enabled on CamelContext: appCamelContext
+14:52:07,690 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Tracing is enabled on CamelContext: appCamelContext
+14:52:07,690 | INFO  | l Console Thread | ManagedManagementStrategy        | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | JMX is enabled
+14:52:07,724 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+14:52:07,728 | INFO  | l Console Thread | DefaultStreamCachingStrategy     | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | StreamCaching in use with spool directory: C:\Fuse\jboss-fuse-6.1.0.redhat-379\bin\..\data\tmp\camel\camel-tmp-cb4a3c7b-892a-4ed3-a4bf-58e94d3e2fb4 and rules: [Spool > 128K body size]
+14:52:07,731 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Total 0 routes, of which 0 is started.
+14:52:07,731 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Apache Camel 2.12.0.redhat-610379 (CamelContext: appCamelContext) started in 0.042 seconds
+14:52:08,214 | WARN  | Thread-46        | BndUtils                         | 2 - org.ops4j.pax.url.wrap - 1.3.7 | Bundle cannot be generated
+java.io.IOException: Pipe closed
+	at java.io.PipedInputStream.checkStateForReceive(PipedInputStream.java:261)[:1.7.0_67]
+	at java.io.PipedInputStream.receive(PipedInputStream.java:227)[:1.7.0_67]
+	at java.io.PipedOutputStream.write(PipedOutputStream.java:149)[:1.7.0_67]
+	at java.util.zip.DeflaterOutputStream.deflate(DeflaterOutputStream.java:253)[:1.7.0_67]
+	at java.util.zip.ZipOutputStream.closeEntry(ZipOutputStream.java:238)[:1.7.0_67]
+	at aQute.lib.osgi.Jar.writeResource(Jar.java:305)[2:org.ops4j.pax.url.wrap:1.3.7]
+	at aQute.lib.osgi.Jar.write(Jar.java:211)[2:org.ops4j.pax.url.wrap:1.3.7]
+	at org.ops4j.pax.swissbox.bnd.BndUtils$1.run(BndUtils.java:174)[2:org.ops4j.pax.url.wrap:1.3.7]
+14:52:08,328 | WARN  | Thread-47        | BndUtils                         | 2 - org.ops4j.pax.url.wrap - 1.3.7 | Bundle cannot be generated
+java.io.IOException: Pipe closed
+	at java.io.PipedInputStream.checkStateForReceive(PipedInputStream.java:261)[:1.7.0_67]
+	at java.io.PipedInputStream.receive(PipedInputStream.java:202)[:1.7.0_67]
+	at java.io.PipedOutputStream.write(PipedOutputStream.java:122)[:1.7.0_67]
+	at java.util.zip.ZipOutputStream.writeInt(ZipOutputStream.java:590)[:1.7.0_67]
+	at java.util.zip.ZipOutputStream.writeEXT(ZipOutputStream.java:427)[:1.7.0_67]
+	at java.util.zip.ZipOutputStream.closeEntry(ZipOutputStream.java:262)[:1.7.0_67]
+	at aQute.lib.osgi.Jar.writeResource(Jar.java:305)[2:org.ops4j.pax.url.wrap:1.3.7]
+	at aQute.lib.osgi.Jar.write(Jar.java:211)[2:org.ops4j.pax.url.wrap:1.3.7]
+	at org.ops4j.pax.swissbox.bnd.BndUtils$1.run(BndUtils.java:174)[2:org.ops4j.pax.url.wrap:1.3.7]
+14:52:46,831 | WARN  | Thread-49        | BndUtils                         | 2 - org.ops4j.pax.url.wrap - 1.3.7 | Bundle cannot be generated
+java.io.IOException: Pipe closed
+	at java.io.PipedInputStream.checkStateForReceive(PipedInputStream.java:261)[:1.7.0_67]
+	at java.io.PipedInputStream.receive(PipedInputStream.java:227)[:1.7.0_67]
+	at java.io.PipedOutputStream.write(PipedOutputStream.java:149)[:1.7.0_67]
+	at java.util.zip.DeflaterOutputStream.deflate(DeflaterOutputStream.java:253)[:1.7.0_67]
+	at java.util.zip.ZipOutputStream.closeEntry(ZipOutputStream.java:238)[:1.7.0_67]
+	at aQute.lib.osgi.Jar.writeResource(Jar.java:305)[2:org.ops4j.pax.url.wrap:1.3.7]
+	at aQute.lib.osgi.Jar.write(Jar.java:211)[2:org.ops4j.pax.url.wrap:1.3.7]
+	at org.ops4j.pax.swissbox.bnd.BndUtils$1.run(BndUtils.java:174)[2:org.ops4j.pax.url.wrap:1.3.7]
+14:52:46,899 | WARN  | Thread-50        | BndUtils                         | 2 - org.ops4j.pax.url.wrap - 1.3.7 | Bundle cannot be generated
+java.io.IOException: Pipe closed
+	at java.io.PipedInputStream.checkStateForReceive(PipedInputStream.java:261)[:1.7.0_67]
+	at java.io.PipedInputStream.receive(PipedInputStream.java:202)[:1.7.0_67]
+	at java.io.PipedOutputStream.write(PipedOutputStream.java:122)[:1.7.0_67]
+	at java.util.zip.ZipOutputStream.writeInt(ZipOutputStream.java:590)[:1.7.0_67]
+	at java.util.zip.ZipOutputStream.writeEXT(ZipOutputStream.java:427)[:1.7.0_67]
+	at java.util.zip.ZipOutputStream.closeEntry(ZipOutputStream.java:262)[:1.7.0_67]
+	at aQute.lib.osgi.Jar.writeResource(Jar.java:305)[2:org.ops4j.pax.url.wrap:1.3.7]
+	at aQute.lib.osgi.Jar.write(Jar.java:211)[2:org.ops4j.pax.url.wrap:1.3.7]
+	at org.ops4j.pax.swissbox.bnd.BndUtils$1.run(BndUtils.java:174)[2:org.ops4j.pax.url.wrap:1.3.7]
+14:52:49,527 | INFO  | l Console Thread | AppActivator                     | 248 - sandata-rest-schedule-export - 1.0.0 | Started: [sandata-rest-schedule-export] [1.0.0]: Sandata Schedule Export REST Service
+14:52:49,765 | INFO  | l Console Thread | InstrumentationManagerImpl       | 158 - org.apache.cxf.cxf-rt-management - 2.7.0.redhat-610379 | registering MBean org.apache.cxf:bus.id=sandata-rest-schedule-export-cxf1991083142,type=Bus,instance.id=1991083142: org.apache.cxf.bus.ManagedBus@79d7b648
+14:52:49,770 | INFO  | l Console Thread | InstrumentationManagerImpl       | 158 - org.apache.cxf.cxf-rt-management - 2.7.0.redhat-610379 | registering MBean org.apache.cxf:bus.id=sandata-rest-schedule-export-cxf1991083142,type=Bus,instance.id=1991083142: javax.management.modelmbean.RequiredModelMBean@2bfa016
+14:52:49,771 | INFO  | l Console Thread | InstrumentationManagerImpl       | 158 - org.apache.cxf.cxf-rt-management - 2.7.0.redhat-610379 | registered org.apache.cxf:bus.id=sandata-rest-schedule-export-cxf1991083142,type=Bus,instance.id=1991083142
+14:52:49,772 | INFO  | l Console Thread | InstrumentationManagerImpl       | 158 - org.apache.cxf.cxf-rt-management - 2.7.0.redhat-610379 | registering MBean org.apache.cxf:bus.id=sandata-rest-schedule-export-cxf1991083142,WorkQueueManager=Bus.WorkQueueManager,type=WorkQueueManager,instance.id=1812767262: org.apache.cxf.bus.managers.WorkQueueManagerImplMBeanWrapper@316796fd
+14:52:49,773 | INFO  | l Console Thread | InstrumentationManagerImpl       | 158 - org.apache.cxf.cxf-rt-management - 2.7.0.redhat-610379 | registering MBean org.apache.cxf:bus.id=sandata-rest-schedule-export-cxf1991083142,WorkQueueManager=Bus.WorkQueueManager,type=WorkQueueManager,instance.id=1812767262: javax.management.modelmbean.RequiredModelMBean@7e9d562
+14:52:49,779 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Apache Camel 2.12.0.redhat-610379 (CamelContext: appCamelContext) is starting
+14:52:49,779 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | StreamCaching is enabled on CamelContext: appCamelContext
+14:52:49,779 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Tracing is enabled on CamelContext: appCamelContext
+14:52:49,779 | INFO  | l Console Thread | ManagedManagementStrategy        | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | JMX is enabled
+14:52:49,981 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+14:52:49,985 | INFO  | l Console Thread | DefaultStreamCachingStrategy     | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | StreamCaching in use with spool directory: C:\Fuse\jboss-fuse-6.1.0.redhat-379\bin\..\data\tmp\camel\camel-tmp-fe4872f2-1ada-47c4-8e3d-759b0c86521e and rules: [Spool > 128K body size]
+14:52:50,086 | INFO  | l Console Thread | ServerImpl                       | 159 - org.apache.cxf.cxf-api - 2.7.0.redhat-610379 | Setting the server's publish address to be /export/schedule
+14:52:50,088 | INFO  | l Console Thread | InstrumentationManagerImpl       | 158 - org.apache.cxf.cxf-rt-management - 2.7.0.redhat-610379 | registering MBean org.apache.cxf:bus.id=sandata-rest-schedule-export-cxf1991083142,type=Bus.Service.Endpoint,service="{http://schedule.export.lab.sandata.com/}RestfulServices",port="RestfulServices",instance.id=877481767: org.apache.cxf.endpoint.ManagedEndpoint@3f87a444
+14:52:50,090 | INFO  | l Console Thread | InstrumentationManagerImpl       | 158 - org.apache.cxf.cxf-rt-management - 2.7.0.redhat-610379 | registering MBean org.apache.cxf:bus.id=sandata-rest-schedule-export-cxf1991083142,type=Bus.Service.Endpoint,service="{http://schedule.export.lab.sandata.com/}RestfulServices",port="RestfulServices",instance.id=877481767: javax.management.modelmbean.RequiredModelMBean@27e16f45
+14:52:50,226 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Route: EXPORT_SCHEDULE started and consuming from: Endpoint[activemq://queue:EXPORT_SCHEDULE]
+14:52:50,263 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Route: EXPORT_SCHEDULE_ExecuteInsert started and consuming from: Endpoint[activemq://queue:EXPORT_SCHEDULE_ExecuteInsert]
+14:52:50,266 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Route: SCHEDULE_EXPORT_RESTFUL_ROUTE_ID started and consuming from: Endpoint[cxfrs://bean://rsServer?bindingStyle=SimpleConsumer]
+14:52:50,272 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Total 3 routes, of which 3 is started.
+14:52:50,273 | INFO  | l Console Thread | BlueprintCamelContext            | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | Apache Camel 2.12.0.redhat-610379 (CamelContext: appCamelContext) started in 0.493 seconds
+14:53:14,531 | INFO  | qtp2097053221-51 | LoggingInInterceptor             | 159 - org.apache.cxf.cxf-api - 2.7.0.redhat-610379 | Inbound Message
+----------------------------
+ID: 1
+Address: http://localhost:8181/cxf/export/schedule;agencyId=1;startDate=2015-07-30%2000:00:00;endDate=2015-07-30%2002:00:00
+Http-Method: GET
+Content-Type: 
+Headers: {Accept=[*/*], accept-encoding=[gzip, deflate, sdch], Accept-Language=[en-US,en;q=0.8], Authorization=[Basic YWRtaW46YWRtaW4=], connection=[keep-alive], Content-Type=[null], Cookie=[.prism_anonymous=35d1a5bd-7445-418f-aa59-f57df7626715; .ASPXANONYMOUS=dH7rz2T00AEkAAAANmY3NTA5YzItZjZmMC00OTc0LWE2NDEtYTFlYmM0YzIzZTMzVD4Hp-DvfvN47Z5gDWwW_RQuKMA1], Host=[localhost:8181], User-Agent=[Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36]}
+--------------------------------------
+14:53:14,555 | INFO  | qtp2097053221-51 | Tracer                           | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | ID-rusty-dev-51955-1438368698648-2-2 >>> (SCHEDULE_EXPORT_RESTFUL_ROUTE_ID) from(cxfrs://bean://rsServer?bindingStyle=SimpleConsumer) --> setHeader[karaf.name] <<< Pattern:InOut, Headers:{CamelAcceptContentType=*/*, CamelCxfRsOperationResourceInfoStack=[org.apache.cxf.jaxrs.model.MethodInvocationInfo@4130bb6f], Accept=*/*, connection=keep-alive, CamelCxfRsResponseGenericType=class com.sandata.lab.data.model.response.Response, Cookie=.prism_anonymous=35d1a5bd-7445-418f-aa59-f57df7626715; .ASPXANONYMOUS=dH7rz2T00AEkAAAANmY3NTA5YzItZjZmMC00OTc0LWE2NDEtYTFlYmM0YzIzZTMzVD4Hp-DvfvN47Z5gDWwW_RQuKMA1, User-Agent=Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36, breadcrumbId=ID-rusty-dev-51955-1438368698648-2-1, agencyId=1, CamelHttpMethod=GET, Host=localhost:8181, CamelHttpUri=/cxf/export/schedule;agencyId=1;startDate=2015-07-30%2000:00:00;endDate=2015-07-30%2002:00:00, CamelHttpPath=, Authorization=Basic YWRtaW46YWRtaW4=, startDate=2015-07-30 00:00:00, endDate=2015-07-30 02:00:00, CamelCxfRsResponseClass=class com.sandata.lab.data.model.response.Response, CamelCxfMessage=org.apache.cxf.message.XMLMessage@89222359, Accept-Language=en-US,en;q=0.8, operationName=EXPORT_SCHEDULE, accept-encoding=gzip, deflate, sdch}, BodyType:org.apache.cxf.message.MessageContentsList, Body:1
+14:53:14,558 | INFO  | qtp2097053221-51 | Tracer                           | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | ID-rusty-dev-51955-1438368698648-2-2 >>> (SCHEDULE_EXPORT_RESTFUL_ROUTE_ID) setHeader[karaf.name] --> pipeline <<< Pattern:InOut, Headers:{Accept=*/*, Host=localhost:8181, User-Agent=Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36, CamelAcceptContentType=*/*, karaf.name=root, CamelCxfRsResponseClass=class com.sandata.lab.data.model.response.Response, Cookie=.prism_anonymous=35d1a5bd-7445-418f-aa59-f57df7626715; .ASPXANONYMOUS=dH7rz2T00AEkAAAANmY3NTA5YzItZjZmMC00OTc0LWE2NDEtYTFlYmM0YzIzZTMzVD4Hp-DvfvN47Z5gDWwW_RQuKMA1, operationName=EXPORT_SCHEDULE, Accept-Language=en-US,en;q=0.8, CamelCxfRsResponseGenericType=class com.sandata.lab.data.model.response.Response, Authorization=Basic YWRtaW46YWRtaW4=, CamelCxfMessage=org.apache.cxf.message.XMLMessage@89222359, CamelHttpPath=, accept-encoding=gzip, deflate, sdch, connection=keep-alive, endDate=2015-07-30 02:00:00, agencyId=1, breadcrumbId=ID-rusty-dev-51955-1438368698648-2-1, CamelHttpMethod=GET, startDate=2015-07-30 00:00:00, CamelHttpUri=/cxf/export/schedule;agencyId=1;startDate=2015-07-30%2000:00:00;endDate=2015-07-30%2002:00:00, CamelCxfRsOperationResourceInfoStack=[org.apache.cxf.jaxrs.model.MethodInvocationInfo@4130bb6f]}, BodyType:org.apache.cxf.message.MessageContentsList, Body:1
+14:53:14,569 | INFO  | qtp2097053221-51 | TemporaryQueueReplyManager       | 135 - org.apache.camel.camel-jms - 2.12.0.redhat-610379 | Using 20-20 concurrent consumers on TemporaryQueueReplyManager[EXPORT_SCHEDULE]
+14:53:14,629 | INFO  | EXPORT_SCHEDULE] | Tracer                           | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | ID-rusty-dev-51955-1438368698648-2-4 >>> (EXPORT_SCHEDULE) from(activemq://queue:EXPORT_SCHEDULE) --> setHeader[karaf.name] <<< Pattern:InOut, Headers:{CamelHttpPath=, Authorization=Basic YWRtaW46YWRtaW4=, JMSExpiration=1438368814598, Accept=*/*, JMSRedelivered=false, JMSReplyTo=temp-queue://ID:rusty-dev-51902-1438368651557-7:1:1, JMSMessageID=ID:rusty-dev-51902-1438368651557-7:1:21:1:1, agencyId=1, JMSCorrelationID=Camel-ID-rusty-dev-51955-1438368698648-2-3, connection=keep-alive, JMSTimestamp=1438368794598, endDate=2015-07-30 02:00:00, Cookie=.prism_anonymous=35d1a5bd-7445-418f-aa59-f57df7626715; .ASPXANONYMOUS=dH7rz2T00AEkAAAANmY3NTA5YzItZjZmMC00OTc0LWE2NDEtYTFlYmM0YzIzZTMzVD4Hp-DvfvN47Z5gDWwW_RQuKMA1, breadcrumbId=ID-rusty-dev-51955-1438368698648-2-1, JMSDestination=queue://EXPORT_SCHEDULE, CamelAcceptContentType=*/*, karaf.name=root, Host=localhost:8181, accept-encoding=gzip, deflate, sdch, JMSXGroupID=null, CamelHttpUri=/cxf/export/schedule;agencyId=1;startDate=2015-07-30%2000:00:00;endDate=2015-07-30%2002:00:00, JMSPriority=4, Accept-Language=en-US,en;q=0.8, JMSXUserID=null, startDate=2015-07-30 00:00:00, operationName=EXPORT_SCHEDULE, JMSType=null, CamelHttpMethod=GET, JMSDeliveryMode=2, User-Agent=Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36}, BodyType:org.apache.cxf.message.MessageContentsList, Body:1
+14:53:14,631 | INFO  | EXPORT_SCHEDULE] | Tracer                           | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | ID-rusty-dev-51955-1438368698648-2-4 >>> (EXPORT_SCHEDULE) setHeader[karaf.name] --> bean[ref:restScheduleExportService method: createUUID] <<< Pattern:InOut, Headers:{JMSDeliveryMode=2, JMSXUserID=null, karaf.name=root, CamelHttpPath=, Authorization=Basic YWRtaW46YWRtaW4=, JMSPriority=4, JMSDestination=queue://EXPORT_SCHEDULE, JMSExpiration=1438368814598, connection=keep-alive, JMSType=null, startDate=2015-07-30 00:00:00, JMSReplyTo=temp-queue://ID:rusty-dev-51902-1438368651557-7:1:1, Accept-Language=en-US,en;q=0.8, CamelHttpUri=/cxf/export/schedule;agencyId=1;startDate=2015-07-30%2000:00:00;endDate=2015-07-30%2002:00:00, JMSMessageID=ID:rusty-dev-51902-1438368651557-7:1:21:1:1, Accept=*/*, Cookie=.prism_anonymous=35d1a5bd-7445-418f-aa59-f57df7626715; .ASPXANONYMOUS=dH7rz2T00AEkAAAANmY3NTA5YzItZjZmMC00OTc0LWE2NDEtYTFlYmM0YzIzZTMzVD4Hp-DvfvN47Z5gDWwW_RQuKMA1, JMSRedelivered=false, accept-encoding=gzip, deflate, sdch, User-Agent=Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36, breadcrumbId=ID-rusty-dev-51955-1438368698648-2-1, JMSTimestamp=1438368794598, agencyId=1, Host=localhost:8181, CamelAcceptContentType=*/*, JMSCorrelationID=Camel-ID-rusty-dev-51955-1438368698648-2-3, endDate=2015-07-30 02:00:00, operationName=EXPORT_SCHEDULE, JMSXGroupID=null, CamelHttpMethod=GET}, BodyType:org.apache.cxf.message.MessageContentsList, Body:1
+14:53:14,635 | INFO  | EXPORT_SCHEDULE] | Tracer                           | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | ID-rusty-dev-51955-1438368698648-2-4 >>> (EXPORT_SCHEDULE) bean[ref:restScheduleExportService method: createUUID] --> wireTap(Endpoint[activemq://queue:EXPORT_SCHEDULE_ExecuteInsert]) <<< Pattern:InOut, Headers:{Accept=*/*, startDate=2015-07-30 00:00:00, endDate=2015-07-30 02:00:00, agencyId=1, JMSType=null, JMSMessageID=ID:rusty-dev-51902-1438368651557-7:1:21:1:1, JMSTimestamp=1438368794598, accept-encoding=gzip, deflate, sdch, CamelHttpPath=, karaf.name=root, SCHEDULE_GUID=d8ab5a97-b2c4-4ac6-be92-26f04670bdb8, JMSXUserID=null, CamelAcceptContentType=*/*, JMSXGroupID=null, CamelHttpMethod=GET, operationName=EXPORT_SCHEDULE, Host=localhost:8181, Accept-Language=en-US,en;q=0.8, User-Agent=Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36, CamelHttpUri=/cxf/export/schedule;agencyId=1;startDate=2015-07-30%2000:00:00;endDate=2015-07-30%2002:00:00, JMSPriority=4, Authorization=Basic YWRtaW46YWRtaW4=, connection=keep-alive, JMSDestination=queue://EXPORT_SCHEDULE, breadcrumbId=ID-rusty-dev-51955-1438368698648-2-1, JMSReplyTo=temp-queue://ID:rusty-dev-51902-1438368651557-7:1:1, JMSExpiration=1438368814598, Cookie=.prism_anonymous=35d1a5bd-7445-418f-aa59-f57df7626715; .ASPXANONYMOUS=dH7rz2T00AEkAAAANmY3NTA5YzItZjZmMC00OTc0LWE2NDEtYTFlYmM0YzIzZTMzVD4Hp-DvfvN47Z5gDWwW_RQuKMA1, JMSDeliveryMode=2, JMSRedelivered=false, JMSCorrelationID=Camel-ID-rusty-dev-51955-1438368698648-2-3}, BodyType:org.apache.cxf.message.MessageContentsList, Body:1
+14:53:14,638 | INFO  | EXPORT_SCHEDULE] | Tracer                           | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | ID-rusty-dev-51955-1438368698648-2-4 >>> (EXPORT_SCHEDULE) wireTap(Endpoint[activemq://queue:EXPORT_SCHEDULE_ExecuteInsert]) --> setBody[Simple: ${in.header.SCHEDULE_GUID}] <<< Pattern:InOut, Headers:{Accept=*/*, startDate=2015-07-30 00:00:00, endDate=2015-07-30 02:00:00, agencyId=1, JMSType=null, JMSMessageID=ID:rusty-dev-51902-1438368651557-7:1:21:1:1, JMSTimestamp=1438368794598, accept-encoding=gzip, deflate, sdch, CamelHttpPath=, karaf.name=root, SCHEDULE_GUID=d8ab5a97-b2c4-4ac6-be92-26f04670bdb8, JMSXUserID=null, CamelAcceptContentType=*/*, JMSXGroupID=null, CamelHttpMethod=GET, operationName=EXPORT_SCHEDULE, Host=localhost:8181, Accept-Language=en-US,en;q=0.8, User-Agent=Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36, CamelHttpUri=/cxf/export/schedule;agencyId=1;startDate=2015-07-30%2000:00:00;endDate=2015-07-30%2002:00:00, JMSPriority=4, Authorization=Basic YWRtaW46YWRtaW4=, connection=keep-alive, JMSDestination=queue://EXPORT_SCHEDULE, breadcrumbId=ID-rusty-dev-51955-1438368698648-2-1, JMSReplyTo=temp-queue://ID:rusty-dev-51902-1438368651557-7:1:1, JMSExpiration=1438368814598, Cookie=.prism_anonymous=35d1a5bd-7445-418f-aa59-f57df7626715; .ASPXANONYMOUS=dH7rz2T00AEkAAAANmY3NTA5YzItZjZmMC00OTc0LWE2NDEtYTFlYmM0YzIzZTMzVD4Hp-DvfvN47Z5gDWwW_RQuKMA1, JMSDeliveryMode=2, JMSRedelivered=false, JMSCorrelationID=Camel-ID-rusty-dev-51955-1438368698648-2-3}, BodyType:org.apache.cxf.message.MessageContentsList, Body:1
+14:53:14,639 | INFO  | EXPORT_SCHEDULE] | Tracer                           | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | ID-rusty-dev-51955-1438368698648-2-4 >>> (EXPORT_SCHEDULE) setBody[Simple: ${in.header.SCHEDULE_GUID}] --> bean[com.sandata.lab.common.utils.data.transformer.FormatTransformer@51cf0e7c] <<< Pattern:InOut, Headers:{JMSDeliveryMode=2, JMSType=null, CamelHttpMethod=GET, connection=keep-alive, CamelHttpUri=/cxf/export/schedule;agencyId=1;startDate=2015-07-30%2000:00:00;endDate=2015-07-30%2002:00:00, accept-encoding=gzip, deflate, sdch, Cookie=.prism_anonymous=35d1a5bd-7445-418f-aa59-f57df7626715; .ASPXANONYMOUS=dH7rz2T00AEkAAAANmY3NTA5YzItZjZmMC00OTc0LWE2NDEtYTFlYmM0YzIzZTMzVD4Hp-DvfvN47Z5gDWwW_RQuKMA1, JMSReplyTo=temp-queue://ID:rusty-dev-51902-1438368651557-7:1:1, Accept=*/*, breadcrumbId=ID-rusty-dev-51955-1438368698648-2-1, CamelHttpPath=, JMSDestination=queue://EXPORT_SCHEDULE, User-Agent=Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36, JMSXGroupID=null, SCHEDULE_GUID=d8ab5a97-b2c4-4ac6-be92-26f04670bdb8, JMSTimestamp=1438368794598, startDate=2015-07-30 00:00:00, karaf.name=root, CamelAcceptContentType=*/*, JMSPriority=4, operationName=EXPORT_SCHEDULE, JMSExpiration=1438368814598, endDate=2015-07-30 02:00:00, Accept-Language=en-US,en;q=0.8, Host=localhost:8181, JMSCorrelationID=Camel-ID-rusty-dev-51955-1438368698648-2-3, Authorization=Basic YWRtaW46YWRtaW4=, JMSXUserID=null, agencyId=1, JMSMessageID=ID:rusty-dev-51902-1438368651557-7:1:21:1:1, JMSRedelivered=false}, BodyType:String, Body:d8ab5a97-b2c4-4ac6-be92-26f04670bdb8
+14:53:14,649 | INFO  | E_ExecuteInsert] | Tracer                           | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | ID-rusty-dev-51955-1438368698648-2-5 >>> (EXPORT_SCHEDULE_ExecuteInsert) from(activemq://queue:EXPORT_SCHEDULE_ExecuteInsert) --> setHeader[karaf.name] <<< Pattern:InOnly, Headers:{JMSCorrelationID=Camel-ID-rusty-dev-51955-1438368698648-2-3, breadcrumbId=ID-rusty-dev-51955-1438368698648-2-1, Host=localhost:8181, connection=keep-alive, agencyId=1, JMSDestination=queue://EXPORT_SCHEDULE_ExecuteInsert, JMSType=null, Cookie=.prism_anonymous=35d1a5bd-7445-418f-aa59-f57df7626715; .ASPXANONYMOUS=dH7rz2T00AEkAAAANmY3NTA5YzItZjZmMC00OTc0LWE2NDEtYTFlYmM0YzIzZTMzVD4Hp-DvfvN47Z5gDWwW_RQuKMA1, JMSRedelivered=false, CamelHttpMethod=GET, operationName=EXPORT_SCHEDULE, JMSExpiration=0, accept-encoding=gzip, deflate, sdch, Accept-Language=en-US,en;q=0.8, Accept=*/*, User-Agent=Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36, karaf.name=root, SCHEDULE_GUID=d8ab5a97-b2c4-4ac6-be92-26f04670bdb8, endDate=2015-07-30 02:00:00, JMSMessageID=ID:rusty-dev-51902-1438368651557-5:1:101:1:1, JMSXUserID=null, Authorization=Basic YWRtaW46YWRtaW4=, JMSReplyTo=null, CamelHttpPath=, CamelAcceptContentType=*/*, JMSPriority=4, JMSTimestamp=1438368794643, CamelJmsDeliveryMode=2, JMSXGroupID=null, CamelHttpUri=/cxf/export/schedule;agencyId=1;startDate=2015-07-30%2000:00:00;endDate=2015-07-30%2002:00:00, startDate=2015-07-30 00:00:00, JMSDeliveryMode=2}, BodyType:org.apache.cxf.message.MessageContentsList, Body:1
+14:53:14,653 | INFO  | E_ExecuteInsert] | Tracer                           | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | ID-rusty-dev-51955-1438368698648-2-5 >>> (EXPORT_SCHEDULE_ExecuteInsert) setHeader[karaf.name] --> bean[ref:restScheduleExportService method: exportSchedule] <<< Pattern:InOnly, Headers:{connection=keep-alive, JMSDeliveryMode=2, karaf.name=root, Authorization=Basic YWRtaW46YWRtaW4=, CamelJmsDeliveryMode=2, SCHEDULE_GUID=d8ab5a97-b2c4-4ac6-be92-26f04670bdb8, accept-encoding=gzip, deflate, sdch, JMSTimestamp=1438368794643, CamelHttpUri=/cxf/export/schedule;agencyId=1;startDate=2015-07-30%2000:00:00;endDate=2015-07-30%2002:00:00, Accept=*/*, JMSReplyTo=null, JMSMessageID=ID:rusty-dev-51902-1438368651557-5:1:101:1:1, Cookie=.prism_anonymous=35d1a5bd-7445-418f-aa59-f57df7626715; .ASPXANONYMOUS=dH7rz2T00AEkAAAANmY3NTA5YzItZjZmMC00OTc0LWE2NDEtYTFlYmM0YzIzZTMzVD4Hp-DvfvN47Z5gDWwW_RQuKMA1, User-Agent=Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36, CamelAcceptContentType=*/*, startDate=2015-07-30 00:00:00, CamelHttpMethod=GET, endDate=2015-07-30 02:00:00, JMSPriority=4, JMSXUserID=null, JMSType=null, CamelHttpPath=, Host=localhost:8181, breadcrumbId=ID-rusty-dev-51955-1438368698648-2-1, JMSRedelivered=false, agencyId=1, Accept-Language=en-US,en;q=0.8, JMSDestination=queue://EXPORT_SCHEDULE_ExecuteInsert, JMSXGroupID=null, JMSCorrelationID=Camel-ID-rusty-dev-51955-1438368698648-2-3, JMSExpiration=0, operationName=EXPORT_SCHEDULE}, BodyType:org.apache.cxf.message.MessageContentsList, Body:1
+14:53:14,657 | INFO  | E_ExecuteInsert] | ExportScheduleLogger             | 248 - sandata-rest-schedule-export - 1.0.0 | [root][Schedule::Export::exportSchedule] ---> START: [90f6bf16-60d4-4a89-b94c-773ab2ed8181][1438368794657]
+14:53:14,659 | INFO  | E_ExecuteInsert] | WcfExportServiceLogger           | 246 - sandata-wcf-export-services - 1.0.0.1 | [DEFAULT][WCF::Export::Service] ---> START: [85860dc7-1ef7-45f9-82b4-1c5b0946eea7][1438368794659]
+14:53:14,664 | INFO  | E_ExecuteInsert] | WcfExportServiceLogger           | 246 - sandata-wcf-export-services - 1.0.0.1 | [DEFAULT][WCF::Export::Service::exportSchedule] ---> END: [85860dc7-1ef7-45f9-82b4-1c5b0946eea7][1438368794659]: Ran In: [0:00:00.000]
+14:53:14,664 | INFO  | E_ExecuteInsert] | ExportScheduleLogger             | 248 - sandata-rest-schedule-export - 1.0.0 | [root][Schedule::Export::exportSchedule] ---> END: [90f6bf16-60d4-4a89-b94c-773ab2ed8181][1438368794664]: Ran In: [0:00:00.007]
+14:53:14,665 | INFO  | E_ExecuteInsert] | Tracer                           | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | ID-rusty-dev-51955-1438368698648-2-5 >>> (EXPORT_SCHEDULE_ExecuteInsert) bean[ref:restScheduleExportService method: exportSchedule] --> log[[${in.header.SCHEDULE_GUID}]: ExportSchedule: COMPLETE!] <<< Pattern:InOnly, Headers:{karaf.name=root, CamelAcceptContentType=*/*, JMSXUserID=null, Accept=*/*, accept-encoding=gzip, deflate, sdch, startDate=2015-07-30 00:00:00, breadcrumbId=ID-rusty-dev-51955-1438368698648-2-1, CamelJmsDeliveryMode=2, CamelHttpPath=, SCHEDULE_GUID=d8ab5a97-b2c4-4ac6-be92-26f04670bdb8, agencyId=1, operationName=EXPORT_SCHEDULE, User-Agent=Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36, connection=keep-alive, JMSDestination=queue://EXPORT_SCHEDULE_ExecuteInsert, Accept-Language=en-US,en;q=0.8, JMSDeliveryMode=2, JMSCorrelationID=Camel-ID-rusty-dev-51955-1438368698648-2-3, JMSTimestamp=1438368794643, JMSRedelivered=false, JMSXGroupID=null, JMSReplyTo=null, JMSExpiration=0, endDate=2015-07-30 02:00:00, JMSPriority=4, CamelHttpMethod=GET, JMSType=null, Authorization=Basic YWRtaW46YWRtaW4=, Host=localhost:8181, JMSMessageID=ID:rusty-dev-51902-1438368651557-5:1:101:1:1, CamelHttpUri=/cxf/export/schedule;agencyId=1;startDate=2015-07-30%2000:00:00;endDate=2015-07-30%2002:00:00, Cookie=.prism_anonymous=35d1a5bd-7445-418f-aa59-f57df7626715; .ASPXANONYMOUS=dH7rz2T00AEkAAAANmY3NTA5YzItZjZmMC00OTc0LWE2NDEtYTFlYmM0YzIzZTMzVD4Hp-DvfvN47Z5gDWwW_RQuKMA1}, BodyType:org.apache.cxf.message.MessageContentsList, Body:1
+14:53:14,666 | INFO  | E_ExecuteInsert] | EXPORT_SCHEDULE_ExecuteInsert    | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | [d8ab5a97-b2c4-4ac6-be92-26f04670bdb8]: ExportSchedule: COMPLETE!
+14:53:14,683 | INFO  | EXPORT_SCHEDULE] | Tracer                           | 133 - org.apache.camel.camel-core - 2.12.0.redhat-610379 | ID-rusty-dev-51955-1438368698648-2-2 >>> (SCHEDULE_EXPORT_RESTFUL_ROUTE_ID) pipeline --> removeHeader[Content-Length] <<< Pattern:InOut, Headers:{startDate=2015-07-30 00:00:00, Authorization=Basic YWRtaW46YWRtaW4=, agencyId=1, JMSType=null, operationName=EXPORT_SCHEDULE, JMSDeliveryMode=2, accept-encoding=gzip, deflate, sdch, JMSTimestamp=1438368794647, CamelJmsDeliveryMode=2, CamelHttpPath=, JMSXUserID=null, JMSDestination=temp-queue://ID:rusty-dev-51902-1438368651557-7:1:1, SCHEDULE_GUID=d8ab5a97-b2c4-4ac6-be92-26f04670bdb8, JMSPriority=4, breadcrumbId=ID-rusty-dev-51955-1438368698648-2-1, Accept=*/*, CamelHttpMethod=GET, JMSCorrelationID=Camel-ID-rusty-dev-51955-1438368698648-2-3, CamelAcceptContentType=*/*, JMSXGroupID=null, Accept-Language=en-US,en;q=0.8, User-Agent=Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36, JMSReplyTo=temp-queue://ID:rusty-dev-51902-1438368651557-7:1:1, endDate=2015-07-30 02:00:00, JMSRedelivered=false, karaf.name=root, Host=localhost:8181, Cookie=.prism_anonymous=35d1a5bd-7445-418f-aa59-f57df7626715; .ASPXANONYMOUS=dH7rz2T00AEkAAAANmY3NTA5YzItZjZmMC00OTc0LWE2NDEtYTFlYmM0YzIzZTMzVD4Hp-DvfvN47Z5gDWwW_RQuKMA1, CamelHttpUri=/cxf/export/schedule;agencyId=1;startDate=2015-07-30%2000:00:00;endDate=2015-07-30%2002:00:00, connection=keep-alive, JMSExpiration=0, JMSMessageID=ID:rusty-dev-51902-1438368651557-3:1:32:1:1}, BodyType:com.sandata.lab.data.model.response.Response, Body:com.sandata.lab.data.model.response.Response@d7a959d[
+  status=SUCCESS
+  token=<null>
+  messageSummary=<null>
+  messageDetail=<null>
+  errorMessage=<null>
+  failedCount=0
+  succeededCount=0
+  data=d8ab5a97-b2c4-4ac6-be92-26f04670bdb8
+]
+14:53:14,729 | INFO  | qtp2097053221-50 | LoggingOutInterceptor            | 159 - org.apache.cxf.cxf-api - 2.7.0.redhat-610379 | Outbound Message
+---------------------------
+ID: 1
+Response-Code: 200
+Content-Type: application/json
+Headers: {SCHEDULE_GUID=[d8ab5a97-b2c4-4ac6-be92-26f04670bdb8], JMSCorrelationID=[Camel-ID-rusty-dev-51955-1438368698648-2-3], startDate=[2015-07-30 00:00:00], connection=[keep-alive], JMSExpiration=[0], JMSMessageID=[ID:rusty-dev-51902-1438368651557-3:1:32:1:1], karaf.name=[root], Cookie=[.prism_anonymous=35d1a5bd-7445-418f-aa59-f57df7626715; .ASPXANONYMOUS=dH7rz2T00AEkAAAANmY3NTA5YzItZjZmMC00OTc0LWE2NDEtYTFlYmM0YzIzZTMzVD4Hp-DvfvN47Z5gDWwW_RQuKMA1], Host=[localhost:8181], JMSDeliveryMode=[2], breadcrumbId=[ID-rusty-dev-51955-1438368698648-2-1], User-Agent=[Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.125 Safari/537.36], endDate=[2015-07-30 02:00:00], JMSPriority=[4], agencyId=[1], JMSTimestamp=[1438368794647], JMSReplyTo=[temp-queue://ID:rusty-dev-51902-1438368651557-7:1:1], JMSDestination=[temp-queue://ID:rusty-dev-51902-1438368651557-7:1:1], Accept-Language=[en-US,en;q=0.8], JMSRedelivered=[false], Authorization=[Basic YWRtaW46YWRtaW4=], accept-encoding=[gzip, deflate, sdch], Accept=[*/*], Content-Type=[application/json], Date=[Fri, 31 Jul 2015 18:53:14 GMT]}
+Messages: (message truncated to 20 bytes)
+
+Payload: {
+  "status": "SUCCE
+--------------------------------------

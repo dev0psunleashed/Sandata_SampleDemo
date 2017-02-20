@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+    <cm:property-placeholder id="sandataDbPoolApp.blueprint.placeholder" persistent-id="com.sandata.lab.dl.db.pool" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+            <cm:property name="activeMQ.username" value="admin" />
+            <cm:property name="activeMQ.password" value="admin" />
+            <cm:property name="activeMQ.concurrentConsumers" value="100" />
+            <cm:property name="thread.pool.size" value="20" />
+            <cm:property name="thread.pool.max.size" value="100" />
+            <cm:property name="thread.pool.max.queue.size" value="-1" />
+            <cm:property name="rest.concurrentConsumers" value="20" />
+
+            <!-- CORE DATA -->
+            <cm:property name="coredata.db.name" value="sdbdev1" />
+            <cm:property name="coredata.db.server" value="stxdevdb.sandata.com" />
+            <cm:property name="coredata.db.port" value="1526" />
+            <cm:property name="coredata.db.user" value="coredata" />
+            <cm:property name="coredata.db.password" value="z3U0kCdbdN" />
+            <cm:property name="coredata.db.initial.pool.size" value="10" />
+            <cm:property name="coredata.db.min.pool.size" value="10" />
+            <cm:property name="coredata.db.max.pool.size" value="100" />
+            <cm:property name="coredata.db.max.statement.size" value="20" />
+            <cm:property name="coredata.db.inactive.timeout.seconds" value="60" />
+            <cm:property name="coredata.db.connection.pool.name" value="UCP_SANDATA_COREDATA_POOL" />
+            <cm:property name="coredata.max.connection.retry" value="5" />
+            <cm:property name="coredata.retry.wait.ms" value="1000" />
+            <cm:property name="coredata.max.connection.reuse.time" value="0" />
+            <cm:property name="coredata.max.connection.reuse.count" value="100" />
+            <cm:property name="coredata.abandoned.connection.timeout" value="120" />
+            <cm:property name="coredata.time.to.live.connection.timeout" value="60" />
+            <cm:property name="coredata.connection.wait.timeout" value="120" />
+            <cm:property name="coredata.inactive.connection.timeout" value="60" />
+            <cm:property name="coredata.timeout.check.interval" value="30" />
+
+            <!-- CORE DATA MART-->
+            <cm:property name="coredatamart.db.name" value="sdbdev1" />
+            <cm:property name="coredatamart.db.server" value="stxdevdb.sandata.com" />
+            <cm:property name="coredatamart.db.port" value="1526" />
+            <cm:property name="coredatamart.db.user" value="dal_user" />
+            <cm:property name="coredatamart.db.password" value="n4HaRalzH4" />
+            <cm:property name="coredatamart.db.initial.pool.size" value="10" />
+            <cm:property name="coredatamart.db.min.pool.size" value="10" />
+            <cm:property name="coredatamart.db.max.pool.size" value="100" />
+            <cm:property name="coredatamart.db.max.statement.size" value="20" />
+            <cm:property name="coredatamart.db.inactive.timeout.seconds" value="60" />
+            <cm:property name="coredatamart.db.connection.pool.name" value="UCP_SANDATA_COREDATAMART_POOL" />
+            <cm:property name="coredatamart.max.connection.retry" value="5" />
+            <cm:property name="coredatamart.retry.wait.ms" value="1000" />
+            <cm:property name="coredatamart.max.connection.reuse.time" value="0" />
+            <cm:property name="coredatamart.max.connection.reuse.count" value="100" />
+            <cm:property name="coredatamart.abandoned.connection.timeout" value="120" />
+            <cm:property name="coredatamart.time.to.live.connection.timeout" value="60" />
+            <cm:property name="coredatamart.connection.wait.timeout" value="120" />
+            <cm:property name="coredatamart.inactive.connection.timeout" value="60" />
+            <cm:property name="coredatamart.timeout.check.interval" value="30" />
+
+            <!-- LOB DATA -->
+            <cm:property name="lobdata.db.name" value="sfdbdev1" />
+            <cm:property name="lobdata.db.server" value="stxdevdb.sandata.com" />
+            <cm:property name="lobdata.db.port" value="1526" />
+            <cm:property name="lobdata.db.user" value="lobdata" />
+            <cm:property name="lobdata.db.password" value="Qo4L5LOSCY" />
+            <cm:property name="lobdata.db.initial.pool.size" value="1" />
+            <cm:property name="lobdata.db.min.pool.size" value="5" />
+            <cm:property name="lobdata.db.max.pool.size" value="20" />
+            <cm:property name="lobdata.db.max.statement.size" value="20" />
+            <cm:property name="lobdata.db.inactive.timeout.seconds" value="60" />
+            <cm:property name="lobdata.db.connection.pool.name" value="UCP_SANDATA_LOBDATA_POOL" />
+            <cm:property name="lobdata.max.connection.retry" value="5" />
+            <cm:property name="lobdata.retry.wait.ms" value="1000" />
+            <cm:property name="lobdata.max.connection.reuse.time" value="0" />
+            <cm:property name="lobdata.max.connection.reuse.count" value="100" />
+            <cm:property name="lobdata.abandoned.connection.timeout" value="120" />
+            <cm:property name="lobdata.time.to.live.connection.timeout" value="60" />
+            <cm:property name="lobdata.connection.wait.timeout" value="120" />
+            <cm:property name="lobdata.inactive.connection.timeout" value="60" />
+            <cm:property name="lobdata.timeout.check.interval" value="30" />
+
+            <!-- META DATA -->
+            <cm:property name="metadata.db.name" value="sdbdev1" />
+            <cm:property name="metadata.db.server" value="stxdevdb.sandata.com" />
+            <cm:property name="metadata.db.port" value="1526" />
+            <cm:property name="metadata.db.user" value="metadata" />
+            <cm:property name="metadata.db.password" value="KjmSX5RE8O" />
+            <cm:property name="metadata.db.initial.pool.size" value="1" />
+            <cm:property name="metadata.db.min.pool.size" value="1" />
+            <cm:property name="metadata.db.max.pool.size" value="20" />
+            <cm:property name="metadata.db.max.statement.size" value="20" />
+            <cm:property name="metadata.db.inactive.timeout.seconds" value="60" />
+            <cm:property name="metadata.db.connection.pool.name" value="UCP_SANDATA_METADATA_POOL" />
+            <cm:property name="metadata.max.connection.retry" value="5" />
+            <cm:property name="metadata.retry.wait.ms" value="1000" />
+            <cm:property name="metadata.max.connection.reuse.time" value="0" />
+            <cm:property name="metadata.max.connection.reuse.count" value="100" />
+            <cm:property name="metadata.abandoned.connection.timeout" value="120" />
+            <cm:property name="metadata.time.to.live.connection.timeout" value="60" />
+            <cm:property name="metadata.connection.wait.timeout" value="120" />
+            <cm:property name="metadata.inactive.connection.timeout" value="60" />
+            <cm:property name="metadata.timeout.check.interval" value="30" />
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="coreDataSource" class="com.sandata.lab.dl.db.pool.model.SandataOracleDataSource" depends-on="appCamelContext">
+        <property name="databaseName" value="${coredata.db.name}" />
+        <property name="serverName" value="${coredata.db.server}" />
+        <property name="portNumber" value="${coredata.db.port}" />
+        <property name="user" value="${coredata.db.user}" />
+        <property name="password" value="${coredata.db.password}" />
+        <property name="initialPoolSize" value="${coredata.db.initial.pool.size}" />
+        <property name="minPoolSize" value="${coredata.db.min.pool.size}" />
+        <property name="maxPoolSize" value="${coredata.db.max.pool.size}" />
+        <property name="maxStatementSize" value="${coredata.db.max.statement.size}" />
+        <property name="inactiveTimeoutSeconds" value="${coredata.db.inactive.timeout.seconds}" />
+        <property name="connectionPoolName" value="${coredata.db.connection.pool.name}" />
+        <property name="maxConnectionRetryCount" value="${coredata.max.connection.retry}" />
+        <property name="retryWaitMs" value="${coredata.retry.wait.ms}" />
+        <property name="maxConnectionReuseTime" value="${coredata.max.connection.reuse.time}" />
+        <property name="maxConnectionReuseCount" value="${coredata.max.connection.reuse.count}" />
+        <property name="abandonedConnectionTimeout" value="${coredata.abandoned.connection.timeout}" />
+        <property name="timeToLiveConnectionTimeout" value="${coredata.time.to.live.connection.timeout}" />
+        <property name="connectionWaitTimeout" value="${coredata.connection.wait.timeout}" />
+        <property name="inactiveConnectionTimeout" value="${coredata.inactive.connection.timeout}" />
+        <property name="timeoutCheckInterval" value="${coredata.timeout.check.interval}" />
+    </bean>
+
+    <bean id="coreDataMartSource" class="com.sandata.lab.dl.db.pool.model.SandataOracleDataSource" depends-on="appCamelContext">
+        <property name="databaseName" value="${coredatamart.db.name}" />
+        <property name="serverName" value="${coredatamart.db.server}" />
+        <property name="portNumber" value="${coredatamart.db.port}" />
+        <property name="user" value="${coredatamart.db.user}" />
+        <property name="password" value="${coredatamart.db.password}" />
+        <property name="initialPoolSize" value="${coredatamart.db.initial.pool.size}" />
+        <property name="minPoolSize" value="${coredatamart.db.min.pool.size}" />
+        <property name="maxPoolSize" value="${coredatamart.db.max.pool.size}" />
+        <property name="maxStatementSize" value="${coredatamart.db.max.statement.size}" />
+        <property name="inactiveTimeoutSeconds" value="${coredatamart.db.inactive.timeout.seconds}" />
+        <property name="connectionPoolName" value="${coredatamart.db.connection.pool.name}" />
+        <property name="maxConnectionRetryCount" value="${coredatamart.max.connection.retry}" />
+        <property name="retryWaitMs" value="${coredatamart.retry.wait.ms}" />
+        <property name="maxConnectionReuseTime" value="${coredatamart.max.connection.reuse.time}" />
+        <property name="maxConnectionReuseCount" value="${coredatamart.max.connection.reuse.count}" />
+        <property name="abandonedConnectionTimeout" value="${coredatamart.abandoned.connection.timeout}" />
+        <property name="timeToLiveConnectionTimeout" value="${coredatamart.time.to.live.connection.timeout}" />
+        <property name="connectionWaitTimeout" value="${coredatamart.connection.wait.timeout}" />
+        <property name="inactiveConnectionTimeout" value="${coredatamart.inactive.connection.timeout}" />
+        <property name="timeoutCheckInterval" value="${coredatamart.timeout.check.interval}" />
+    </bean>
+
+    <bean id="lobDataSource" class="com.sandata.lab.dl.db.pool.model.SandataOracleDataSource" depends-on="coreDataSource">
+        <property name="databaseName" value="${lobdata.db.name}" />
+        <property name="serverName" value="${lobdata.db.server}" />
+        <property name="portNumber" value="${lobdata.db.port}" />
+        <property name="user" value="${lobdata.db.user}" />
+        <property name="password" value="${lobdata.db.password}" />
+        <property name="initialPoolSize" value="${lobdata.db.initial.pool.size}" />
+        <property name="minPoolSize" value="${lobdata.db.min.pool.size}" />
+        <property name="maxPoolSize" value="${lobdata.db.max.pool.size}" />
+        <property name="maxStatementSize" value="${lobdata.db.max.statement.size}" />
+        <property name="inactiveTimeoutSeconds" value="${lobdata.db.inactive.timeout.seconds}" />
+        <property name="connectionPoolName" value="${lobdata.db.connection.pool.name}" />
+        <property name="maxConnectionRetryCount" value="${lobdata.max.connection.retry}" />
+        <property name="retryWaitMs" value="${lobdata.retry.wait.ms}" />
+        <property name="maxConnectionReuseTime" value="${lobdata.max.connection.reuse.time}" />
+        <property name="maxConnectionReuseCount" value="${lobdata.max.connection.reuse.count}" />
+        <property name="abandonedConnectionTimeout" value="${lobdata.abandoned.connection.timeout}" />
+        <property name="timeToLiveConnectionTimeout" value="${lobdata.time.to.live.connection.timeout}" />
+        <property name="connectionWaitTimeout" value="${lobdata.connection.wait.timeout}" />
+        <property name="inactiveConnectionTimeout" value="${lobdata.inactive.connection.timeout}" />
+        <property name="timeoutCheckInterval" value="${lobdata.timeout.check.interval}" />
+    </bean>
+
+    <bean id="metaDataSource" class="com.sandata.lab.dl.db.pool.model.SandataOracleDataSource" depends-on="lobDataSource">
+        <property name="databaseName" value="${metadata.db.name}" />
+        <property name="serverName" value="${metadata.db.server}" />
+        <property name="portNumber" value="${metadata.db.port}" />
+        <property name="user" value="${metadata.db.user}" />
+        <property name="password" value="${metadata.db.password}" />
+        <property name="initialPoolSize" value="${metadata.db.initial.pool.size}" />
+        <property name="minPoolSize" value="${metadata.db.min.pool.size}" />
+        <property name="maxPoolSize" value="${metadata.db.max.pool.size}" />
+        <property name="maxStatementSize" value="${metadata.db.max.statement.size}" />
+        <property name="inactiveTimeoutSeconds" value="${metadata.db.inactive.timeout.seconds}" />
+        <property name="connectionPoolName" value="${metadata.db.connection.pool.name}" />
+        <property name="maxConnectionRetryCount" value="${metadata.max.connection.retry}" />
+        <property name="retryWaitMs" value="${metadata.retry.wait.ms}" />
+        <property name="maxConnectionReuseTime" value="${metadata.max.connection.reuse.time}" />
+        <property name="maxConnectionReuseCount" value="${metadata.max.connection.reuse.count}" />
+        <property name="abandonedConnectionTimeout" value="${metadata.abandoned.connection.timeout}" />
+        <property name="timeToLiveConnectionTimeout" value="${metadata.time.to.live.connection.timeout}" />
+        <property name="connectionWaitTimeout" value="${metadata.connection.wait.timeout}" />
+        <property name="inactiveConnectionTimeout" value="${metadata.inactive.connection.timeout}" />
+        <property name="timeoutCheckInterval" value="${metadata.timeout.check.interval}" />
+    </bean>
+
+    <bean id="sandataOracleConnectionBean" class="com.sandata.lab.dl.db.pool.connection.SandataOracleConnection"
+                init-method="initConnection" destroy-method="destroyConnection" depends-on="metaDataSource">
+        <property name="coreData" ref="coreDataSource" />
+        <property name="coreDataMart" ref="coreDataMartSource" />
+        <property name="lobData" ref="lobDataSource" />
+        <property name="metaData" ref="metaDataSource" />
+    </bean>
+
+    <bean id="sandataConnectionPoolDataService" class="com.sandata.lab.dl.db.pool.impl.SandataConnectionPoolDataService" depends-on="sandataOracleConnectionBean">
+        <property name="sandataOracleConnection" ref="sandataOracleConnectionBean"/>
+    </bean>
+
+    <service id="sandataConnectionPoolDataServiceApi" ref="sandataConnectionPoolDataService"
+             interface="com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService" depends-on="sandataConnectionPoolDataService">
+        <service-properties>
+            <entry key="service.exported.interfaces" value="*" />
+        </service-properties>
+    </service>
+
+    <!--service ref="sandataConnectionPoolDataService" interface="com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService" /-->
+
+    <bean id="appContext" class="com.sandata.lab.dl.db.pool.app.AppContext"
+          factory-method="initCamelContext" depends-on="appCamelContext">
+        <argument ref="appCamelContext" />
+    </bean>
+
+    <bean id="gsonProvider" class="com.sandata.lab.common.utils.data.provider.GSONProvider"/>
+
+    <!-- connect to the local ActiveMQ broker -->
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="brokerURL" value="${activeMQ.uri}" />
+        <property name="userName" value="${activeMQ.username}" />
+        <property name="password" value="${activeMQ.password}" />
+        <property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+    </bean>
+
+    <camelContext id="appCamelContext" trace="true" streamCache="true" useBlueprintPropertyResolver="true" xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- using Camel properties component and refer to the OSGI-INF.blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <!-- <propertyPlaceholder id="properties" location="OSGI-INF.blueprint:dhs.OSGI-INF.blueprint.placeholder"/>-->
+        <propertyPlaceholder id="properties" location="blueprint:sandataDbPoolApp.blueprint.placeholder"/>
+        <package>com.sandata.lab.dl.db.pool.routes</package>
+
+        <threadPoolProfile id="sandataDbConnectionThreadPool" poolSize="{{thread.pool.size}}" maxPoolSize="{{thread.pool.max.size}}" maxQueueSize="{{thread.pool.max.queue.size}}"/>
+    </camelContext>
+</blueprint>

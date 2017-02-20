@@ -1,0 +1,39 @@
+<configuration scan="true" scanPeriod="30 seconds">
+    <appender name="DL_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/dl/visitDL.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread]  - %X{camel.breadcrumbId} - %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy" >
+            <fileNamePattern>data/log/dl/visitDL.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="VISIT_DL_DEFAULT_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/dl/visitDLDefaultLog.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %p %c - %X{camel.breadcrumbId} - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>data/log/dl/visitDLDefaultLog.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <logger name="visitDlLog" level="INFO" additivity="false">
+        <appender-ref ref="DL_LOGGER"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="VISIT_DL_DEFAULT_LOGGER"/>
+    </root>
+</configuration>

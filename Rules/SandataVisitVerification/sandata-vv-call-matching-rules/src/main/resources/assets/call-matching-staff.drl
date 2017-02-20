@@ -1,0 +1,127 @@
+package assets;
+import com.sandata.lab.rules.vv.fact.VisitEventFact;
+import com.sandata.lab.rules.vv.model.VisitState;
+import com.sandata.lab.rules.vv.fact.ScheduleEventFact;
+import com.sandata.lab.rules.vv.model.CallPreferences;
+import com.sandata.lab.rules.vv.fact.StaffFact;
+
+import org.slf4j.LoggerFactory
+import com.sandata.lab.rules.vv.log.utils.App;
+
+dialect  "mvel"
+
+rule "set default state for staff as UNKNOWN_STAFF"
+    agenda-group "call-matching-staff"
+    salience 100
+    when
+        $staffFact : StaffFact(visitState == null)
+    then
+        logInfo("set default state for staff as UNKNOWN_STAFF");
+        retract($staffFact);
+        $staffFact.setVisitState(VisitState.UNKNOWN_STAFF);
+        insert($staffFact);
+end;
+
+
+rule "exactly staff matching rule"
+    agenda-group "call-matching-staff"
+    salience 100
+    when
+        $visitEventFact : VisitEventFact( visitState == VisitState.NOT_MATCHED)
+        //$staffFact : StaffFact(visitState == VisitState.UNKNOWN_STAFF, staffId == $visitEventFact.staffID)
+        $staffFact : StaffFact(visitState == VisitState.UNKNOWN_STAFF, staffVisitVerificationId == $visitEventFact.staffID)
+    then
+        logInfo("staff was matched");
+        retract($staffFact);
+        $staffFact.setVisitState(VisitState.STAFF_MATCHED);
+        //the matched staff should be attached to the current visit ?
+        retract($visitEventFact);
+        $visitEventFact.setStaffFact($staffFact);
+        insert($visitEventFact);
+end;
+
+/* bizness rules changes , just need match exactly !
+rule "call-matching-staff-9-of-9"
+    agenda-group "call-matching-staff"
+    salience 100
+    when
+        $visitEventFact : VisitEventFact( visitState == VisitState.NOT_MATCHED)
+        $staffFact : StaffFact(visitState == VisitState.UNKNOWN_STAFF, xOfY(9, 9, staffId, $visitEventFact.staffID))
+    then
+        logInfo("call-matching-staff-9-of-9 matched");
+        retract($staffFact);
+        $staffFact.setVisitState(VisitState.STAFF_MATCHED_9_OF_9);
+        //the matched staff should be attached to the current visit ?
+        retract($visitEventFact);
+        $visitEventFact.setStaffFact($staffFact);
+        insert($visitEventFact);
+end;
+
+rule "call-matching-staff-7-of-9"
+    agenda-group "call-matching-staff"
+    salience 90
+    when
+         $visitEventFact : VisitEventFact( visitState == VisitState.NOT_MATCHED)
+         $staffFact : StaffFact(visitState == VisitState.UNKNOWN_STAFF, xOfY(7, 9, staffId, $visitEventFact.staffID))
+    then
+        logInfo("call-matching-staff-7-of-9 matched");
+        retract($staffFact);
+        $staffFact.setVisitState(VisitState.STAFF_MATCHED_7_OF_9);
+        //the matched staff should be attached to the current visit ?
+        retract($visitEventFact);
+        $visitEventFact.setStaffFact($staffFact);
+        insert($visitEventFact);
+end;
+
+rule "cep-engine-staff-6-of-9"
+    agenda-group "call-matching-staff"
+    salience 80
+    when
+             $visitEventFact : VisitEventFact( visitState == VisitState.NOT_MATCHED)
+             $staffFact : StaffFact(visitState == VisitState.UNKNOWN_STAFF, xOfY(6, 9, staffId, $visitEventFact.staffID))
+        then
+            logInfo("call-matching-staff-6-of-9 matched");
+            retract($staffFact);
+            $staffFact.setVisitState(VisitState.STAFF_MATCHED_6_OF_9);
+            //the matched staff should be attached to the current visit ?
+            retract($visitEventFact);
+            $visitEventFact.setStaffFact($staffFact);
+            insert($visitEventFact);
+end;
+*/
+
+
+
+rule "Remove the staff that not match to any rule !"
+    agenda-group "call-matching-staff"
+    salience 70
+    when
+             $visitEventFact : VisitEventFact( visitState == VisitState.NOT_MATCHED , staffFact == null)
+             $staffFact : StaffFact(visitState == VisitState.UNKNOWN_STAFF)
+        then
+            logInfo("Remove the staff that not match to any rule");
+            retract($visitEventFact);
+            retract($staffFact);
+            $visitEventFact.setStaffFact($staffFact);
+            insert($visitEventFact);
+end;
+
+rule "There's no staff existing, set as UNKNOWN_STAFF !"
+    agenda-group "call-matching-staff"
+    salience 70
+    when
+             $visitEventFact : VisitEventFact( visitState == VisitState.NOT_MATCHED , staffFact == null)
+             not StaffFact()
+        then
+            logInfo("There's no staff existing, set as UNKNOWN_STAFF");
+            StaffFact staffFact = new StaffFact();
+            staffFact.setVisitState(VisitState.UNKNOWN_STAFF);
+            retract($visitEventFact);
+            $visitEventFact.setStaffFact(staffFact);
+            insert($visitEventFact);
+end;
+
+
+
+
+

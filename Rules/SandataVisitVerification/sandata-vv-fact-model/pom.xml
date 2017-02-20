@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.sandata.lab.rules.vv</groupId>
+    <artifactId>sandata-vv-fact-model</artifactId>
+    <version>1.8-wildfly</version>
+
+    <properties>
+        <sandata-data-model-version>1.0.488-wildfly</sandata-data-model-version>
+        <exports>
+          com.sandata.lab.rules.vv.*
+      </exports>
+      <exportsholding>
+          com.sandata.lab.data.model.dl.model.Visit;version="${sandata-data-model-version}",
+          com.sandata.lab.data.model.dl.model.VisitEvent;version="${sandata-data-model-version}",
+          com.sandata.lab.data.model.dl.model.ScheduleEvent;version="${sandata-data-model-version}",
+          com.sandata.lab.data.model.dl.model.extended.ScheduleEventExt;version="${sandata-data-model-version}",
+          com.sandata.lab.data.model.dl.model.extended.VisitTaskListExt;version="${sandata-data-model-version}",
+      </exportsholding>
+
+      <imports>
+      !javax.*
+      </imports>
+        
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.sandata.lab.model</groupId>
+            <artifactId>sandata-lab-data-model</artifactId>
+            <version>${sandata-data-model-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.code.gson</groupId>
+                    <artifactId>gson</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>ojdbc6</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.oracle</groupId>
+                    <artifactId>ucp</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-beanio</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>joda-time</groupId>
+                    <artifactId>joda-time</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>org.springframework.jdbc</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>compile</scope>
+        </dependency>
+
+    </dependencies>
+    <distributionManagement>
+        <repository>
+            <id>deployment</id>
+            <name>Internal Releases</name>
+            <url>
+                http://mnt-up-repo01:8081/nexus/content/repositories/dev1/
+            </url>
+        </repository>
+        <snapshotRepository>
+            <id>deployment</id>
+            <name>Internal Releases</name>
+            <url>
+                http://mnt-up-repo01:8081/nexus/content/repositories/snapshots/
+            </url>
+        </snapshotRepository>
+    </distributionManagement>
+    <profiles>
+        <profile>
+            <id>deploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.1</version>
+                        <configuration>
+                            <source>1.7</source>
+                            <target>1.7</target>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

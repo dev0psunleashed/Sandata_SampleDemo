@@ -1,0 +1,11 @@
+call C:\app\Oracle\product\jpub\jpub_exe.bat coredata Z4fEIRn7D2 stxdevdb.sandata.com sdbdev2 BSN_ENT_TRNG_CALENDAR_TYP BsnEntTrngCalendarTyp com.sandata.lab.rest.bsn_ent.jpub.model src/main/java
+call C:\app\Oracle\product\jpub\jpub_exe.bat coredata Z4fEIRn7D2 stxdevdb.sandata.com sdbdev2 BSN_ENT_STAFF_ROLE_TYP BsnEntStaffRoleTyp com.sandata.lab.rest.bsn_ent.jpub.model src/main/java
+call C:\app\Oracle\product\jpub\jpub_exe.bat coredata Z4fEIRn7D2 stxdevdb.sandata.com sdbdev2 BSN_ENT_ROLE_TYP BsnEntRoleTyp com.sandata.lab.rest.bsn_ent.jpub.model src/main/java
+call C:\app\Oracle\product\jpub\jpub_exe.bat coredata Z4fEIRn7D2 stxdevdb.sandata.com sdbdev2 BSN_ENT_REL_TYP BsnEntRelTyp com.sandata.lab.rest.bsn_ent.jpub.model src/main/java
+call C:\app\Oracle\product\jpub\jpub_exe.bat coredata Z4fEIRn7D2 stxdevdb.sandata.com sdbdev2 BSN_ENT_PAYER_TYP BsnEntPayerTyp com.sandata.lab.rest.bsn_ent.jpub.model src/main/java
+call C:\app\Oracle\product\jpub\jpub_exe.bat coredata Z4fEIRn7D2 stxdevdb.sandata.com sdbdev2 BSN_ENT_LOB_TYP BsnEntLobTyp com.sandata.lab.rest.bsn_ent.jpub.model src/main/java
+call C:\app\Oracle\product\jpub\jpub_exe.bat coredata Z4fEIRn7D2 stxdevdb.sandata.com sdbdev2 BSN_ENT_EFT_TYP BsnEntEftTyp com.sandata.lab.rest.bsn_ent.jpub.model src/main/java
+call C:\app\Oracle\product\jpub\jpub_exe.bat coredata Z4fEIRn7D2 stxdevdb.sandata.com sdbdev2 BSN_ENT_CRED_TYP BsnEntCredTyp com.sandata.lab.rest.bsn_ent.jpub.model src/main/java
+call C:\app\Oracle\product\jpub\jpub_exe.bat coredata Z4fEIRn7D2 stxdevdb.sandata.com sdbdev2 BSN_ENT_CONTACT_DETL_TYP BsnEntContactDetlTyp com.sandata.lab.rest.bsn_ent.jpub.model src/main/java
+call C:\app\Oracle\product\jpub\jpub_exe.bat coredata Z4fEIRn7D2 stxdevdb.sandata.com sdbdev2 BSN_ENT_COMPLIANCE_TYP BsnEntComplianceTyp com.sandata.lab.rest.bsn_ent.jpub.model src/main/java
+call C:\app\Oracle\product\jpub\jpub_exe.bat coredata Z4fEIRn7D2 stxdevdb.sandata.com sdbdev2 BSN_ENT_TYP BsnEntTyp com.sandata.lab.rest.bsn_ent.jpub.model src/main/java

@@ -1,0 +1,7 @@
+    @PUT
+    @Path("/__PATH__")
+    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public final Response __METHOD__(__MODEL_CLASS__ data) {
+        return null;
+    }

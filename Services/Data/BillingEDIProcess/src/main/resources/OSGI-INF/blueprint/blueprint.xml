@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+    <cm:property-placeholder id="billing.edi.process.blueprint.placeholder" persistent-id="com.sandata.lab.billing.edi" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+            <cm:property name="activeMQ.username" value="admin" />
+            <cm:property name="activeMQ.password" value="admin" />
+            <cm:property name="activeMQ.concurrentConsumers" value="1" />
+
+            <cm:property name="thread.pool.size" value="20" />
+            <cm:property name="thread.pool.max.size" value="100" />
+            <cm:property name="thread.pool.max.queue.size" value="-1" />
+
+            <cm:property name="billing.edi.process.base.folder" value="target/sandata-billing-edi-process" />
+            <cm:property name="temp.folder" value="{{billing.edi.process.base.folder}}/ClearingMagic" />
+            <cm:property name="837.temp.folder" value="{{temp.folder}}/837" />
+            <cm:property name="835.temp.folder" value="{{temp.folder}}/835" />
+            <cm:property name="archive.folder" value="archive" />
+
+            <cm:property: name="send.837.ansi.x12.file.to.clearing.magic.route.from.endpoint" value="file://{{837.temp.folder}}?readLock=markerFile&amp;move={{archive.folder}}" />
+            <cm:property: name="send.837.ansi.x12.file.to.clearing.magic.route.to.endpoint" value="smb://MDWuser@CLEARING-MAGIC/Inbox" />
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="institutionalClaimProcessor" class="com.sandata.lab.billing.edi.processors.InstitutionalClaimProcessor" depends-on="oracleDataService">
+        <property name="oracleDataService" ref="oracleDataService" />
+    </bean>
+
+    <bean id="coreDataSource" class="com.sandata.lab.billing.edi.data.SandataOracleCoreDataSourceAdapter" depends-on="billingEdiProcessCamelContext">
+        <argument>
+            <reference
+                    interface="com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService"
+                    availability="mandatory" />
+        </argument>
+    </bean>
+
+    <bean id="oracleDataService" class="com.sandata.lab.billing.edi.impl.OracleDataService" depends-on="billingEdiProcessCamelContext" activation="eager">
+        <property name="connectionPoolDataService">
+            <reference
+                    interface="com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService"
+                    availability="mandatory" />
+        </property>
+    </bean>
+
+    <bean id="appContext" class="com.sandata.lab.billing.edi.app.AppContext" factory-method="initCamelContext" depends-on="billingEdiProcessCamelContext">
+        <argument ref="billingEdiProcessCamelContext" />
+    </bean>
+
+    <!-- connect to the local ActiveMQ broker -->
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="brokerURL" value="${activeMQ.uri}" />
+        <property name="userName" value="${activeMQ.username}" />
+        <property name="password" value="${activeMQ.password}" />
+        <property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+    </bean>
+
+    <camelContext id="billingEdiProcessCamelContext" trace="false" streamCache="true" useBlueprintPropertyResolver="true" xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- using Camel properties component and refer to the OSGI-INF.blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <!-- <propertyPlaceholder id="properties" location="OSGI-INF.blueprint:dhs.OSGI-INF.blueprint.placeholder"/>-->
+        <propertyPlaceholder id="properties" location="blueprint:billing.edi.process.blueprint.placeholder"/>
+        <package>com.sandata.lab.billing.edi.routes.system</package>
+
+        <threadPoolProfile id="billingEdiProcessThreadPool" poolSize="{{thread.pool.size}}" maxPoolSize="{{thread.pool.max.size}}" maxQueueSize="{{thread.pool.max.queue.size}}"/>
+    </camelContext>
+</blueprint>

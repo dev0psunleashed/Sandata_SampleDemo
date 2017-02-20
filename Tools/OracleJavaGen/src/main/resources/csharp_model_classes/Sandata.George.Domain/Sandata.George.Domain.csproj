@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{12C2C7A0-4FA7-4744-899A-70F1701C7C2F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sandata.George.Domain</RootNamespace>
+    <AssemblyName>Sandata.George.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entities\AccountsReceivable.cs" />
+    <Compile Include="Entities\AdmissionPeriod.cs" />
+    <Compile Include="Entities\AdmissionPeriodDiagnosis.cs" />
+    <Compile Include="Entities\AllergyLookup.cs" />
+    <Compile Include="Entities\Authorization.cs" />
+    <Compile Include="Entities\AuthorizationServices.cs" />
+    <Compile Include="Entities\AuthorizationTasks.cs" />
+    <Compile Include="Entities\Billing.cs" />
+    <Compile Include="Entities\BillingRate.cs" />
+    <Compile Include="Entities\BusinessEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\BusinessEntityCompliance.cs" />
+    <Compile Include="Entities\BusinessEntityContactDetail.cs" />
+    <Compile Include="Entities\BusinessEntityCredentials.cs" />
+    <Compile Include="Entities\BusinessEntityLineOfBusiness.cs" />
+    <Compile Include="Entities\BusinessEntityPayer.cs" />
+    <Compile Include="Entities\BusinessEntityRelationship.cs" />
+    <Compile Include="Entities\BusinessEntityRole.cs" />
+    <Compile Include="Entities\BusinessEntityStaffRole.cs" />
+    <Compile Include="Entities\BusinessEntityTainingCalendar.cs" />
+    <Compile Include="Entities\BusinessLevel.cs" />
+    <Compile Include="Entities\CalendarLookup.cs" />
+    <Compile Include="Entities\ComplianceLookup.cs" />
+    <Compile Include="Entities\DisasterLevelLookup.cs" />
+    <Compile Include="Entities\Eligibility.cs" />
+    <Compile Include="Entities\EthnicityLookup.cs" />
+    <Compile Include="Entities\ExcludedPatients.cs" />
+    <Compile Include="Entities\FrequencyLookup.cs" />
+    <Compile Include="Entities\GenderLookup.cs" />
+    <Compile Include="Entities\HCPCSLookup.cs" />
+    <Compile Include="Entities\HolidayCalendar.cs" />
+    <Compile Include="Entities\ICDDiagnosisCode.cs" />
+    <Compile Include="Entities\Invoice Preview\BillingPreviewSummary.cs" />
+    <Compile Include="Entities\Invoice Preview\LineOfBusinessDetail.cs" />
+    <Compile Include="Entities\Invoice Preview\PayerDetail.cs" />
+    <Compile Include="Entities\Invoice Preview\SubmissionTypeDetail.cs" />
+    <Compile Include="Entities\Invoice.cs" />
+    <Compile Include="Entities\LanguageLookup.cs" />
+    <Compile Include="Entities\MaritalStatusLookup.cs" />
+    <Compile Include="Entities\MasterRateCrosswalk.cs" />
+    <Compile Include="Entities\MedicationClassificationLookup.cs" />
+    <Compile Include="Entities\MedicationLookup.cs" />
+    <Compile Include="Entities\MedicationRouteLookup.cs" />
+    <Compile Include="Entities\MedicationStrengthLookup.cs" />
+    <Compile Include="Entities\MileageAndTime.cs" />
+    <Compile Include="Entities\Patient.cs" />
+    <Compile Include="Entities\PatientAllergies.cs" />
+    <Compile Include="Entities\PatientBusinessEntity.cs" />
+    <Compile Include="Entities\PatientCaseHistory.cs" />
+    <Compile Include="Entities\PatientClinicalAssessment.cs" />
+    <Compile Include="Entities\PatientContactDetail.cs" />
+    <Compile Include="Entities\PatientDiagnosis.cs" />
+    <Compile Include="Entities\PatientDMEAndSupplies.cs" />
+    <Compile Include="Entities\PatientEnvironment.cs" />
+    <Compile Include="Entities\PatientIDCrosswalk.cs" />
+    <Compile Include="Entities\PatientIntake.cs" />
+    <Compile Include="Entities\PatientMedicalHistory.cs" />
+    <Compile Include="Entities\PatientMedications.cs" />
+    <Compile Include="Entities\PatientNutritionalReqs.cs" />
+    <Compile Include="Entities\PatientPayer.cs" />
+    <Compile Include="Entities\PatientPets.cs" />
+    <Compile Include="Entities\PatientRequirements.cs" />
+    <Compile Include="Entities\PatientSafetyMeasures.cs" />
+    <Compile Include="Entities\PatientService.cs" />
+    <Compile Include="Entities\PatientTask.cs" />
+    <Compile Include="Entities\Payer.cs" />
+    <Compile Include="Entities\PayerRate.cs" />
+    <Compile Include="Entities\PayerTypeLookup.cs" />
+    <Compile Include="Entities\Payroll.cs" />
+    <Compile Include="Entities\Physician.cs" />
+    <Compile Include="Entities\PlanOfCare.cs" />
+    <Compile Include="Entities\ReasonForChangeLookup.cs" />
+    <Compile Include="Entities\Reference.cs" />
+    <Compile Include="Entities\Referral.cs" />
+    <Compile Include="Entities\ReligionLookup.cs" />
+    <Compile Include="Entities\Schedule.cs" />
+    <Compile Include="Entities\ScheduleEvent.cs" />
+    <Compile Include="Entities\ScheduleEventTask.cs" />
+    <Compile Include="Entities\Service.cs" />
+    <Compile Include="Entities\ServiceLookup.cs" />
+    <Compile Include="Entities\ServiceSchedule.cs" />
+    <Compile Include="Entities\ServiceTask.cs" />
+    <Compile Include="Entities\ServiceVisit.cs" />
+    <Compile Include="Entities\SkillLookup.cs" />
+    <Compile Include="Entities\Staff.cs" />
+    <Compile Include="Entities\StaffAdmissionType.cs" />
+    <Compile Include="Entities\StaffAssessment.cs" />
+    <Compile Include="Entities\StaffAvailability.cs" />
+    <Compile Include="Entities\StaffBenefits.cs" />
+    <Compile Include="Entities\StaffCertifications.cs" />
+    <Compile Include="Entities\StaffCompliance.cs" />
+    <Compile Include="Entities\StaffComplianceLookup.cs" />
+    <Compile Include="Entities\StaffCredentials.cs" />
+    <Compile Include="Entities\StaffHiringHistory.cs" />
+    <Compile Include="Entities\StaffInServiceTraining.cs" />
+    <Compile Include="Entities\StaffMedicalHistory.cs" />
+    <Compile Include="Entities\StaffPatientHistory.cs" />
+    <Compile Include="Entities\StaffPayFrequencyLookup.cs" />
+    <Compile Include="Entities\StaffPayrollDetail.cs" />
+    <Compile Include="Entities\StaffPayrollTypeLookup.cs" />
+    <Compile Include="Entities\StaffRate.cs" />
+    <Compile Include="Entities\StaffReferralLookup.cs" />
+    <Compile Include="Entities\StaffSkills.cs" />
+    <Compile Include="Entities\StaffTraining.cs" />
+    <Compile Include="Entities\StaffTrainingLookup.cs" />
+    <Compile Include="Entities\StaffTrainingTypeLookup.cs" />
+    <Compile Include="Entities\StaffTypeLookup.cs" />
+    <Compile Include="Entities\StaffWorkingPreference.cs" />
+    <Compile Include="Entities\StaffWorkingPreferenceLookup.cs" />
+    <Compile Include="Entities\StateLookup.cs" />
+    <Compile Include="Entities\StructuralBarriersDetail.cs" />
+    <Compile Include="Entities\Task.cs" />
+    <Compile Include="Entities\TaskLookup.cs" />
+    <Compile Include="Entities\TaxLookup.cs" />
+    <Compile Include="Entities\Timesheet.cs" />
+    <Compile Include="Entities\TypeOfCareLookup.cs" />
+    <Compile Include="Entities\VerificationCalculatedFields.cs" />
+    <Compile Include="Entities\Visit.cs" />
+    <Compile Include="Entities\VisitException.cs" />
+    <Compile Include="Entities\VisitTaskList.cs" />
+    <Compile Include="Entities\VisitVerification.cs" />
+    <Compile Include="TestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestForm.Designer.cs">
+      <DependentUpon>TestForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="TestForm.resx">
+      <DependentUpon>TestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sandata.George.Common\Sandata.George.Common.csproj">
+      <Project>{1344a7ad-dac8-4ae9-8afd-4d3ff89978d0}</Project>
+      <Name>Sandata.George.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

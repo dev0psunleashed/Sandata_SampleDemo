@@ -1,0 +1,18 @@
+
+<configuration>
+
+    <appender name="UP_DEFAULT_LOGGER" class="ch.qos.logback.core.FileAppender">
+        <file>upDefaultLog.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{MM:dd:yyyy HH:mm:ss.SSS} %p %c - %X{camel.breadcrumbId} - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="UP_DEFAULT_LOGGER"/>
+    </root>
+
+
+
+</configuration>

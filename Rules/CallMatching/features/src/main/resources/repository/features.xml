@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="cep-engine-${project.version}">
+    <repository>mvn:org.drools/drools-karaf-features/${drools.version}/xml/features</repository>
+    <repository>mvn:org.jboss.integration.fuse/karaf-features/${jboss.fuse.integration.management.version}/xml/features</repository>
+    <repository>mvn:org.ops4j.pax.cdi/pax-cdi-features/${pax.cdi.version}/xml/features</repository>
+
+    <feature name="cep-engine" version="${project.version}"
+             description="CEP Engine imports DRL as asset and Working memory Rules Engine in Stream mode">
+        <feature>camel-spring</feature>
+        <feature>camel-cache</feature>
+        <feature version="${drools.version}">drools-module</feature>
+        <feature version="${drools.version}">drools-decisiontable</feature>
+        <feature version="${drools.version}">kie-aries-blueprint</feature>
+        <feature version="${jboss.fuse.integration.management.version}">kie-camel</feature>
+
+        <bundle>mvn:org.mvel/mvel2/${mvel.version}</bundle>
+        <bundle>mvn:com.sandata.lab.rules/cep-cache/${project.version}</bundle>
+        <bundle>mvn:com.sandata.lab.rules/cep-engine-dl/${project.version}</bundle>
+        <bundle>mvn:com.sandata.lab.rules/cep-engine-processor/${project.version}</bundle>
+        <bundle>mvn:com.sandata.lab.rules/cep-engine-visitevent-transform/${project.version}</bundle>
+        <bundle>mvn:com.sandata.lab.rules/cep-visit-exception/${project.version}</bundle>
+        <bundle>mvn:org.apache.commons/commons-lang3/${commons.langs3.version}</bundle>
+    </feature>
+</features>
+<!--<features name="cep-engine-${project.version}">
+    <repository>mvn:org.drools/drools-karaf-features/${drools.version}/xml/features</repository>
+    <repository>mvn:org.jboss.integration.fuse/karaf-features/${jboss.fuse.integration.management.version}/xml/features</repository>
+    <repository>mvn:org.ops4j.pax.cdi/pax-cdi-features/${pax.cdi.version}/xml/features</repository>
+    <repository>mvn:com.sandata.lab.imports.calls/sandata-import-calls/${sandata-imports-calls-version}/xml/features</repository>
+    <repository>mvn:com.sandata.lab.dl.vv/sandata-visit-event-data-service/${sandata-data-services-vv-version}/xml/features</repository>
+    <repository>mvn:com.sandata.lab.logger/sandata-logger-service/${sandata-logger-service-version}/xml/features</repository>
+
+    <feature name="cep-engine" version="${project.version}"
+             description="CEP Engine imports DRL as asset and Working memory Rules Engine in Stream mode">
+        <feature>camel-spring</feature>
+        <feature>camel-cache</feature>
+        <feature version="${drools.version}">drools-module</feature>
+        <feature version="${drools.version}">drools-decisiontable</feature>
+        <feature version="${drools.version}">kie-aries-blueprint</feature>
+        <feature version="${jboss.fuse.integration.management.version}">kie-camel</feature>
+        <feature version="${sandata-imports-calls-version}">sandata-import-calls</feature>
+        <feature version="${sandata-data-services-vv-version}">sandata-visit-event-data-service</feature>
+        <feature version="${sandata-logger-service-version}">sandata-logger-service</feature>
+        <bundle>mvn:org.mvel/mvel2/${mvel.version}</bundle>
+        <bundle>mvn:com.sandata.lab.rules/cep-cache/${project.version}</bundle>
+        <bundle>mvn:com.sandata.lab.dl.db.pool/sandata-database-pool-service/${sandata-database-pool-service-version}</bundle>
+        <bundle>mvn:com.sandata.lab.logger/sandata-logger-service/${sandata-logger-service-version}</bundle>
+        <bundle>mvn:com.sandata.lab.dl.vv/sandata-visit-event-data-service/${sandata-data-services-vv-version}</bundle>
+-->     <!--
+                <bundle>mvn:com.sandata.lab.imports.calls/sandata-import-calls/${sandata-imports-calls-version}</bundle>
+        -->
+<!--        <bundle>mvn:com.sandata.lab.rules/cep-engine-processor/${project.version}</bundle>
+        <bundle>mvn:com.sandata.lab.rules/cep-engine-dl/${project.version}</bundle>
+        <bundle>mvn:com.sandata.lab.rules/cep-engine-visitevent-transform/${project.version}</bundle>
+        <bundle>mvn:com.sandata.lab.rules/cep-visit-exception/${project.version}</bundle>
+        <bundle>mvn:com.sandata.lab.rules/cep-call-creator/${project.version}</bundle>
+        <bundle>mvn:org.apache.commons/commons-lang3/${commons.langs3.version}</bundle>
+
+    </feature>
+</features>-->

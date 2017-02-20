@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.sandata.lab.rest.service</groupId>
+    <artifactId>sandata-rest-service-data-service</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>bundle</packaging>
+    <description>Sandata REST SERVICE Service</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jboss.fuse.bom.version>6.3.0.redhat-187</jboss.fuse.bom.version>
+
+        <beanutils.version>1.8.3</beanutils.version>
+        <cxf.version>2.7.0.redhat-610379</cxf.version>
+        <commons.pool.version>1.6</commons.pool.version>
+        <commons.langs3.version>3.1</commons.langs3.version>
+        <commons.langs.version>2.6</commons.langs.version>
+        <commons.logging.version>1.1.3</commons.logging.version>
+        <commons.net.version>3.2</commons.net.version>
+        <commons.collections.version>3.2.1</commons.collections.version>
+        <springframework.version>3.2.4.RELEASE</springframework.version>
+        <servicemix.bundles.httpclient.version>3.1_5</servicemix.bundles.httpclient.version>
+        <servicemix.bundles.version>1.4_3</servicemix.bundles.version>
+        <servicemix.bundles.xpp3.version>1.1.4c_6</servicemix.bundles.xpp3.version>
+        <servicemix.specs.version>2.3.0.redhat-610379</servicemix.specs.version>
+        <apache.felix.version>1.4.0</apache.felix.version>
+        <gson.version>2.2.4</gson.version>
+        <joda.version>2.2</joda.version>
+        <oracle.version>11.2.0.3</oracle.version>
+        <camel.blueprint.test.version>2.10.6</camel.blueprint.test.version>
+        <jetty.version>8.1.14.v20131031</jetty.version>
+        <karaf.jaas.boot.version>2.3.0</karaf.jaas.boot.version>
+        <drools.version>5.5.0.Final_1</drools.version>
+        <osgi.r4.version>1.0</osgi.r4.version>
+        <camel.spring.version>2.12.0.redhat-610379</camel.spring.version>
+        <mssql.version>4.0</mssql.version>
+        <httpclient.version>4.3.2</httpclient.version>
+        <jsch.version>0.1.50</jsch.version>
+        <uuid.version>3.2</uuid.version>
+        <neethi.version>3.0.2</neethi.version>
+        <spring.osgi.version>1.2.1</spring.osgi.version>
+
+        <com.oracle.ucp.version>1.0</com.oracle.ucp.version>
+        <com.oracle.ojdbc.version>11.2.0.4</com.oracle.ojdbc.version>
+
+        <jmockit.version>1.18</jmockit.version>
+
+        <!-- OSGi stuff -->
+        <felix-plugin.version>2.4.0</felix-plugin.version>
+        <apache.felix.version>1.4.0</apache.felix.version>
+        <osgi.version>5.0.0</osgi.version>
+
+        <sandata-database-pool-service-version>1.0.59</sandata-database-pool-service-version>
+
+        <sandata-copyright>Copyright © 2016-2019 Sandata Technologies, LLC Operates under U.S. Patent Nos. 5,949,856, and 5,963,912 which are owned by Sandata Technologies, LLC. All rights reserved.</sandata-copyright>
+
+        <sandata-data-model-version>1.0.490</sandata-data-model-version>
+        <sandata-lab-common-oracle-version>1.0.7</sandata-lab-common-oracle-version>
+        <sandata-lab-common-utils-version>1.0.99</sandata-lab-common-utils-version>
+
+        <private>
+            com.sandata.lab.rest.service.impl
+        </private>
+        <exports>
+            com.sandata.lab.rest.service.*
+        </exports>
+        <imports>
+            com.oracle.*,
+            oracle.sql,
+            oracle.jdbc,
+            oracle.jdbc.aq,
+            oracle.jdbc.pool,
+            oracle.jdbc.dcn,
+            oracle.jdbc.oracore,
+            oracle.jdbc.internal,
+            oracle.jpub.runtime,
+            oracle.ucp,
+            oracle.ucp.jdbc,
+            com.sandata.lab.dl.db.pool.connection;version="[${sandata-database-pool-service-version},2)",
+            com.sandata.lab.dl.db.pool.api;version="[${sandata-database-pool-service-version},2)",
+            com.sandata.lab.dl.db.pool.utils.constants;version="[${sandata-database-pool-service-version},2)",
+            com.google.gson.*;version="[2.2,3)",
+            org.ietf.jgss.*,
+            javax.naming.*,
+            javax.management.*,
+            javax.ws.rs;version="[1.1,3)",
+            javax.ws.rs.core;version="[1.1,3)",
+            javax.ws.rs.ext;version="[1.1,3)",
+            javax.xml.bind,
+            javax.xml.bind.annotation,
+            javax.xml.parsers,
+            javax.net.ssl,
+            org.apache.activemq.camel.component,
+            org.apache.camel.*;version="[2.10,3)",
+            org.apache.cxf.jaxrs.*,
+            org.apache.cxf.interceptor.security,
+            org.apache.cxf.message,
+            org.apache.commons.lang3.*,
+            org.osgi.framework;version="[1.5,2)",
+            org.osgi.service.blueprint;version="[1.0.0,2.0.0)",
+            org.slf4j.*;version="[1.7,2)",
+            org.apache.karaf.jaas.boot,
+            org.apache.karaf.jaas.boot.principal,
+            org.eclipse.jetty.plus.jaas,
+            org.springframework.jdbc.*,
+            org.springframework.transaction.*,
+            org.apache.commons.dbcp.*,
+            javax.sql.*,
+            javax.swing.*,
+            org.w3c.dom.*,
+            org.xml.sax.*,
+            org.apache.commons.lang.exception.*,
+            org.apache.commons.beanutils.*,
+            javax.xml.datatype.*,
+            javax.xml.namespace.*
+        </imports>
+        <fab-provided-dependencies>
+            org.apache.camel:*
+        </fab-provided-dependencies>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.fuse.bom</groupId>
+                <artifactId>jboss-fuse-parent</artifactId>
+                <version>${jboss.fuse.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>${com.oracle.ojdbc.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ucp</artifactId>
+            <version>${com.oracle.ucp.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sandata.lab.dl.db.pool</groupId>
+            <artifactId>sandata-database-pool-service</artifactId>
+            <version>${sandata-database-pool-service-version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sandata.lab.common.oracle</groupId>
+            <artifactId>sandata-lab-common-oracle</artifactId>
+            <version>${sandata-lab-common-oracle-version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sandata.lab.common.utils</groupId>
+            <artifactId>sandata-lab-common-utils</artifactId>
+            <version>${sandata-lab-common-utils-version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sandata.lab.model</groupId>
+            <artifactId>sandata-lab-data-model</artifactId>
+            <version>${sandata-data-model-version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.commons-httpclient</artifactId>
+            <version>${servicemix.bundles.httpclient.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.aggregate</groupId>
+            <artifactId>jetty-all-server</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.karaf.jaas</groupId>
+            <artifactId>org.apache.karaf.jaas.boot</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Parent POM Dependencies-->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http-jetty</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-pool</groupId>
+            <artifactId>commons-pool</artifactId>
+            <version>${commons.pool.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>org.springframework.jdbc</artifactId>
+            <version>${springframework.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>org.springframework.core</artifactId>
+            <version>${springframework.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons.langs3.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.commons-dbcp</artifactId>
+            <version>${servicemix.bundles.version}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.thoughtworks.xstream</groupId>
+                    <artifactId>xstream</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- org.apache.commons.lang.BooleanUtils -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- OSGI BundleActivator -->
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>${apache.felix.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- gson 2.2.4 -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JodaTime -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${joda.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Apache Camel -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-cxf</artifactId>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-web</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-aop</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>aopalliance</groupId>
+                    <artifactId>aopalliance</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>${commons.net.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Tests -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test-blueprint</artifactId>
+            <version>${camel.blueprint.test.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jmockit</groupId>
+            <artifactId>jmockit</artifactId>
+            <version>${jmockit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jmockit</groupId>
+            <artifactId>jmockit-coverage</artifactId>
+            <version>${jmockit.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <version>${felix-plugin.version}</version>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+                        <Implementation-Version>${project.version}</Implementation-Version>
+                        <_failok>true</_failok>
+                        <Export-Package>${exports}</Export-Package>
+                        <Import-Package>${imports}</Import-Package>
+                        <Private-Package>${private}</Private-Package>
+                        <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+                        <!-- http://camel.apache.org/tutorial-osgi-camel-part2b.html -->
+                        <!-- http://www.davsclaus.com/2012/08/osgi-deployment-made-easy-with-fab.html -->
+                        <!-- http://fuse.fusesource.org/bundle/overview.html -->
+                        <FAB-Provided-Dependency>${fab-provided-dependencies}</FAB-Provided-Dependency>
+                        <Bundle-Activator>com.sandata.lab.rest.service.app.AppActivator</Bundle-Activator>
+                        <Bundle-Name>${project.name}</Bundle-Name>
+                        <Bundle-Copyright>${sandata-copyright}</Bundle-Copyright>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.15</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*IntegrationTest.java</exclude>
+                    </excludes>
+                    <skipTests>true</skipTests>
+                    <systemPropertyVariables>
+                        <coverage-outputDir>target/my-coverage-report</coverage-outputDir>
+                        <!-- other properties, if needed -->
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>target/features.xml</file>
+                                    <type>xml</type>
+                                    <classifier>features</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <tagBase>http://svn.sandata.local/repos/up/release</tagBase>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.3</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.doxia</groupId>
+                        <artifactId>doxia-module-confluence</artifactId>
+                        <version>1.3</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+    <distributionManagement>
+        <repository>
+            <id>deployment</id>
+            <name>Internal Releases</name>
+            <url>
+                http://mnt-up-repo01:8081/nexus/content/repositories/releases/
+            </url>
+        </repository>
+        <snapshotRepository>
+            <id>deployment</id>
+            <name>Internal Releases</name>
+            <url>
+                http://mnt-up-repo01:8081/nexus/content/repositories/snapshots/
+            </url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>

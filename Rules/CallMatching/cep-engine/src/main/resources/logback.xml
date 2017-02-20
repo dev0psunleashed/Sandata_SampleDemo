@@ -1,0 +1,97 @@
+<configuration scan="true" scanPeriod="30 seconds">
+    <appender name="RULES_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/rules/rules.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}[%thread] - %X{camel.breadcrumbId} - %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy" >
+            <fileNamePattern>data/log/rules/rules.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="SCHEDULE_REQUEST_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/rules/scheduleRequest.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}[%thread] - %X{camel.breadcrumbId} - %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy" >
+            <fileNamePattern>data/log/rules/scheduleRequest.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="SCHEDULE_RESPONSE_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/rules/scheduleResponse.log</file>
+        <append>true</append>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}[%thread] - %X{camel.breadcrumbId} - %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy" >
+            <fileNamePattern>data/log/rules/scheduleResponse.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="DUPE_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/duplicate/dupes.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}[%thread] - %X{camel.breadcrumbId} - %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy" >
+            <fileNamePattern>data/log/duplicate/dupes.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="CEP_RULES_DEFAULT_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/rules/rulesDefaultLog.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd MM:dd:yyyy HH:mm:ss.SSS} %p %c - %X{camel.breadcrumbId} - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>data/log/rules/rulesDefaultLog.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="rulesLog" level="INFO" additivity="false">
+        <appender-ref ref="RULES_LOGGER"/>
+    </logger>
+    <logger name="scheduleRequestLog" level="INFO" additivity="false">
+        <appender-ref ref="SCHEDULE_REQUEST_LOGGER"/>
+    </logger>
+    <logger name="scheduleResponseLog" level="INFO" additivity="false">
+        <appender-ref ref="SCHEDULE_RESPONSE_LOGGER"/>
+    </logger>
+    <logger name="dupesLog" level="INFO" additivity="false">
+        <appender-ref ref="DUPE_LOGGER"/>
+    </logger>
+    <logger name="defaultRulesLogger" level="INFO" additivity="true">
+        <appender-ref ref="CEP_RULES_DEFAULT_LOGGER"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="CEP_RULES_DEFAULT_LOGGER" />
+    </root>
+</configuration>

@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IDMService.java</title>
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+  <link rel='stylesheet' type='text/css' href='../../../../../../coverage.css'/>
+  <link rel='shortcut icon' type='image/png' href='../../../../../../logo.png'/>
+  <script type='text/javascript' src='../../../../../../coverage.js'></script>
+  <script type='text/javascript' src='../../../../../../prettify.js'></script>
+</head>
+<body onload='prettyPrint()'>
+  <table cellpadding='0' cellspacing='1'>
+    <caption>Authentication Service\src\main\java\com\sandata\lab\security\auth\services\IDMService.java</caption>
+    <tr>
+      <td class='line'>1</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>package com.sandata.lab.security.auth.services;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'></td><td>&nbsp;</td>
+      <td><pre class='imports prettyprint' onclick='showHideLines(this)'><div>import com.google.gson.*;
+import com.google.gson.annotations.SerializedName;
+import com.sandata.lab.common.utils.data.provider.GSONProvider;
+import com.sandata.lab.common.utils.string.StringUtil;
+import com.sandata.lab.security.auth.model.forgeRock.User;
+import com.sandata.lab.security.auth.utils.GsonDateDeSerializer;
+import org.apache.camel.PropertyInject;
+
+import java.lang.reflect.Field;
+import java.net.URLEncoder;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+</div><span>import ...</span></pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>18</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l18s0'>public class IDMService extends RestServiceProxy {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>20</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l20s0'>    @PropertyInject("{{openidm.host}}")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>21</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    private String host = "http://dev-lab-odj01.sandata.com";</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>23</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l23s0'>    @PropertyInject("{{openidm.port}}")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>24</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    private String port = "8085";</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>26</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l26s0'>    @PropertyInject("{{openidm.user}}")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>27</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    private String userName = "IDM-manager";</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>29</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l29s0'>    @PropertyInject("{{openidm.password}}")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>30</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    private String password = "GeorgeAdmin1";</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>32</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l32s0'>    @PropertyInject("{{openidm.path}}")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>33</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    private String path = "/openidm/managed/user/";</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>35</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l35s0'>    @PropertyInject("{{openidm.email.path}}")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>36</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    private String emailPath = "/openidm/external/email?_action=send";</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>38</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public static IDMService getInstance() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>39</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l39s0'>        return new IDMService();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>40</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>42</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    private HashMap getAuthHeaders() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>43</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l43s0'>        HashMap&lt;String, String> authValues = new HashMap&lt;String, String>();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>45</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l45s0'>        authValues.put("X-OpenIDM-Username", userName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>46</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l46s0'>        authValues.put("X-OpenIDM-Password", password);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>48</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l48s0'>        return authValues;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>49</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>51</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    private String getRequestURL(String host, String port, String path, String user) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>52</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l52s0'>        StringBuilder stringBuilder = new StringBuilder();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>53</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l53s0'>        stringBuilder.append(host);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>54</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l54s0'>        stringBuilder.append(":");</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>55</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l55s0'>        stringBuilder.append(port + path + user.toLowerCase());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>57</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l57s0'>        return stringBuilder.toString();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>58</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>60</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public User createUpdateUser(User user) throws Exception {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>62</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>64</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l64s0'>            User idmUser = getUser(user.getEmail());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>66</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l66s0' title='Executions: 0' class='uncovered'>if(idmUser != null)</span> {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>68</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l68s0'>                user.setPasswordAccountLockedTime(idmUser.getPasswordAccountLockedTime());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>69</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l69s0'>                user.setPasswordChangedTime(idmUser.getPasswordChangedTime());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>70</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>73</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l73s0'>            HashMap&lt;String, String> headerValues = new HashMap&lt;String, String>();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>74</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l74s0'>            headerValues.put("Content-type", "application/json");</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>76</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l76s0'>            headerValues.putAll(getAuthHeaders());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>78</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l78s0'>            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>80</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l80s0'>            String request = gson.toJson(user);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>81</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l81s0'>            URLEncoder.encode(request, java.nio.charset.StandardCharsets.UTF_8.toString());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>83</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l83s0'>            String requestURL = getRequestURL(host, port, path, user.getUserName());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>84</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l84s0'>            String response = this.putRequest(requestURL, headerValues, request);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>86</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l86s0'>            User createdUser = (User) gson.fromJson(response, User.class);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>88</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l88s0'>            return createdUser;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>89</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l89s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>91</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l91s0'>            e.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>92</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l92s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>93</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>94</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>96</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public User getUser(String email) throws Exception {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>98</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>100</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l100s0'>            HashMap&lt;String, String> headerValues = new HashMap&lt;String, String>();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>101</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l101s0'>            headerValues.put("Content-type", "application/json");</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>103</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l103s0'>            headerValues.putAll(getAuthHeaders());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>105</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l105s0'>            String requestURL = getRequestURL(host, port, path, email);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>106</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l106s0'>            String response = this.getRequest(requestURL, headerValues);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>108</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l108s0'>            Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new GsonDateDeSerializer()).create();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>110</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l110s0'>            User createdUser = (User) gson.fromJson(response, User.class);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>112</td><td class='count'>1</td>
+      <td><pre class='prettyprint jmp'>            <span id='l112s0' title='Executions: 1' class='covered'>if (!StringUtil.IsNullOrEmpty(createdUser.getCode())</span> && <span id='l112s1' title='Executions: 0' class='uncovered'>createdUser.getCode().equals("404"))</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>113</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l113s0'>                return null;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>114</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>116</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l116s0'>            return createdUser;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>117</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l117s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>119</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l119s0'>            e.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>120</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l120s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>121</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>122</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>124</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void deleteUser(String userName) throws Exception {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>126</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>127</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l127s0'>            HashMap&lt;String, String> headerValues = new HashMap&lt;String, String>();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>129</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l129s0'>            headerValues.putAll(getAuthHeaders());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>131</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l131s0'>            String requestURL = getRequestURL(host, port, path, userName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>132</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l132s0'>            String response = this.deleteRequest(requestURL, headerValues);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>133</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l133s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>135</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l135s0'>            e.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>136</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l136s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>137</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l137s0'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>138</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l138s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>140</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void updateUser(User user) throws Exception {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>141</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>143</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l143s0'>            HashMap&lt;String, String> headerValues = new HashMap&lt;String, String>();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>144</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l144s0'>            headerValues.put("Content-type", "application/json");</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>146</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l146s0'>            headerValues.putAll(getAuthHeaders());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>149</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l149s0'>            Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new GsonDateDeSerializer()).setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>150</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l150s0'>                    .create();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>152</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l152s0'>            String requestString = gson.toJson(user);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>153</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l153s0'>            JsonObject jsonObject = new JsonParser().parse(requestString).getAsJsonObject();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>155</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l155s0'>            Set&lt;Map.Entry&lt;String, JsonElement>> entrySet = jsonObject.entrySet();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>156</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l156s0' title='Executions: 0' class='uncovered'>for (Map.Entry&lt;String, JsonElement> entry</span> : <span id='l156s1' title='Executions: 0' class='uncovered'>entrySet)</span> {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>158</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>                <span id='l158s0' title='Executions: 0' class='uncovered'>if ((entry.getKey().equals("SANDATAGUID")</span> && <span id='l158s1' title='Executions: 0' class='uncovered'>entry.getValue() == null)</span> || <span id='l158s2' title='Executions: 0' class='uncovered'>entry.getKey().equals("password")</span> || entry.getKey().equals("Persona")) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>159</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l159s0'>                    continue;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>160</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>161</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l161s0'>                Map&lt;String, String> map = new HashMap();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>162</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l162s0'>                map.put("operation", "replace");</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>163</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l163s0'>                map.put("field", "/" + entry.getKey());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>165</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l165s0'>                map.put("value", entry.getValue().getAsString());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>167</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l167s0'>                String request = gson.toJson(map);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>169</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l169s0'>                request = "[" + request + "]";</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>170</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l170s0'>                URLEncoder.encode(request, java.nio.charset.StandardCharsets.UTF_8.toString());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>172</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l172s0'>                String requestURL = getRequestURL(host, port, path, user.getUserName());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>173</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l173s0'>                String response = this.patchRequest(requestURL, headerValues, request);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>175</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l175s0'>            }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>176</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l176s0'>        } catch (Exception ex) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>177</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l177s0'>            ex.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>178</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l178s0'>            throw ex;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>179</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l179s0'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>180</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l180s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>182</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void changePassword(String userName, String newPassword) throws Exception {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>184</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>186</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l186s0'>            HashMap&lt;String, String> headerValues = new HashMap&lt;String, String>();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>187</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l187s0'>            headerValues.put("Content-type", "application/json");</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>189</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l189s0'>            headerValues.putAll(getAuthHeaders());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>192</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l192s0'>            Map&lt;String, String> map = new HashMap();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>193</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l193s0'>            map.put("operation", "replace");</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>194</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l194s0'>            map.put("field", "/password");</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>195</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l195s0'>            map.put("value", newPassword);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>197</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l197s0'>            Gson gson = new GsonBuilder()</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>198</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l198s0'>                    .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>199</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l199s0'>                    .create();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>201</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l201s0'>            String request = gson.toJson(map);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>203</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l203s0'>            request = "[" + request + "]";</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>204</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l204s0'>            URLEncoder.encode(request, java.nio.charset.StandardCharsets.UTF_8.toString());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>206</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l206s0'>            String requestURL = getRequestURL(host, port, path, userName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>207</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l207s0'>            String response = this.patchRequest(requestURL, headerValues, request);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>208</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l208s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>210</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l210s0'>            e.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>211</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l211s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>212</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l212s0'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>213</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l213s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>215</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void grantAccess(String userName, String value) throws Exception {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>217</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>220</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l220s0'>            HashMap&lt;String, String> headerValues = new HashMap&lt;String, String>();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>221</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l221s0'>            headerValues.put("Content-type", "application/json");</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>223</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l223s0'>            headerValues.putAll(getAuthHeaders());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>226</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l226s0'>            Map&lt;String, String> map = new HashMap();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>227</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l227s0'>            map.put("operation", "replace");</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>228</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l228s0'>            map.put("field", "/SandataAccess");</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>229</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l229s0'>            map.put("value", value);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>231</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l231s0'>            Gson gson = new GsonBuilder()</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>232</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l232s0'>                    .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>233</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l233s0'>                    .create();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>235</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l235s0'>            String request = gson.toJson(map);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>237</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l237s0'>            request = "[" + request + "]";</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>238</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l238s0'>            URLEncoder.encode(request, java.nio.charset.StandardCharsets.UTF_8.toString());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>240</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l240s0'>            String requestURL = getRequestURL(host, port, path, userName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>241</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l241s0'>            String response = this.patchRequest(requestURL, headerValues, request);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>243</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l243s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>245</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l245s0'>            e.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>246</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l246s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>247</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l247s0'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>248</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l248s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>250</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void addPersonaToUser(String userName, String persona) throws Exception {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>252</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>254</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l254s0'>            HashMap&lt;String, String> headerValues = new HashMap&lt;String, String>();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>255</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l255s0'>            headerValues.put("Content-type", "application/json");</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>257</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l257s0'>            headerValues.putAll(getAuthHeaders());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>260</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l260s0'>            Map&lt;String, String> map = new HashMap();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>261</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l261s0'>            map.put("operation", "add");</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>262</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l262s0'>            map.put("field", "Persona/-");</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>263</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l263s0'>            map.put("value", persona);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>265</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l265s0'>            Gson gson = new GsonBuilder()</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>266</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l266s0'>                    .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>267</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l267s0'>                    .create();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>269</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l269s0'>            String request = gson.toJson(map);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>271</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l271s0'>            request = "[" + request + "]";</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>272</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l272s0'>            URLEncoder.encode(request, java.nio.charset.StandardCharsets.UTF_8.toString());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>274</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l274s0'>            String requestURL = getRequestURL(host, port, path, userName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>275</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l275s0'>            String response = this.patchRequest(requestURL, headerValues, request);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>276</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l276s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>278</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l278s0'>            e.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>279</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l279s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>280</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l280s0'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>281</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l281s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>283</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void removePersonaFromUser(String userName, String persona) throws Exception {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>285</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>286</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l286s0'>            HashMap&lt;String, String> headerValues = new HashMap&lt;String, String>();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>287</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l287s0'>            headerValues.put("Content-type", "application/json");</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>289</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l289s0'>            headerValues.putAll(getAuthHeaders());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>292</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l292s0'>            Map&lt;String, String> map = new HashMap();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>293</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l293s0'>            map.put("operation", "remove");</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>294</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l294s0'>            map.put("field", "/Persona");</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>295</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l295s0'>            map.put("value", persona);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>297</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l297s0'>            Gson gson = new GsonBuilder()</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>298</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l298s0'>                    .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>299</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l299s0'>                    .create();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>301</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l301s0'>            String request = gson.toJson(map);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>303</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l303s0'>            request = "[" + request + "]";</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>304</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l304s0'>            URLEncoder.encode(request, java.nio.charset.StandardCharsets.UTF_8.toString());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>306</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l306s0'>            String requestURL = getRequestURL(host, port, path, userName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>307</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l307s0'>            String response = this.patchRequest(requestURL, headerValues, request);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>308</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l308s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>310</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l310s0'>            e.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>311</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l311s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>312</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l312s0'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>313</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l313s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>315</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void emailUser(String userName, String from, String type, String subject, String message) throws Exception {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>317</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>319</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l319s0'>            HashMap&lt;String, String> headerValues = new HashMap&lt;String, String>();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>320</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l320s0'>            headerValues.put("Content-type", "application/json");</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>321</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l321s0'>            headerValues.putAll(getAuthHeaders());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>324</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l324s0'>            Map&lt;String, String> map = new HashMap();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>325</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l325s0'>            map.put("from", from);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>326</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l326s0'>            map.put("to", userName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>327</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l327s0'>            map.put("type", type);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>328</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l328s0'>            map.put("subject", subject);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>329</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l329s0'>            map.put("body", message);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>331</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l331s0'>            Gson gson = new GsonBuilder()</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>332</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l332s0'>                    .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>333</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l333s0'>                    .create();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>335</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l335s0'>            String request = gson.toJson(map);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>337</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l337s0'>            URLEncoder.encode(request, java.nio.charset.StandardCharsets.UTF_8.toString());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>339</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l339s0'>            String requestURL = getRequestURL(host, port, emailPath, userName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>340</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l340s0'>            String response = this.postRequest(requestURL, headerValues, request);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>341</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l341s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>343</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l343s0'>            e.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>344</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l344s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>345</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l345s0'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>346</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l346s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'></td><td>&nbsp;</td>
+      <td class='comment' onclick='showHideLines(this)'><div>    /**
+     * Determine whether a user account is locked in ForgeRock
+     *
+     * @param userName
+     * @return
+     */</div><span>    /*...*/</span></td>
+    </tr>
+    <tr>
+      <td class='line'>354</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public boolean isUserLocked(String userName) throws Exception {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>356</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>357</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l357s0'>            HashMap&lt;String, String> headerValues = new HashMap&lt;String, String>();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>358</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l358s0'>            headerValues.put("Content-type", "application/json");</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>360</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l360s0'>            headerValues.putAll(getAuthHeaders());</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>362</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l362s0'>            String requestURL = getRequestURL(host, port, path, userName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>363</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l363s0'>            String response = this.getRequest(requestURL + "?_fields=pwdAccountLockedTime", headerValues);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>365</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l365s0'>            JsonParser jsonParser = new JsonParser();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>366</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l366s0'>            JsonElement result = jsonParser.parse(response);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>368</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l368s0' title='Executions: 0' class='uncovered'>if (null == result.getAsJsonObject().get("pwdAccountLockedTime"))</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>369</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l369s0'>                return false;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>370</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>371</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l371s0'>            String isLocked = result.getAsJsonObject().get("pwdAccountLockedTime").toString();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>373</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l373s0' title='Executions: 0' class='uncovered'>return StringUtil.IsNullOrEmpty(isLocked)</span> || <span id='l373s1' title='Executions: 0' class='uncovered'>isLocked.equals("null")</span> ? <span id='l373s2' title='Executions: 0' class='uncovered'>false</span> : <span id='l373s3' title='Executions: 0' class='uncovered'>true;</span></pre></td>
+    </tr>
+    <tr>
+      <td class='line'>374</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l374s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>376</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l376s0'>            e.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>377</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l377s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>378</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>379</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>381</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>}</pre></td>
+    </tr>
+  </table>
+</body>
+</html>

@@ -1,0 +1,135 @@
+SELECT * FROM(
+SELECT ROWNUM ROW_NUMBER, R1.* FROM (
+
+      (SELECT COUNT(VISIT_SK) OVER() TOTAL_ROWS,
+            SCHED_EVNT_START_DTIME,SCHED_EVNT_END_DTIME,
+            24 * (SCHED_EVNT_END_DTIME-SCHED_EVNT_START_DTIME) ScheduledHours,
+            (SELECT COUNT(*) FROM VISIT_TASK_LST WHERE VISIT_SK=VISIT.VISIT_SK) TaskCount,
+            (SELECT COUNT(*) FROM VISIT_EXCP
+              WHERE VISIT_SK=VISIT.VISIT_SK AND TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND CURR_REC_IND = 1) VisitExceptionCount,
+            AdminStaffManager.ADMIN_STAFF_ID AS ManagerID,
+            AdminStaffManager.ADMIN_STAFF_FIRST_NAME AS ManagerFirstName,
+            AdminStaffManager.ADMIN_STAFF_LAST_NAME AS ManagerLastName,
+            AdminStaffCoordinator.ADMIN_STAFF_ID AS CoordinatorID,
+            AdminStaffCoordinator.ADMIN_STAFF_FIRST_NAME AS CoordinatorFirstName,
+            AdminStaffCoordinator.ADMIN_STAFF_LAST_NAME AS CoordinatorLastName,
+            PatientPayer.PAYER_ID,PAYER_NAME,
+            PatientPayer.CONTR_ID,CONTR_DESC,
+            PatientPayer.SVC_NAME,
+            PT_FIRST_NAME,PT_LAST_NAME,PT_MIDDLE_NAME,PT_MEDICAID_ID,PT_PHONE,PT_ADDR_TYP_NAME,Patient.TZ_NAME,
+            STAFF_FIRST_NAME,STAFF_LAST_NAME,STAFF_MIDDLE_NAME,STAFF_TIN_QLFR,STAFF_TIN,STAFF_PHONE,
+            BE_NAME,
+            VISIT.*
+          FROM VISIT
+
+            -- Patient
+            LEFT JOIN (SELECT BE_ID,PT_ID,PT_FIRST_NAME,PT_LAST_NAME,PT_MIDDLE_NAME,PT_MEDICAID_ID,TZ_NAME
+              FROM PT
+                WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND CURR_REC_IND = 1) Patient
+            ON VISIT.BE_ID = Patient.BE_ID
+              AND VISIT.PT_ID = Patient.PT_ID
+
+            -- Patient Contact Phone
+            LEFT JOIN (SELECT BE_ID,PT_ID,PT_PHONE,PT_PHONE_ANI_ENABLED_IND
+              FROM PT_CONT_PHONE
+                WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND CURR_REC_IND = 1
+                  AND PT_PHONE_PRMY_IND = 1) PatientPhone
+            ON VISIT.BE_ID = PatientPhone.BE_ID
+              AND VISIT.PT_ID = PatientPhone.PT_ID
+
+            -- Patient Contact Address
+            LEFT JOIN (SELECT BE_ID,PT_ID,PT_ADDR_TYP_NAME
+              FROM PT_CONT_ADDR
+                WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND CURR_REC_IND = 1
+                  AND ADDR_PRIO_NAME = 'PRIMARY') PatientAddress
+            ON VISIT.BE_ID = PatientAddress.BE_ID
+              AND VISIT.PT_ID = PatientAddress.PT_ID
+
+            -- Patient Payer
+            LEFT JOIN (SELECT BE_ID,PT_ID,PAYER_ID,CONTR_ID,SVC_NAME
+              FROM PT_PAYER
+                WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND CURR_REC_IND = 1
+                  AND PAYER_RANK_NAME = 'PRIMARY') PatientPayer
+            ON VISIT.BE_ID = PatientPayer.BE_ID
+              AND VISIT.PT_ID = PatientPayer.PT_ID
+
+            -- Staff
+            LEFT JOIN (SELECT BE_ID,STAFF_ID,STAFF_FIRST_NAME,STAFF_LAST_NAME,STAFF_MIDDLE_NAME,STAFF_TIN_QLFR,STAFF_TIN
+              FROM STAFF
+                WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND CURR_REC_IND = 1) Staff
+            ON VISIT.BE_ID = Staff.BE_ID
+              AND VISIT.STAFF_ID = Staff.STAFF_ID
+
+            -- Staff Contact Phone
+            LEFT JOIN (SELECT BE_ID,STAFF_ID,STAFF_PHONE
+              FROM STAFF_CONT_PHONE
+                WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND CURR_REC_IND = 1
+                  AND STAFF_PHONE_PRMY_IND = 1) StaffPhone
+            ON VISIT.BE_ID = StaffPhone.BE_ID
+              AND VISIT.STAFF_ID = StaffPhone.STAFF_ID
+
+            -- Staff Coordinator
+            LEFT JOIN (SELECT XREF.BE_ID,XREF.STAFF_ID,XREF.ADMIN_STAFF_ID,
+                        COORDINATOR.ADMIN_STAFF_FIRST_NAME,COORDINATOR.ADMIN_STAFF_LAST_NAME
+              FROM ADMIN_STAFF_STAFF_XREF XREF
+                INNER JOIN (SELECT BE_ID,ADMIN_STAFF_ID,ADMIN_STAFF_FIRST_NAME,ADMIN_STAFF_LAST_NAME
+                  FROM ADMIN_STAFF
+                    WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND CURR_REC_IND = 1) COORDINATOR
+                ON XREF.BE_ID = COORDINATOR.BE_ID AND XREF.ADMIN_STAFF_ID = COORDINATOR.ADMIN_STAFF_ID
+                WHERE XREF.ADMIN_STAFF_ROLE_NAME = 'COORDINATOR'
+                    AND TO_CHAR(XREF.REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND XREF.CURR_REC_IND = 1) AdminStaffCoordinator
+            ON VISIT.BE_ID = AdminStaffCoordinator.BE_ID
+              AND VISIT.STAFF_ID = AdminStaffCoordinator.STAFF_ID
+
+            -- Staff Manager
+            LEFT JOIN (SELECT XREF.BE_ID,XREF.STAFF_ID,XREF.ADMIN_STAFF_ID,
+                        MANAGER.ADMIN_STAFF_FIRST_NAME,MANAGER.ADMIN_STAFF_LAST_NAME
+              FROM ADMIN_STAFF_STAFF_XREF XREF
+                INNER JOIN (SELECT BE_ID,ADMIN_STAFF_ID,ADMIN_STAFF_FIRST_NAME,ADMIN_STAFF_LAST_NAME
+                  FROM ADMIN_STAFF
+                    WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND CURR_REC_IND = 1) MANAGER
+                ON XREF.BE_ID = MANAGER.BE_ID AND XREF.ADMIN_STAFF_ID = MANAGER.ADMIN_STAFF_ID
+                WHERE XREF.ADMIN_STAFF_ROLE_NAME = 'MANAGER'
+                    AND TO_CHAR(XREF.REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND XREF.CURR_REC_IND = 1) AdminStaffManager
+            ON VISIT.BE_ID = AdminStaffManager.BE_ID
+              AND VISIT.STAFF_ID = AdminStaffManager.STAFF_ID
+
+            -- Payer
+            LEFT JOIN (SELECT BE_ID,PAYER_ID,PAYER_NAME
+              FROM PAYER
+                WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND CURR_REC_IND = 1) Payer
+            ON VISIT.BE_ID = Payer.BE_ID
+              AND PatientPayer.PAYER_ID = Payer.PAYER_ID
+
+            -- Contract
+            LEFT JOIN (SELECT BE_ID,PAYER_ID,CONTR_ID,CONTR_DESC
+              FROM CONTR
+                WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND CURR_REC_IND = 1) Contract
+            ON VISIT.BE_ID = Contract.BE_ID
+              AND PatientPayer.PAYER_ID = Contract.PAYER_ID
+              AND PatientPayer.CONTR_ID = Contract.CONTR_ID
+
+            -- Agency
+            INNER JOIN (SELECT BE_ID,BE_NAME
+              FROM BE
+                WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND CURR_REC_IND = 1) Agency
+            ON VISIT.BE_ID = Agency.BE_ID
+
+            -- Schedule
+            LEFT JOIN (SELECT BE_ID,PT_ID,SCHED_EVNT_SK,SCHED_EVNT_START_DTIME,SCHED_EVNT_END_DTIME,SCHED_EVNT_TOTAL_HRS
+              FROM SCHED_EVNT
+                WHERE TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31' AND CURR_REC_IND = 1) ScheduleEvent
+            ON VISIT.BE_ID = ScheduleEvent.BE_ID
+                AND VISIT.PT_ID = ScheduleEvent.PT_ID
+                AND VISIT.SCHED_EVNT_SK = ScheduleEvent.SCHED_EVNT_SK
+
+            WHERE VISIT_ACT_START_TMSTP BETWEEN TO_DATE('2016-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS')
+              AND TO_DATE('2017-01-01 23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+
+              AND AdminStaffCoordinator.ADMIN_STAFF_ID IS NOT NULL
+
+          ORDER BY PT_LAST_NAME ASC
+    )
+) R1)
+
+WHERE ROW_NUMBER BETWEEN 1 AND 10;

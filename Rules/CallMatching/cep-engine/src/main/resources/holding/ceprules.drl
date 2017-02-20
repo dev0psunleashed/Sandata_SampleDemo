@@ -1,0 +1,372 @@
+package com.sandata.lab.rules.call.matching.ceprules;
+
+import com.sandata.lab.rules.call.model.VisitEventFact;
+import com.sandata.lab.rules.call.model.Schedule;
+import com.sandata.lab.rules.call.model.UnplannedVisit;
+import com.sandata.lab.rules.call.model.State;
+import com.sandata.lab.data.model.dl.model.VisitEvent;
+import com.sandata.lab.rules.call.model.VisitFact;
+
+global java.util.List schedules;
+global com.sandata.lab.rules.call.model.CallPreferences callPreferences;
+
+function boolean staffXOfNine(int x, String staffId1, String staffId2) {
+	boolean matched = false;
+	int pos = 10 - x;
+	for(int i = 0; i < pos; i++) {
+		if(staffId2.indexOf(staffId1.substring(i,i+x)) != -1 ) {
+			matched = true;
+			break;
+		}
+	}
+	return matched;
+}
+//import function com.sandata.lab.calls.matching.model.Schedule.diff
+declare SchedulePruner
+ 	@role(event)
+    @expires(5m)
+ 	scheduleId : String @key
+ 	staffId : String @key
+
+ end
+
+declare State
+ end
+
+declare Schedule
+	@role(event)
+	@timestamp(startTime)
+	@duration(timeSpan)
+	@expires(24h)
+end
+
+declare VisitEventFact
+	@role(event)
+	@timestamp(callInTime)
+	@expires(15m)
+end
+
+declare VisitFact
+
+end
+/*
+rule "calls matching in process visits get first shot"
+salience 820
+when
+    $visit : VisitFact( state == State.UNPLANNED )
+    $visitEventFact : VisitEventFact(state == State.NOT_MATCHED, ani == $visit.getAni(), staffId == $visit.staffId)
+then
+ $visit.setState(State.MATCHED);
+ $visitEventFact.setState(State.MATCHED);
+ $visit.setCallOut($visitEventFact.getCallInTime());
+ update($visit);
+ retract($visitEventFact);
+ retract($visit);
+ end
+*/
+
+rule "calls-matching-0 Unplanned No Schedules returned"
+salience 800
+when
+	$schedule : Schedule( state == com.sandata.lab.rules.call.model.State.CREATE_UNPLANNED_VISIT)
+	$visitEventFact : VisitEventFact( state == State.NOT_MATCHED, this during $schedule )
+then
+	$visitEventFact.setState(State.INSERTED);
+	$visitEventFact.setScheduleId($schedule.getScheduleId());
+	update($visitEventFact);
+    update($schedule);
+	insert(new UnplannedVisit($schedule, $visitEventFact, $visitEventFact.getCallInTime(),$schedule.getEndTime()));
+
+	retract($visitEventFact);
+    retract($schedule);
+	//System.out.println("VisitEventFact with a visitId of " + $visitEventFact.getVisitId() + " matched with schedule with scheduleId of " + $schedule.getScheduleId() + ".");
+	//System.out.println("Time diffs are (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getCallInTime())) + ") and (" + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+	//insert(new SchedulePruner($schedule.getScheduleId(),$schedule.getStaffId()));
+	//update($visitEventFact);
+	//update($schedule);
+
+end	 
+
+
+rule "calls-rules-0 load schedules "
+salience 795
+//agenda-group "Load Schedules"
+when
+	$s : Schedule(state == State.LOADED) //over window:time( 1m )
+then
+	$s.setState(State.NOT_MATCHED);
+	update($s);
+	
+end
+
+
+rule "calls-rules-1 VisitEventFact made during schedule Best Case"
+salience 790
+when
+	$schedule : Schedule( state == State.NOT_MATCHED || state == State.MATCHED  || state == State.IN_PROGRESS)
+	$visitEventFact : VisitEventFact( state == State.NOT_MATCHED, this during $schedule, staffId == $schedule.staffId, ani == $schedule.callerIdForPatient )
+then
+	$visitEventFact.setState(State.MATCHED);
+	$visitEventFact.setScheduleId($schedule.getScheduleId());
+	$schedule.setState(State.MATCHED);
+	//System.out.println("VisitEventFact with a visitId of " + $visitEventFact.getVisitId() + " matched with schedule with scheduleId of " + $schedule.getScheduleId() + ".");
+	//System.out.println("Time diffs are (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getVisitEventFactInTime())) + ") and (" + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+	//insert(new SchedulePruner($schedule.getScheduleId(),$schedule.getStaffId()));
+	update($visitEventFact);
+	update($schedule);
+end	 
+
+rule "calls-rules-1 VisitEventFact made during schedule and matched 7 of 9"
+salience 775
+when
+	$schedule : Schedule( state == State.NOT_MATCHED || state == State.MATCHED || state == State.IN_PROGRESS)
+	$visitEventFact : VisitEventFact( state == State.NOT_MATCHED, this during $schedule, staffXOfNine(7, staffId, $schedule.staffId), ani == $schedule.callerIdForPatient )
+then
+	$visitEventFact.setState(State.MATCHED);
+	$visitEventFact.setScheduleId($schedule.getScheduleId());
+	$schedule.setState(State.MATCHED);
+//	System.out.println("VisitEventFact 7of9 with a visitId of " + $visitEventFact.getVisitId() + " matched with schedule with scheduleId of " + $schedule.getScheduleId() + ".");
+//	System.out.println("Time diffs are (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getCallInTime())) + ") and (" + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+//	insert(new SchedulePruner($schedule.getScheduleId(),$schedule.getStaffId()));
+	update($visitEventFact);
+	update($schedule);
+end	 
+
+rule "calls-rules-1 VisitEventFact made during schedule and matched 6 of 9"
+salience 770
+when
+	$schedule : Schedule( state == State.NOT_MATCHED || state == State.MATCHED || state == State.IN_PROGRESS )
+	$visitEventFact : VisitEventFact( state == State.NOT_MATCHED, this during $schedule, staffXOfNine(6, staffId, $schedule.staffId), ani == $schedule.callerIdForPatient )
+then
+	$visitEventFact.setState(State.MATCHED);
+	$visitEventFact.setScheduleId($schedule.getScheduleId());
+	$schedule.setState(State.MATCHED);
+//	System.out.println("VisitEventFact 6of9 with a visitId of " + $visitEventFact.getVisitId() + " matched with schedule with scheduleId of " + $schedule.getScheduleId() + ".");
+//	System.out.println("Time diffs are (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getCallInTime())) + ") and (" + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+//	insert(new SchedulePruner($schedule.getScheduleId(),$schedule.getStaffId()));
+	update($visitEventFact);
+	update($schedule);
+end	 
+
+rule "calls-rules-2 set callinTime when when calls is closer to startTime and callin is empty"
+salience 700
+when
+	$visitEventFact : VisitEventFact( state == State.MATCHED)
+	$schedule : Schedule (state == State.MATCHED, scheduleId == $visitEventFact.scheduleId, callIn == null, Schedule.diff(startTime,$visitEventFact.callInTime) < Schedule.diff(endTime,$visitEventFact.callInTime))
+then
+    //$schedule.setState(State.INSERTED); A calls gets inserted not a schedule
+    $visitEventFact.setState(State.INSERTED);
+    $schedule.setCallIn($visitEventFact.getCallInTime());
+    $schedule.setCallCallIn($visitEventFact);
+    $schedule.setState(State.IN_PROGRESS + State.INSERTED);
+    retract($visitEventFact);
+//    System.out.println("INSERTED Callin (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getCallInTime())) + " < " + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+    update($schedule);
+end
+
+rule "calls-rules-2-3 set calloutTime when calls is closer to endTime and callout is empty and calls in is empty or > 5 NOT EXTRANEOUS"
+salience 700
+when
+	$visitEventFact : VisitEventFact( state == State.MATCHED)
+	$schedule : Schedule ( (state == State.MATCHED  || state == State.IN_PROGRESS) && scheduleId == $visitEventFact.scheduleId && callOut == null && Schedule.diff(startTime,$visitEventFact.callInTime) >= Schedule.diff(endTime,$visitEventFact.callInTime) && 
+	(callIn == null || Schedule.diff(callIn, $visitEventFact.callInTime) > callPreferences.getMinVisitDurationMS() ) )
+	
+then
+    //$schedule.setState(State.INSERTED); Cant insert a schedule
+    $visitEventFact.setState(State.INSERTED);
+    $schedule.setCallOut($visitEventFact.getCallInTime());
+    $schedule.setCallCallOut($visitEventFact);
+    $schedule.setState(State.IN_PROGRESS + State.INSERTED + State.MATCHED);
+    retract($visitEventFact);
+    //System.out.println("INSERTED Callout (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getCallInTime())) + " >= " + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+    update($schedule);
+end
+//==================================Extraneous VisitEventFact rule 3========================================
+rule "calls-rules-3 DONT set calloutTime when callout empty and callin populated and < 5 EXTRANEOUS"
+salience 700
+when
+	$visitEventFact : VisitEventFact( state == State.MATCHED)
+	$schedule : Schedule (state == State.IN_PROGRESS && scheduleId == $visitEventFact.scheduleId && callOut == null &&  
+	(callIn != null && Schedule.diff(callIn, $visitEventFact.callInTime) <= callPreferences.getMinVisitDurationMS() ) )
+then
+    //$schedule.setState(State.INSERTED); Cant insert a schedule
+    $visitEventFact.setState(State.EXTRANEOUS);
+    $schedule.addExtraneousCalls($visitEventFact);
+    //$schedule.setCallOut($visitEventFact.getCallInTime());Dont set it fails minimum visit time
+    $schedule.setState(State.IN_PROGRESS);
+    retract($visitEventFact);
+    //System.out.println("Extraneous calls (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getCallInTime())) + " >= " + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+    update($schedule);
+end
+
+rule "calls-rules-2-3 Move calloutTime to callintime when callintime empty and when callout populated and < 5 EXTRANEOUS added"
+salience 700
+when
+	$visitEventFact : VisitEventFact( state == State.MATCHED)
+	$schedule : Schedule (state == State.IN_PROGRESS && scheduleId == $visitEventFact.scheduleId && callIn == null && callOut != null && Schedule.diff(startTime,$visitEventFact.callInTime) >= Schedule.diff(endTime,$visitEventFact.callInTime) && 
+	(Schedule.diff(callOut, $visitEventFact.callInTime) <= callPreferences.getMinVisitDurationMS() ) )
+then
+    //$schedule.setState(State.INSERTED); Cant insert a schedule
+    $visitEventFact.setState(State.EXTRANEOUS);
+    $schedule.addExtraneousCalls($visitEventFact);
+    $schedule.setCallIn($schedule.getCallOut());//move it to first now since we had a second calls
+    $schedule.setCallOut(null);
+    $schedule.setCallCallIn($schedule.getCallCallOut());
+    $schedule.setCallCallOut(null);
+    retract($visitEventFact);
+    $schedule.setState(State.BOTH_INSERTED);
+    //System.out.println("Extraneous calls (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getCallInTime())) + " >= " + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+    update($schedule);
+end
+
+rule "calls-rules-2-3 make old calloutTime EXTRANEOUS and replace when callout populated and < 5 callout added"
+salience 700
+when
+	$visitEventFact : VisitEventFact( state == State.MATCHED)
+	$schedule : Schedule (state == State.IN_PROGRESS && scheduleId == $visitEventFact.scheduleId && callIn != null && callOut != null && Schedule.diff(startTime,$visitEventFact.callInTime) >= Schedule.diff(endTime,$visitEventFact.callInTime) && 
+	(Schedule.diff(callOut, $visitEventFact.callInTime) <= callPreferences.getMinVisitDurationMS() ) )
+then
+    //$schedule.setState(State.INSERTED); Cant insert a schedule
+    $visitEventFact.setState(State.INSERTED);
+    $schedule.getCallCallOut().setState(State.EXTRANEOUS);
+    $schedule.addExtraneousCalls($schedule.getCallCallOut());
+    $schedule.setCallOut($visitEventFact.getCallInTime());
+    $schedule.setCallCallOut($visitEventFact);
+    retract($visitEventFact);
+    //System.out.println("Extraneous calls (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getCallInTime())) + " >= " + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+    update($schedule);
+end
+
+rule "calls-rules-2-3 set calloutTime when calls is after schedule.callouttime and > 5 NOT EXTRANEOUS move old callouttime to extraneous"
+salience 700
+when
+	$visitEventFact : VisitEventFact( state == State.MATCHED)
+	$schedule : Schedule (state == State.IN_PROGRESS && scheduleId == $visitEventFact.scheduleId && callOut != null && Schedule.diff(startTime,$visitEventFact.callInTime) >= Schedule.diff(endTime,$visitEventFact.callInTime) && 
+	(callIn != null && callOut before $visitEventFact.callInTime && Schedule.diff(callOut, $visitEventFact.callInTime) > callPreferences.getMinVisitDurationMS() ) )
+	
+then
+    //$schedule.setState(State.INSERTED); Cant insert a schedule
+    $visitEventFact.setState(State.INSERTED);
+    $schedule.setCallOut($visitEventFact.getCallInTime());
+    $schedule.addExtraneousCalls($schedule.getCallCallOut());
+    $schedule.setCallCallOut($visitEventFact);
+    retract($visitEventFact);
+    //System.out.println("INSERTED Callout (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getCallInTime())) + " >= " + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+    $schedule.setState(State.CALL_OUT_INSERTED);
+    update($schedule);
+end
+
+rule "calls-rules-5 ADD EXTRANEOUS" // should never happen from calls server
+salience 700
+when
+	$visitEventFact : VisitEventFact( state == State.MATCHED)
+	$schedule : Schedule (state == State.IN_PROGRESS && scheduleId == $visitEventFact.scheduleId && callOut != null && callIn != null && 
+	callOut after $visitEventFact.callInTime && callIn before $visitEventFact.callInTime )
+	
+then
+    //$schedule.setState(State.INSERTED); Cant insert a schedule
+    $visitEventFact.setState(State.EXTRANEOUS);
+    $schedule.addExtraneousCalls($visitEventFact);
+    retract($visitEventFact);
+    //System.out.println("ADD EXTRANEOUS CALL IN BETWEEN");
+    //System.out.println("( schedule.callOut " + $schedule.getCallOut().toString() + " after callInTime " + $visitEventFact.getCallInTime().toString() + " )" );
+    //System.out.println("( schedule.callIn " + $schedule.getCallIn().toString() + " before callInTime " + $visitEventFact.getCallInTime().toString() + " )" );
+    update($schedule);
+end
+
+//==================================================================================================
+rule "calls-rules-5 set calloutTime when callout populated > 5 NOT EXTRANEOUS callin is empty "
+salience 700
+when
+	$visitEventFact : VisitEventFact( state == State.MATCHED)
+	$schedule : Schedule ( (state == State.MATCHED  || state == State.IN_PROGRESS) && scheduleId == $visitEventFact.scheduleId && callIn == null && callOut != null && Schedule.diff(startTime,$visitEventFact.callInTime) >= Schedule.diff(endTime,$visitEventFact.callInTime) && 
+	(Schedule.diff(callOut, $visitEventFact.callInTime) > callPreferences.getMinVisitDurationMS() ) )
+then
+    //$schedule.setState(State.INSERTED); Cant insert a schedule
+    $visitEventFact.setState(State.INSERTED);
+    $schedule.setState(State.IN_PROGRESS);
+    $schedule.setCallCallIn($schedule.getCallCallOut());
+    $schedule.setCallCallOut($visitEventFact);
+    $schedule.setCallOut($visitEventFact.getCallInTime());
+    update($schedule)
+    retract($visitEventFact);
+    //System.out.println("Extraneous calls (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getCallInTime())) + " >= " + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+    //
+end
+
+//============================================== 24Hours match==============================
+
+rule "calls-rules-12-identify-the-schedule VisitEventFact made within 24 hours schedule"
+salience 700
+when
+	$schedule : Schedule( state == State.NOT_MATCHED || state == State.IN_PROGRESS)
+	$visitEventFact : VisitEventFact( state == State.NOT_MATCHED, this during[-24h, 48h] $schedule, staffId == $schedule.staffId, ani == $schedule.callerIdForPatient )
+then
+	$visitEventFact.setState(State.MATCHED);
+	$visitEventFact.setScheduleId($schedule.getScheduleId());
+	$schedule.setState(State.IN_PROGRESS);
+	//System.out.println("VisitEventFact with a visitId of " + $visitEventFact.getVisitId() + " matched with schedule with scheduleId of " + $schedule.getScheduleId() + ".");
+	//System.out.println("24h rule fired Time diffs are (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getCallInTime())) + ") and (" + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+	insert(new SchedulePruner($schedule.getScheduleId(),$schedule.getStaffId()));
+	update($visitEventFact);
+	update($schedule);
+end	 
+
+rule "calls-rules-12-identify-the-schedule VisitEventFact made within 24 hours schedule 7 Of 9"
+salience 700
+when
+	$schedule : Schedule( state == State.NOT_MATCHED || state == State.IN_PROGRESS)
+	$visitEventFact : VisitEventFact( state == State.NOT_MATCHED, this during[-24h, 48h] $schedule, staffXOfNine(7, staffId, $schedule.staffId), ani == $schedule.callerIdForPatient )
+then
+	$visitEventFact.setState(State.MATCHED);
+	$visitEventFact.setScheduleId($schedule.getScheduleId());
+	$schedule.setState(State.IN_PROGRESS);
+	//System.out.println("VisitEventFact with a visitId of " + $visitEventFact.getVisitId() + " matched with schedule with scheduleId of " + $schedule.getScheduleId() + ".");
+	//System.out.println("24h rule fired Time diffs are (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getCallInTime())) + ") and (" + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+	insert(new SchedulePruner($schedule.getScheduleId(),$schedule.getStaffId()));
+	update($visitEventFact);
+	update($schedule);
+end	 
+rule "calls-rules-12-identify-the-schedule VisitEventFact made within 24 hours schedule 6 of 9"
+salience 700
+when
+	$schedule : Schedule( state == State.NOT_MATCHED || state == State.IN_PROGRESS)
+	$visitEventFact : VisitEventFact( state == State.NOT_MATCHED, this during[-24h, 48h] $schedule, staffXOfNine(6, staffId, $schedule.staffId), ani == $schedule.callerIdForPatient )
+then
+	$visitEventFact.setState(State.MATCHED);
+	$visitEventFact.setScheduleId($schedule.getScheduleId());
+	$schedule.setState(State.IN_PROGRESS);
+	//System.out.println("VisitEventFact with a visitId of " + $visitEventFact.getVisitId() + " matched with schedule with scheduleId of " + $schedule.getScheduleId() + ".");
+	//System.out.println("24h rule fired Time diffs are (" + Long.toString(Schedule.diff($schedule.getStartTime(),$visitEventFact.getCallInTime())) + ") and (" + Long.toString(Schedule.diff($schedule.getEndTime(),$visitEventFact.getCallInTime())) + ")");
+	insert(new SchedulePruner($schedule.getScheduleId(),$schedule.getStaffId()));
+	update($visitEventFact);
+	update($schedule);
+end	 
+
+rule "calls-rules-12 END EXISTING ON NEW VISIT"
+salience 700
+when
+	$pruner : SchedulePruner()
+	$schedule : Schedule( staffId == $pruner.staffId && (state == State.IN_PROGRESS || state == State.MATCHED) && scheduleId != $pruner.scheduleId)
+then
+	$schedule.setState(State.ENDED);
+	update($schedule);
+	retract($pruner);
+end
+
+rule "calls-rules-4 There was a break on this visit"//this scheduled visit would have been updated already by last calls.
+salience 700
+when
+	$schedule : Schedule(state == State.ENDED)
+	$visitEventFact : VisitEventFact( state == State.NOT_MATCHED, staffId == $schedule.staffId, ani == $schedule.callerIdForPatient )
+then
+	$visitEventFact.setState(State.MATCHED);
+	$schedule.setState(State.ENDED);
+	$schedule.deleteExtraneousCalls();
+	$schedule.setCallCallIn($visitEventFact);
+	$schedule.setCallCallOut(null);
+	insert ( new UnplannedVisit($schedule, $visitEventFact, $visitEventFact.getCallInTime(), $schedule.getEndTime()));
+	retract($visitEventFact)
+	retract($schedule);
+end
+

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="${project.artifactId}-repository">
+
+    <feature name="${project.artifactId}" version="${project.version}" start-level="60" description="Sandata Document Model">
+
+
+
+    </feature>
+
+</features>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+
+    <cm:property-placeholder id="importApp.blueprint.placeholder" persistent-id="com.sandata.lab.exports.payroll.staff" update-strategy="reload"> <!-- TODO: Rename... -->
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+            <cm:property name="activeMQ.username" value="admin" />
+            <cm:property name="activeMQ.password" value="admin" />
+            <cm:property name="activeMQ.concurrentConsumers" value="100" />
+            <cm:property name="rest.concurrentConsumers" value="20" />
+
+            <cm:property name="thread.pool.size" value="20" />
+            <cm:property name="thread.pool.max.size" value="100" />
+            <cm:property name="thread.pool.max.queue.size" value="-1" />
+
+            <cm:property name="jms.timeout" value="86400s" />
+
+            <cm:property name="paypro.name" value="PayPro" />
+            <cm:property name="paypro.chron" value="0 0 9 1/1 * ? *" />
+            <cm:property name="paypro.destination" value="file:target/data" />
+
+            <cm:property name="redeliverydelay" value="20000"/>
+            <cm:property name="maximumRedeliveries" value="8"/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+
+
+    <bean id="appContext" class="com.sandata.lab.exports.staff.app.AppContext"
+          factory-method="initCamelContext" depends-on="appCamelContext">
+        <argument ref="appCamelContext" />
+    </bean>
+
+
+    <!-- connect to the local ActiveMQ broker -->
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="brokerURL" value="${activeMQ.uri}" />
+        <property name="userName" value="${activeMQ.username}" />
+        <property name="password" value="${activeMQ.password}" />
+        <property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+    </bean>
+
+    <bean id="staffTransformer" class="com.sandata.lab.exports.staff.impl.StaffTransformer"/>
+
+
+    <bean id="traceFormatter" class="org.apache.camel.processor.interceptor.DefaultTraceFormatter">
+        <property name="showBody" value="false"/>
+        <property name="showHeaders" value="false"/>
+    </bean>
+
+    <camelContext id="appCamelContext" trace="true" streamCache="true" useBlueprintPropertyResolver="true" xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- using Camel properties component and refer to the OSGI-INF.blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <!-- <propertyPlaceholder id="properties" location="OSGI-INF.blueprint:dhs.OSGI-INF.blueprint.placeholder"/>-->
+        <propertyPlaceholder id="properties" location="blueprint:importApp.blueprint.placeholder"/>
+        <package>com.sandata.lab.exports.staff.routes</package>
+        <threadPoolProfile id="payrollRestThreadPool" poolSize="{{thread.pool.size}}" maxPoolSize="{{thread.pool.max.size}}" maxQueueSize="{{thread.pool.max.queue.size}}"/>
+    </camelContext>
+</blueprint>

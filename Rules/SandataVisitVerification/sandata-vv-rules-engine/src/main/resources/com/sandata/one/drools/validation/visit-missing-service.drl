@@ -1,0 +1,35 @@
+//created on: Feb 2, 2017
+package com.sandata.one.drools.validation
+
+import com.sandata.lab.rules.vv.fact.ScheduleEventFact;
+import com.sandata.lab.rules.vv.fact.VisitEventFact;
+import com.sandata.lab.rules.vv.fact.VisitFact;
+import com.sandata.lab.rules.vv.fact.VisitServiceValidationFact;
+import com.sandata.one.drools.utils.Constants;
+import com.sandata.one.drools.utils.CommonUtils;
+
+import org.slf4j.LoggerFactory;
+import com.sandata.lab.rules.vv.log.utils.App;
+import java.math.BigInteger;
+
+import function com.sandata.one.drools.utils.CommonUtils.helper;
+
+dialect  "mvel"
+
+rule "A stand alone rule for missing service for a visit."
+
+    salience 100
+    when
+        $visitFact : VisitFact(visitSk != null)
+        $visitServiceValidationFact : VisitServiceValidationFact ()
+  	    $visitEventFact : VisitEventFact() 
+  	    $scheduleEventFact : ScheduleEventFact()
+    then
+        
+        if(!CommonUtils.verifyVisitService($visitEventFact, $visitServiceValidationFact, $scheduleEventFact, $visitFact)) {
+        	$visitFact.addVisitException($visitFact.getVisitSk(), Constants.EXCEPTION_TYPE.MISSING_SERVICE.getExceptionId());
+        }
+		helper(drools);
+end;
+
+

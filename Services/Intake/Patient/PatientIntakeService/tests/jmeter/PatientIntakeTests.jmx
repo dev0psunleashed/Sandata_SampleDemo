@@ -1,0 +1,1345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="2.7" jmeter="2.12 r1636949">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Patient Intake Tests" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="url" elementType="Argument">
+            <stringProp name="Argument.name">url</stringProp>
+            <stringProp name="Argument.value">localhost</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="port" elementType="Argument">
+            <stringProp name="Argument.name">port</stringProp>
+            <stringProp name="Argument.value">8181</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Threads" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <longProp name="ThreadGroup.start_time">1416552811000</longProp>
+        <longProp name="ThreadGroup.end_time">1416552811000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path"></stringProp>
+          <stringProp name="HTTPSampler.concurrentPool">4</stringProp>
+        </ConfigTestElement>
+        <hashTree/>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="DHSInterfaces HTTP Header Manager" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="soid" elementType="Header">
+              <stringProp name="Header.name">Authorization</stringProp>
+              <stringProp name="Header.value">Basic YWRtaW46YWRtaW4=</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Insert Patient" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;patientId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;memberNumber&quot;: &quot;20064978498&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos0005&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1962-01-21 00:00:00&quot;,&#xd;
+  &quot;age&quot;: 41,&#xd;
+  &quot;maritalStatus&quot;: &quot;Married&quot;,&#xd;
+  &quot;gender&quot;: &quot;Male&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;language&quot;: &quot;English&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Caucasian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Patient&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;insurance&quot;: &quot;98000945960&quot;,&#xd;
+  &quot;insuranceId&quot;: null,&#xd;
+  &quot;medicaidId&quot;: &quot;78069408861&quot;,&#xd;
+  &quot;medicareId&quot;: &quot;14458783703&quot;,&#xd;
+  &quot;medicalRecordNumber&quot;: &quot;23010361612&quot;,&#xd;
+  &quot;insuranceStartDate&quot;: null,&#xd;
+  &quot;insuranceEndDate&quot;: null,&#xd;
+  &quot;referralNumber&quot;: null,&#xd;
+  &quot;referralStartDate&quot;: null,&#xd;
+  &quot;referralEndDate&quot;: null,&#xd;
+  &quot;referralSource&quot;: null,&#xd;
+  &quot;admissionId&quot;: null,&#xd;
+  &quot;HourlyRate&quot;: 24.37,&#xd;
+  &quot;billRate&quot;: 1.57,&#xd;
+  &quot;agencyLocation&quot;: &quot;934 Howard Place, Loomis, Rhode Island, 4747&quot;,&#xd;
+  &quot;clinicalManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;marketer&quot;: null,&#xd;
+  &quot;disasterLevelId&quot;: null,&#xd;
+  &quot;dnrId&quot;: null,&#xd;
+  &quot;dnrDate&quot;: null,&#xd;
+  &quot;allergies&quot;: null,&#xd;
+  &quot;dmeAndSupplies&quot;: null,&#xd;
+  &quot;nutritionalRequirements&quot;: null,&#xd;
+  &quot;safetyMeasures&quot;: null,&#xd;
+  &quot;medication&quot;: null,&#xd;
+  &quot;medicationStrength&quot;: null,&#xd;
+  &quot;medicationDosage&quot;: null,&#xd;
+  &quot;medicationRoute&quot;: null,&#xd;
+  &quot;medicationFrequency&quot;: null,&#xd;
+  &quot;medicationComments&quot;: null,&#xd;
+  &quot;medicationClassification&quot;: null,&#xd;
+  &quot;medicationBeginDate&quot;: null,&#xd;
+  &quot;medicationEndDate&quot;: null,&#xd;
+  &quot;referenceNumber&quot;: null,&#xd;
+  &quot;referenceFormat&quot;: null,&#xd;
+  &quot;referenceMaximum&quot;: null,&#xd;
+  &quot;referenceModifier1&quot;: null,&#xd;
+  &quot;referenceModifier2&quot;: null,&#xd;
+  &quot;referenceModifier3&quot;: null,&#xd;
+  &quot;referenceModifier4&quot;: null,&#xd;
+  &quot;authorizationBeginDate&quot;: null,&#xd;
+  &quot;authorizationEndDate&quot;: null,&#xd;
+  &quot;authorizationComments&quot;: null,&#xd;
+  &quot;limitBy&quot;: null,&#xd;
+  &quot;total&quot;: null,&#xd;
+  &quot;task&quot;: null,&#xd;
+  &quot;schedule&quot;: null,&#xd;
+  &quot;eligibility&quot;: null,&#xd;
+  &quot;nameOfThePayerCovering&quot;: null,&#xd;
+  &quot;copay&quot;: null,&#xd;
+  &quot;lastEligibilityCheckDate&quot;: null,&#xd;
+  &quot;selectedServices&quot;: null,&#xd;
+  &quot;selectedTasks&quot;: null&#xd;
+}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/cxf/pintake/patient</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Insert Patient List" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">[{&#xd;
+  &quot;patientId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;memberNumber&quot;: &quot;20064978498&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos0008&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1962-01-21 00:00:00&quot;,&#xd;
+  &quot;age&quot;: 41,&#xd;
+  &quot;maritalStatus&quot;: &quot;Married&quot;,&#xd;
+  &quot;gender&quot;: &quot;Male&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;language&quot;: &quot;English&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Caucasian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Patient&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;insurance&quot;: &quot;98000945960&quot;,&#xd;
+  &quot;insuranceId&quot;: null,&#xd;
+  &quot;medicaidId&quot;: &quot;78069408861&quot;,&#xd;
+  &quot;medicareId&quot;: &quot;14458783703&quot;,&#xd;
+  &quot;medicalRecordNumber&quot;: &quot;23010361612&quot;,&#xd;
+  &quot;insuranceStartDate&quot;: null,&#xd;
+  &quot;insuranceEndDate&quot;: null,&#xd;
+  &quot;referralNumber&quot;: null,&#xd;
+  &quot;referralStartDate&quot;: null,&#xd;
+  &quot;referralEndDate&quot;: null,&#xd;
+  &quot;referralSource&quot;: null,&#xd;
+  &quot;admissionId&quot;: null,&#xd;
+  &quot;HourlyRate&quot;: 24.37,&#xd;
+  &quot;billRate&quot;: 1.57,&#xd;
+  &quot;agencyLocation&quot;: &quot;934 Howard Place, Loomis, Rhode Island, 4747&quot;,&#xd;
+  &quot;clinicalManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;marketer&quot;: null,&#xd;
+  &quot;disasterLevelId&quot;: null,&#xd;
+  &quot;dnrId&quot;: null,&#xd;
+  &quot;dnrDate&quot;: null,&#xd;
+  &quot;allergies&quot;: null,&#xd;
+  &quot;dmeAndSupplies&quot;: null,&#xd;
+  &quot;nutritionalRequirements&quot;: null,&#xd;
+  &quot;safetyMeasures&quot;: null,&#xd;
+  &quot;medication&quot;: null,&#xd;
+  &quot;medicationStrength&quot;: null,&#xd;
+  &quot;medicationDosage&quot;: null,&#xd;
+  &quot;medicationRoute&quot;: null,&#xd;
+  &quot;medicationFrequency&quot;: null,&#xd;
+  &quot;medicationComments&quot;: null,&#xd;
+  &quot;medicationClassification&quot;: null,&#xd;
+  &quot;medicationBeginDate&quot;: null,&#xd;
+  &quot;medicationEndDate&quot;: null,&#xd;
+  &quot;referenceNumber&quot;: null,&#xd;
+  &quot;referenceFormat&quot;: null,&#xd;
+  &quot;referenceMaximum&quot;: null,&#xd;
+  &quot;referenceModifier1&quot;: null,&#xd;
+  &quot;referenceModifier2&quot;: null,&#xd;
+  &quot;referenceModifier3&quot;: null,&#xd;
+  &quot;referenceModifier4&quot;: null,&#xd;
+  &quot;authorizationBeginDate&quot;: null,&#xd;
+  &quot;authorizationEndDate&quot;: null,&#xd;
+  &quot;authorizationComments&quot;: null,&#xd;
+  &quot;limitBy&quot;: null,&#xd;
+  &quot;total&quot;: null,&#xd;
+  &quot;task&quot;: null,&#xd;
+  &quot;schedule&quot;: null,&#xd;
+  &quot;eligibility&quot;: null,&#xd;
+  &quot;nameOfThePayerCovering&quot;: null,&#xd;
+  &quot;copay&quot;: null,&#xd;
+  &quot;lastEligibilityCheckDate&quot;: null,&#xd;
+  &quot;selectedServices&quot;: null,&#xd;
+  &quot;selectedTasks&quot;: null&#xd;
+},&#xd;
+{&#xd;
+  &quot;patientId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;memberNumber&quot;: &quot;20064978498&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos0009&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1962-01-21 00:00:00&quot;,&#xd;
+  &quot;age&quot;: 41,&#xd;
+  &quot;maritalStatus&quot;: &quot;Married&quot;,&#xd;
+  &quot;gender&quot;: &quot;Male&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;language&quot;: &quot;English&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Caucasian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Patient&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;insurance&quot;: &quot;98000945960&quot;,&#xd;
+  &quot;insuranceId&quot;: null,&#xd;
+  &quot;medicaidId&quot;: &quot;78069408861&quot;,&#xd;
+  &quot;medicareId&quot;: &quot;14458783703&quot;,&#xd;
+  &quot;medicalRecordNumber&quot;: &quot;23010361612&quot;,&#xd;
+  &quot;insuranceStartDate&quot;: null,&#xd;
+  &quot;insuranceEndDate&quot;: null,&#xd;
+  &quot;referralNumber&quot;: null,&#xd;
+  &quot;referralStartDate&quot;: null,&#xd;
+  &quot;referralEndDate&quot;: null,&#xd;
+  &quot;referralSource&quot;: null,&#xd;
+  &quot;admissionId&quot;: null,&#xd;
+  &quot;HourlyRate&quot;: 24.37,&#xd;
+  &quot;billRate&quot;: 1.57,&#xd;
+  &quot;agencyLocation&quot;: &quot;934 Howard Place, Loomis, Rhode Island, 4747&quot;,&#xd;
+  &quot;clinicalManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;marketer&quot;: null,&#xd;
+  &quot;disasterLevelId&quot;: null,&#xd;
+  &quot;dnrId&quot;: null,&#xd;
+  &quot;dnrDate&quot;: null,&#xd;
+  &quot;allergies&quot;: null,&#xd;
+  &quot;dmeAndSupplies&quot;: null,&#xd;
+  &quot;nutritionalRequirements&quot;: null,&#xd;
+  &quot;safetyMeasures&quot;: null,&#xd;
+  &quot;medication&quot;: null,&#xd;
+  &quot;medicationStrength&quot;: null,&#xd;
+  &quot;medicationDosage&quot;: null,&#xd;
+  &quot;medicationRoute&quot;: null,&#xd;
+  &quot;medicationFrequency&quot;: null,&#xd;
+  &quot;medicationComments&quot;: null,&#xd;
+  &quot;medicationClassification&quot;: null,&#xd;
+  &quot;medicationBeginDate&quot;: null,&#xd;
+  &quot;medicationEndDate&quot;: null,&#xd;
+  &quot;referenceNumber&quot;: null,&#xd;
+  &quot;referenceFormat&quot;: null,&#xd;
+  &quot;referenceMaximum&quot;: null,&#xd;
+  &quot;referenceModifier1&quot;: null,&#xd;
+  &quot;referenceModifier2&quot;: null,&#xd;
+  &quot;referenceModifier3&quot;: null,&#xd;
+  &quot;referenceModifier4&quot;: null,&#xd;
+  &quot;authorizationBeginDate&quot;: null,&#xd;
+  &quot;authorizationEndDate&quot;: null,&#xd;
+  &quot;authorizationComments&quot;: null,&#xd;
+  &quot;limitBy&quot;: null,&#xd;
+  &quot;total&quot;: null,&#xd;
+  &quot;task&quot;: null,&#xd;
+  &quot;schedule&quot;: null,&#xd;
+  &quot;eligibility&quot;: null,&#xd;
+  &quot;nameOfThePayerCovering&quot;: null,&#xd;
+  &quot;copay&quot;: null,&#xd;
+  &quot;lastEligibilityCheckDate&quot;: null,&#xd;
+  &quot;selectedServices&quot;: null,&#xd;
+  &quot;selectedTasks&quot;: null&#xd;
+}]&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/cxf/pintake/patients</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update Patient" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;patientId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;memberNumber&quot;: &quot;20064978498&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1962-01-21 00:00:00&quot;,&#xd;
+  &quot;age&quot;: 41,&#xd;
+  &quot;maritalStatus&quot;: &quot;Married&quot;,&#xd;
+  &quot;gender&quot;: &quot;Male&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;language&quot;: &quot;English&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Caucasian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Patient&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;insurance&quot;: &quot;98000945960&quot;,&#xd;
+  &quot;insuranceId&quot;: null,&#xd;
+  &quot;medicaidId&quot;: &quot;78069408861&quot;,&#xd;
+  &quot;medicareId&quot;: &quot;14458783703&quot;,&#xd;
+  &quot;medicalRecordNumber&quot;: &quot;23010361612&quot;,&#xd;
+  &quot;insuranceStartDate&quot;: null,&#xd;
+  &quot;insuranceEndDate&quot;: null,&#xd;
+  &quot;referralNumber&quot;: null,&#xd;
+  &quot;referralStartDate&quot;: null,&#xd;
+  &quot;referralEndDate&quot;: null,&#xd;
+  &quot;referralSource&quot;: null,&#xd;
+  &quot;admissionId&quot;: null,&#xd;
+  &quot;HourlyRate&quot;: 24.37,&#xd;
+  &quot;billRate&quot;: 1.57,&#xd;
+  &quot;agencyLocation&quot;: &quot;934 Howard Place, Loomis, Rhode Island, 4747&quot;,&#xd;
+  &quot;clinicalManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;marketer&quot;: null,&#xd;
+  &quot;disasterLevelId&quot;: null,&#xd;
+  &quot;dnrId&quot;: null,&#xd;
+  &quot;dnrDate&quot;: null,&#xd;
+  &quot;allergies&quot;: null,&#xd;
+  &quot;dmeAndSupplies&quot;: null,&#xd;
+  &quot;nutritionalRequirements&quot;: null,&#xd;
+  &quot;safetyMeasures&quot;: null,&#xd;
+  &quot;medication&quot;: null,&#xd;
+  &quot;medicationStrength&quot;: null,&#xd;
+  &quot;medicationDosage&quot;: null,&#xd;
+  &quot;medicationRoute&quot;: null,&#xd;
+  &quot;medicationFrequency&quot;: null,&#xd;
+  &quot;medicationComments&quot;: null,&#xd;
+  &quot;medicationClassification&quot;: null,&#xd;
+  &quot;medicationBeginDate&quot;: null,&#xd;
+  &quot;medicationEndDate&quot;: null,&#xd;
+  &quot;referenceNumber&quot;: null,&#xd;
+  &quot;referenceFormat&quot;: null,&#xd;
+  &quot;referenceMaximum&quot;: null,&#xd;
+  &quot;referenceModifier1&quot;: null,&#xd;
+  &quot;referenceModifier2&quot;: null,&#xd;
+  &quot;referenceModifier3&quot;: null,&#xd;
+  &quot;referenceModifier4&quot;: null,&#xd;
+  &quot;authorizationBeginDate&quot;: null,&#xd;
+  &quot;authorizationEndDate&quot;: null,&#xd;
+  &quot;authorizationComments&quot;: null,&#xd;
+  &quot;limitBy&quot;: null,&#xd;
+  &quot;total&quot;: null,&#xd;
+  &quot;task&quot;: null,&#xd;
+  &quot;schedule&quot;: null,&#xd;
+  &quot;eligibility&quot;: null,&#xd;
+  &quot;nameOfThePayerCovering&quot;: null,&#xd;
+  &quot;copay&quot;: null,&#xd;
+  &quot;lastEligibilityCheckDate&quot;: null,&#xd;
+  &quot;selectedServices&quot;: null,&#xd;
+  &quot;selectedTasks&quot;: null&#xd;
+}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/cxf/pintake/patient</stringProp>
+          <stringProp name="HTTPSampler.method">PUT</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update Patient List" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">[{&#xd;
+  &quot;patientId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;memberNumber&quot;: &quot;20064978498&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1962-01-21 00:00:00&quot;,&#xd;
+  &quot;age&quot;: 41,&#xd;
+  &quot;maritalStatus&quot;: &quot;Married&quot;,&#xd;
+  &quot;gender&quot;: &quot;Male&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;language&quot;: &quot;English&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Caucasian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Patient&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;insurance&quot;: &quot;98000945960&quot;,&#xd;
+  &quot;insuranceId&quot;: null,&#xd;
+  &quot;medicaidId&quot;: &quot;78069408861&quot;,&#xd;
+  &quot;medicareId&quot;: &quot;14458783703&quot;,&#xd;
+  &quot;medicalRecordNumber&quot;: &quot;23010361612&quot;,&#xd;
+  &quot;insuranceStartDate&quot;: null,&#xd;
+  &quot;insuranceEndDate&quot;: null,&#xd;
+  &quot;referralNumber&quot;: null,&#xd;
+  &quot;referralStartDate&quot;: null,&#xd;
+  &quot;referralEndDate&quot;: null,&#xd;
+  &quot;referralSource&quot;: null,&#xd;
+  &quot;admissionId&quot;: null,&#xd;
+  &quot;HourlyRate&quot;: 24.37,&#xd;
+  &quot;billRate&quot;: 1.57,&#xd;
+  &quot;agencyLocation&quot;: &quot;934 Howard Place, Loomis, Rhode Island, 4747&quot;,&#xd;
+  &quot;clinicalManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;marketer&quot;: null,&#xd;
+  &quot;disasterLevelId&quot;: null,&#xd;
+  &quot;dnrId&quot;: null,&#xd;
+  &quot;dnrDate&quot;: null,&#xd;
+  &quot;allergies&quot;: null,&#xd;
+  &quot;dmeAndSupplies&quot;: null,&#xd;
+  &quot;nutritionalRequirements&quot;: null,&#xd;
+  &quot;safetyMeasures&quot;: null,&#xd;
+  &quot;medication&quot;: null,&#xd;
+  &quot;medicationStrength&quot;: null,&#xd;
+  &quot;medicationDosage&quot;: null,&#xd;
+  &quot;medicationRoute&quot;: null,&#xd;
+  &quot;medicationFrequency&quot;: null,&#xd;
+  &quot;medicationComments&quot;: null,&#xd;
+  &quot;medicationClassification&quot;: null,&#xd;
+  &quot;medicationBeginDate&quot;: null,&#xd;
+  &quot;medicationEndDate&quot;: null,&#xd;
+  &quot;referenceNumber&quot;: null,&#xd;
+  &quot;referenceFormat&quot;: null,&#xd;
+  &quot;referenceMaximum&quot;: null,&#xd;
+  &quot;referenceModifier1&quot;: null,&#xd;
+  &quot;referenceModifier2&quot;: null,&#xd;
+  &quot;referenceModifier3&quot;: null,&#xd;
+  &quot;referenceModifier4&quot;: null,&#xd;
+  &quot;authorizationBeginDate&quot;: null,&#xd;
+  &quot;authorizationEndDate&quot;: null,&#xd;
+  &quot;authorizationComments&quot;: null,&#xd;
+  &quot;limitBy&quot;: null,&#xd;
+  &quot;total&quot;: null,&#xd;
+  &quot;task&quot;: null,&#xd;
+  &quot;schedule&quot;: null,&#xd;
+  &quot;eligibility&quot;: null,&#xd;
+  &quot;nameOfThePayerCovering&quot;: null,&#xd;
+  &quot;copay&quot;: null,&#xd;
+  &quot;lastEligibilityCheckDate&quot;: null,&#xd;
+  &quot;selectedServices&quot;: null,&#xd;
+  &quot;selectedTasks&quot;: null&#xd;
+},&#xd;
+{&#xd;
+  &quot;patientId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;memberNumber&quot;: &quot;20064978498&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1962-01-21 00:00:00&quot;,&#xd;
+  &quot;age&quot;: 41,&#xd;
+  &quot;maritalStatus&quot;: &quot;Married&quot;,&#xd;
+  &quot;gender&quot;: &quot;Male&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;language&quot;: &quot;English&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Caucasian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Patient&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;insurance&quot;: &quot;98000945960&quot;,&#xd;
+  &quot;insuranceId&quot;: null,&#xd;
+  &quot;medicaidId&quot;: &quot;78069408861&quot;,&#xd;
+  &quot;medicareId&quot;: &quot;14458783703&quot;,&#xd;
+  &quot;medicalRecordNumber&quot;: &quot;23010361612&quot;,&#xd;
+  &quot;insuranceStartDate&quot;: null,&#xd;
+  &quot;insuranceEndDate&quot;: null,&#xd;
+  &quot;referralNumber&quot;: null,&#xd;
+  &quot;referralStartDate&quot;: null,&#xd;
+  &quot;referralEndDate&quot;: null,&#xd;
+  &quot;referralSource&quot;: null,&#xd;
+  &quot;admissionId&quot;: null,&#xd;
+  &quot;HourlyRate&quot;: 24.37,&#xd;
+  &quot;billRate&quot;: 1.57,&#xd;
+  &quot;agencyLocation&quot;: &quot;934 Howard Place, Loomis, Rhode Island, 4747&quot;,&#xd;
+  &quot;clinicalManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;marketer&quot;: null,&#xd;
+  &quot;disasterLevelId&quot;: null,&#xd;
+  &quot;dnrId&quot;: null,&#xd;
+  &quot;dnrDate&quot;: null,&#xd;
+  &quot;allergies&quot;: null,&#xd;
+  &quot;dmeAndSupplies&quot;: null,&#xd;
+  &quot;nutritionalRequirements&quot;: null,&#xd;
+  &quot;safetyMeasures&quot;: null,&#xd;
+  &quot;medication&quot;: null,&#xd;
+  &quot;medicationStrength&quot;: null,&#xd;
+  &quot;medicationDosage&quot;: null,&#xd;
+  &quot;medicationRoute&quot;: null,&#xd;
+  &quot;medicationFrequency&quot;: null,&#xd;
+  &quot;medicationComments&quot;: null,&#xd;
+  &quot;medicationClassification&quot;: null,&#xd;
+  &quot;medicationBeginDate&quot;: null,&#xd;
+  &quot;medicationEndDate&quot;: null,&#xd;
+  &quot;referenceNumber&quot;: null,&#xd;
+  &quot;referenceFormat&quot;: null,&#xd;
+  &quot;referenceMaximum&quot;: null,&#xd;
+  &quot;referenceModifier1&quot;: null,&#xd;
+  &quot;referenceModifier2&quot;: null,&#xd;
+  &quot;referenceModifier3&quot;: null,&#xd;
+  &quot;referenceModifier4&quot;: null,&#xd;
+  &quot;authorizationBeginDate&quot;: null,&#xd;
+  &quot;authorizationEndDate&quot;: null,&#xd;
+  &quot;authorizationComments&quot;: null,&#xd;
+  &quot;limitBy&quot;: null,&#xd;
+  &quot;total&quot;: null,&#xd;
+  &quot;task&quot;: null,&#xd;
+  &quot;schedule&quot;: null,&#xd;
+  &quot;eligibility&quot;: null,&#xd;
+  &quot;nameOfThePayerCovering&quot;: null,&#xd;
+  &quot;copay&quot;: null,&#xd;
+  &quot;lastEligibilityCheckDate&quot;: null,&#xd;
+  &quot;selectedServices&quot;: null,&#xd;
+  &quot;selectedTasks&quot;: null&#xd;
+}]&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/cxf/pintake/patients</stringProp>
+          <stringProp name="HTTPSampler.method">PUT</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Delete Patient" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;patientId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;memberNumber&quot;: &quot;20064978498&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1962-01-21 00:00:00&quot;,&#xd;
+  &quot;age&quot;: 41,&#xd;
+  &quot;maritalStatus&quot;: &quot;Married&quot;,&#xd;
+  &quot;gender&quot;: &quot;Male&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;language&quot;: &quot;English&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Caucasian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Patient&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;insurance&quot;: &quot;98000945960&quot;,&#xd;
+  &quot;insuranceId&quot;: null,&#xd;
+  &quot;medicaidId&quot;: &quot;78069408861&quot;,&#xd;
+  &quot;medicareId&quot;: &quot;14458783703&quot;,&#xd;
+  &quot;medicalRecordNumber&quot;: &quot;23010361612&quot;,&#xd;
+  &quot;insuranceStartDate&quot;: null,&#xd;
+  &quot;insuranceEndDate&quot;: null,&#xd;
+  &quot;referralNumber&quot;: null,&#xd;
+  &quot;referralStartDate&quot;: null,&#xd;
+  &quot;referralEndDate&quot;: null,&#xd;
+  &quot;referralSource&quot;: null,&#xd;
+  &quot;admissionId&quot;: null,&#xd;
+  &quot;HourlyRate&quot;: 24.37,&#xd;
+  &quot;billRate&quot;: 1.57,&#xd;
+  &quot;agencyLocation&quot;: &quot;934 Howard Place, Loomis, Rhode Island, 4747&quot;,&#xd;
+  &quot;clinicalManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;marketer&quot;: null,&#xd;
+  &quot;disasterLevelId&quot;: null,&#xd;
+  &quot;dnrId&quot;: null,&#xd;
+  &quot;dnrDate&quot;: null,&#xd;
+  &quot;allergies&quot;: null,&#xd;
+  &quot;dmeAndSupplies&quot;: null,&#xd;
+  &quot;nutritionalRequirements&quot;: null,&#xd;
+  &quot;safetyMeasures&quot;: null,&#xd;
+  &quot;medication&quot;: null,&#xd;
+  &quot;medicationStrength&quot;: null,&#xd;
+  &quot;medicationDosage&quot;: null,&#xd;
+  &quot;medicationRoute&quot;: null,&#xd;
+  &quot;medicationFrequency&quot;: null,&#xd;
+  &quot;medicationComments&quot;: null,&#xd;
+  &quot;medicationClassification&quot;: null,&#xd;
+  &quot;medicationBeginDate&quot;: null,&#xd;
+  &quot;medicationEndDate&quot;: null,&#xd;
+  &quot;referenceNumber&quot;: null,&#xd;
+  &quot;referenceFormat&quot;: null,&#xd;
+  &quot;referenceMaximum&quot;: null,&#xd;
+  &quot;referenceModifier1&quot;: null,&#xd;
+  &quot;referenceModifier2&quot;: null,&#xd;
+  &quot;referenceModifier3&quot;: null,&#xd;
+  &quot;referenceModifier4&quot;: null,&#xd;
+  &quot;authorizationBeginDate&quot;: null,&#xd;
+  &quot;authorizationEndDate&quot;: null,&#xd;
+  &quot;authorizationComments&quot;: null,&#xd;
+  &quot;limitBy&quot;: null,&#xd;
+  &quot;total&quot;: null,&#xd;
+  &quot;task&quot;: null,&#xd;
+  &quot;schedule&quot;: null,&#xd;
+  &quot;eligibility&quot;: null,&#xd;
+  &quot;nameOfThePayerCovering&quot;: null,&#xd;
+  &quot;copay&quot;: null,&#xd;
+  &quot;lastEligibilityCheckDate&quot;: null,&#xd;
+  &quot;selectedServices&quot;: null,&#xd;
+  &quot;selectedTasks&quot;: null&#xd;
+}&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/cxf/pintake/patient</stringProp>
+          <stringProp name="HTTPSampler.method">DELETE</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Delete Patient List" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">[{&#xd;
+  &quot;patientId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;memberNumber&quot;: &quot;20064978498&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1962-01-21 00:00:00&quot;,&#xd;
+  &quot;age&quot;: 41,&#xd;
+  &quot;maritalStatus&quot;: &quot;Married&quot;,&#xd;
+  &quot;gender&quot;: &quot;Male&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;language&quot;: &quot;English&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Caucasian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Patient&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;insurance&quot;: &quot;98000945960&quot;,&#xd;
+  &quot;insuranceId&quot;: null,&#xd;
+  &quot;medicaidId&quot;: &quot;78069408861&quot;,&#xd;
+  &quot;medicareId&quot;: &quot;14458783703&quot;,&#xd;
+  &quot;medicalRecordNumber&quot;: &quot;23010361612&quot;,&#xd;
+  &quot;insuranceStartDate&quot;: null,&#xd;
+  &quot;insuranceEndDate&quot;: null,&#xd;
+  &quot;referralNumber&quot;: null,&#xd;
+  &quot;referralStartDate&quot;: null,&#xd;
+  &quot;referralEndDate&quot;: null,&#xd;
+  &quot;referralSource&quot;: null,&#xd;
+  &quot;admissionId&quot;: null,&#xd;
+  &quot;HourlyRate&quot;: 24.37,&#xd;
+  &quot;billRate&quot;: 1.57,&#xd;
+  &quot;agencyLocation&quot;: &quot;934 Howard Place, Loomis, Rhode Island, 4747&quot;,&#xd;
+  &quot;clinicalManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;marketer&quot;: null,&#xd;
+  &quot;disasterLevelId&quot;: null,&#xd;
+  &quot;dnrId&quot;: null,&#xd;
+  &quot;dnrDate&quot;: null,&#xd;
+  &quot;allergies&quot;: null,&#xd;
+  &quot;dmeAndSupplies&quot;: null,&#xd;
+  &quot;nutritionalRequirements&quot;: null,&#xd;
+  &quot;safetyMeasures&quot;: null,&#xd;
+  &quot;medication&quot;: null,&#xd;
+  &quot;medicationStrength&quot;: null,&#xd;
+  &quot;medicationDosage&quot;: null,&#xd;
+  &quot;medicationRoute&quot;: null,&#xd;
+  &quot;medicationFrequency&quot;: null,&#xd;
+  &quot;medicationComments&quot;: null,&#xd;
+  &quot;medicationClassification&quot;: null,&#xd;
+  &quot;medicationBeginDate&quot;: null,&#xd;
+  &quot;medicationEndDate&quot;: null,&#xd;
+  &quot;referenceNumber&quot;: null,&#xd;
+  &quot;referenceFormat&quot;: null,&#xd;
+  &quot;referenceMaximum&quot;: null,&#xd;
+  &quot;referenceModifier1&quot;: null,&#xd;
+  &quot;referenceModifier2&quot;: null,&#xd;
+  &quot;referenceModifier3&quot;: null,&#xd;
+  &quot;referenceModifier4&quot;: null,&#xd;
+  &quot;authorizationBeginDate&quot;: null,&#xd;
+  &quot;authorizationEndDate&quot;: null,&#xd;
+  &quot;authorizationComments&quot;: null,&#xd;
+  &quot;limitBy&quot;: null,&#xd;
+  &quot;total&quot;: null,&#xd;
+  &quot;task&quot;: null,&#xd;
+  &quot;schedule&quot;: null,&#xd;
+  &quot;eligibility&quot;: null,&#xd;
+  &quot;nameOfThePayerCovering&quot;: null,&#xd;
+  &quot;copay&quot;: null,&#xd;
+  &quot;lastEligibilityCheckDate&quot;: null,&#xd;
+  &quot;selectedServices&quot;: null,&#xd;
+  &quot;selectedTasks&quot;: null&#xd;
+},&#xd;
+{&#xd;
+  &quot;patientId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;memberNumber&quot;: &quot;20064978498&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1962-01-21 00:00:00&quot;,&#xd;
+  &quot;age&quot;: 41,&#xd;
+  &quot;maritalStatus&quot;: &quot;Married&quot;,&#xd;
+  &quot;gender&quot;: &quot;Male&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;language&quot;: &quot;English&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Caucasian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Patient&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;insurance&quot;: &quot;98000945960&quot;,&#xd;
+  &quot;insuranceId&quot;: null,&#xd;
+  &quot;medicaidId&quot;: &quot;78069408861&quot;,&#xd;
+  &quot;medicareId&quot;: &quot;14458783703&quot;,&#xd;
+  &quot;medicalRecordNumber&quot;: &quot;23010361612&quot;,&#xd;
+  &quot;insuranceStartDate&quot;: null,&#xd;
+  &quot;insuranceEndDate&quot;: null,&#xd;
+  &quot;referralNumber&quot;: null,&#xd;
+  &quot;referralStartDate&quot;: null,&#xd;
+  &quot;referralEndDate&quot;: null,&#xd;
+  &quot;referralSource&quot;: null,&#xd;
+  &quot;admissionId&quot;: null,&#xd;
+  &quot;HourlyRate&quot;: 24.37,&#xd;
+  &quot;billRate&quot;: 1.57,&#xd;
+  &quot;agencyLocation&quot;: &quot;934 Howard Place, Loomis, Rhode Island, 4747&quot;,&#xd;
+  &quot;clinicalManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;marketer&quot;: null,&#xd;
+  &quot;disasterLevelId&quot;: null,&#xd;
+  &quot;dnrId&quot;: null,&#xd;
+  &quot;dnrDate&quot;: null,&#xd;
+  &quot;allergies&quot;: null,&#xd;
+  &quot;dmeAndSupplies&quot;: null,&#xd;
+  &quot;nutritionalRequirements&quot;: null,&#xd;
+  &quot;safetyMeasures&quot;: null,&#xd;
+  &quot;medication&quot;: null,&#xd;
+  &quot;medicationStrength&quot;: null,&#xd;
+  &quot;medicationDosage&quot;: null,&#xd;
+  &quot;medicationRoute&quot;: null,&#xd;
+  &quot;medicationFrequency&quot;: null,&#xd;
+  &quot;medicationComments&quot;: null,&#xd;
+  &quot;medicationClassification&quot;: null,&#xd;
+  &quot;medicationBeginDate&quot;: null,&#xd;
+  &quot;medicationEndDate&quot;: null,&#xd;
+  &quot;referenceNumber&quot;: null,&#xd;
+  &quot;referenceFormat&quot;: null,&#xd;
+  &quot;referenceMaximum&quot;: null,&#xd;
+  &quot;referenceModifier1&quot;: null,&#xd;
+  &quot;referenceModifier2&quot;: null,&#xd;
+  &quot;referenceModifier3&quot;: null,&#xd;
+  &quot;referenceModifier4&quot;: null,&#xd;
+  &quot;authorizationBeginDate&quot;: null,&#xd;
+  &quot;authorizationEndDate&quot;: null,&#xd;
+  &quot;authorizationComments&quot;: null,&#xd;
+  &quot;limitBy&quot;: null,&#xd;
+  &quot;total&quot;: null,&#xd;
+  &quot;task&quot;: null,&#xd;
+  &quot;schedule&quot;: null,&#xd;
+  &quot;eligibility&quot;: null,&#xd;
+  &quot;nameOfThePayerCovering&quot;: null,&#xd;
+  &quot;copay&quot;: null,&#xd;
+  &quot;lastEligibilityCheckDate&quot;: null,&#xd;
+  &quot;selectedServices&quot;: null,&#xd;
+  &quot;selectedTasks&quot;: null&#xd;
+}]&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/cxf/pintake/patients</stringProp>
+          <stringProp name="HTTPSampler.method">DELETE</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

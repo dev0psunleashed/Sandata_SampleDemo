@@ -1,0 +1,11 @@
+<kmodule xmlns="http://jboss.org/kie/6.0.0/kmodule" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<kbase name="callMatchingBase" default="true" eventProcessingMode="stream" equalsBehavior="equality" packages="assets" >
+    <!-- by default is singleton scope -->
+    <ksession name="callMatchingSession" scope="prototype"  type="stateless" default="true" clockType="realtime">
+        <listeners>
+            <ruleRuntimeEventListener type="com.sandata.lab.rules.call.matching.rules.listeners.CallMatchingRuleListener"/>
+            <agendaEventListener type="com.sandata.lab.rules.call.matching.rules.listeners.CallMatchingAgendaListener"/>
+        </listeners>
+    </ksession>
+</kbase>
+</kmodule>

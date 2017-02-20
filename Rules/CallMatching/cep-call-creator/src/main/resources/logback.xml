@@ -1,0 +1,35 @@
+<configuration scan="true" scanPeriod="30 seconds">
+    <appender name="CALL_CREATOR_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/callcreator/callCreator.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread]  - %X{camel.breadcrumbId} - %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy" >
+            <fileNamePattern>data/log/callcreator/callCreator.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+    <appender name="CALL_CREATOR_DEFAULT_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/callcreator/callCreatorDefaultLog.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd MM:dd:yyyy HH:mm:ss.SSS} %p %c - %X{camel.breadcrumbId} - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>data/log/callcreator/callCreatorDefaultLog.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+    <logger name="callCreatorLog" level="INFO" additivity="false">
+        <appender-ref ref="CALL_CREATOR_LOGGER"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CALL_CREATOR_DEFAULT_LOGGER"/>
+    </root>
+</configuration>

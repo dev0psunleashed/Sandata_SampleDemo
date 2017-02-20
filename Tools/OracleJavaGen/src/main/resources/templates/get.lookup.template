@@ -1,0 +1,6 @@
+    @GET
+    @Path("/__PATH__")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public final Response __METHOD__(@MatrixParam("update_cache") boolean updateCache) {
+        return null;
+    }

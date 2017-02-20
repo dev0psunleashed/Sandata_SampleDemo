@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:kie="http://drools.org/schema/kie-aries-blueprint/1.0.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                http://drools.org/schema/kie-aries-blueprint/1.0.0 http://drools.org/schema/kie-aries-blueprint/1.0.0
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+    <cm:property-placeholder id="visit.exceptions.services.blueprint.placeholder"
+                             persistent-id="com.sandata.lab.rules.vv.visit.exceptions.service" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616"/>
+            <cm:property name="activeMQ.username" value="admin"/>
+            <cm:property name="activeMQ.password" value="admin"/>
+            <cm:property name="activeMQ.concurrentConsumers" value="100"/>
+            <cm:property name="exchange.exception.redelivery.delay" value="10000"/>
+            <cm:property name="exchange.exception.maximum.redeliveries" value="0"/>
+            <cm:property name="visit.event.aggregation.time" value="30000"/>
+            <cm:property name="visit.exception.schedule.cron" value="0 0/1 * * * ?"/>
+            <cm:property name="scheduled.start.date.lower.limit" value=""/>
+            <cm:property name="scheduled.start.date.upper.limit" value=""/>
+            <cm:property name="webservice.url" value="/visit/exception" />
+            
+             <!-- for wildfly/kie-server rest auth info and url -->
+            <cm:property name="wildfly.kie.server.user" value="kieuser" />
+            <cm:property name="wildfly.kie.server.pwd" value="123456" />
+            <cm:property name="wildfly.kie.server.root.url" value="http://localhost:8080/kie-server-6.5.0.Final-ee7/services/rest/server" />
+            <cm:property name="wildfly.kie.container.id" value="sandata_one_drools" />
+            <cm:property name="wildfly.kie.session.id" value="sandadaOneDroolsSession" />
+            <cm:property name="wildfly.kie.agendagroup" value="" />
+
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="traceFormatter" class="org.apache.camel.processor.interceptor.DefaultTraceFormatter">
+        <property name="showBody" value="false"/>
+        <property name="showHeaders" value="false"/>
+    </bean>
+
+    <!-- connect to the local ActiveMQ broker -->
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="brokerURL" value="${activeMQ.uri}"/>
+        <property name="userName" value="${activeMQ.username}"/>
+        <property name="password" value="${activeMQ.password}"/>
+        <property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+    </bean>
+
+    <bean id="kieServerHandler" class="com.sandata.lab.kie.server.utils.impl.KieServerRestHandler">
+        <argument value="${wildfly.kie.server.user}"/>
+        <argument value="${wildfly.kie.server.pwd}"/>
+        <argument value="${wildfly.kie.server.root.url}"/>
+        <argument value="${wildfly.kie.container.id}"/>
+    </bean>
+  
+
+    <camel:camelContext id="visitExceptionsServiceContext" useBlueprintPropertyResolver="true" useMDCLogging="true"
+                        trace="true" streamCache="true">
+        <!-- using Camel properties component and refer to the blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <camel:propertyPlaceholder id="properties" location="blueprint:visit.exceptions.services.blueprint.placeholder"/>
+        <camel:package>com.sandata.lab.rules.visit.exception.service.routes</camel:package>
+
+    </camel:camelContext>
+
+</blueprint>

@@ -1,0 +1,53 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="${symbol_dollar}{project.artifactId}-repository">
+
+    <feature name="${symbol_dollar}{project.artifactId}" version="${symbol_dollar}{project.version}" start-level="60" description="TODO: Add Feature Description">
+
+        <feature dependency="true" version="${symbol_dollar}{camel-version}">camel-quartz</feature>
+        <bundle start-level="60">mvn:org.apache.commons/commons-lang3/${symbol_dollar}{commons.langs3.version}</bundle>
+        <bundle start-level="60">mvn:com.google.code.gson/gson/${symbol_dollar}{gson.version}</bundle>
+
+        <!--feature dependency="true" version="${symbol_dollar}{camel.spring.version}">camel-leveldb</feature>
+        <feature dependency="true" version="${symbol_dollar}{camel.spring.version}">camel-quartz</feature>
+        <feature dependency="true" version="${symbol_dollar}{camel.spring.version}">camel-beanio</feature-->
+
+        <bundle start-level="60">
+            mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xpp3/${symbol_dollar}{servicemix.bundles.xpp3.version}
+        </bundle>
+
+        <bundle dependency="true" start-level="69">
+            wrap:mvn:org.apache.karaf.jaas/org.apache.karaf.jaas.boot/${symbol_dollar}{karaf.jaas.boot.version}
+        </bundle>
+
+        <bundle start-level="70">wrap:mvn:org.eclipse.jetty.aggregate/jetty-all-server/${symbol_dollar}{jetty.version}</bundle>
+
+        <bundle start-level="73">mvn:commons-net/commons-net/${symbol_dollar}{commons.net.version}</bundle>
+        <bundle start-level="74">mvn:commons-collections/commons-collections/${symbol_dollar}{commons.collections.version}</bundle>
+        <bundle start-level="75">mvn:commons-beanutils/commons-beanutils/${symbol_dollar}{beanutils.version}</bundle>
+        <bundle start-level="77">
+            mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${symbol_dollar}{servicemix.bundles.version}
+        </bundle>
+        <!--bundle start-level="81">
+            mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.drools/${symbol_dollar}{drools.version}
+        </bundle-->
+        <bundle start-level="82">mvn:commons-logging/commons-logging/${symbol_dollar}{commons.logging.version}</bundle>
+        <bundle start-level="83">mvn:commons-lang/commons-lang/${symbol_dollar}{commons.langs.version}</bundle>
+
+        <bundle start-level="70">mvn:commons-pool/commons-pool/${symbol_dollar}{commons.pool.version}</bundle>
+        <bundle start-level="79">wrap:mvn:commons-httpclient/commons-httpclient/3.1</bundle>
+        <bundle start-level="77">mvn:org.springframework/org.springframework.transaction/${symbol_dollar}{springframework.version}</bundle>
+        <bundle start-level="78">mvn:org.springframework/org.springframework.context/${symbol_dollar}{springframework.version}</bundle>
+        <bundle start-level="79">mvn:org.springframework/org.springframework.core/${symbol_dollar}{springframework.version}</bundle>
+        <bundle start-level="80">mvn:org.springframework/org.springframework.jdbc/${symbol_dollar}{springframework.version}</bundle>
+        <bundle start-level="81">mvn:org.springframework/org.springframework.beans/${symbol_dollar}{springframework.version}</bundle>
+        <bundle start-level="79">wrap:mvn:org.apache.httpcomponents/httpclient/${symbol_dollar}{apachehttp.version}</bundle>
+        <bundle start-level="79">wrap:mvn:org.apache.httpcomponents/httpcore/${symbol_dollar}{apachehttp.version}</bundle>
+        <!--bundle>wrap:mvn:com.microsoft.sqlserver/sqljdbc4/${symbol_dollar}{mssql.version}</bundle-->
+        <!--bundle>wrap:mvn:com.microsoft.jdbc/sqljdbc4/2.0</bundle-->
+
+    </feature>
+
+</features>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+    <!-- Properties Stored in fuse/etc folder persistent-id.cfg -->
+    <cm:property-placeholder id="sandata.redis.blueprint.placeholder" persistent-id="com.sandata.lab.redis" update-strategy="reload">
+        <cm:default-properties>
+
+            <!-- Redis server configurations -->
+            <!--<cm:property name="redis.hostname" value="172.31.0.91" />-->
+            <!--<cm:property name="redis.port" value="6379" />-->
+            <cm:property name="redis.database" value="5" />
+            <cm:property name="redis.password" value="sandatalab" />
+            <cm:property name="redis.usepool" value="true" />
+            <cm:property name="redis.timeout" value="5000" />
+
+            <!-- Redis Sentinel configuration -->
+            <cm:property name="redis.sentinel" value="rd-lab-ses01:26300,rd-lab-ses02:26300,rd-lab-ses03:26300" />
+            <cm:property name="redis.sentinel.master" value="rdmaster" />
+
+            <!-- Jedis pool configurations -->
+            <cm:property name="jedis.maxTotal" value="10" />
+            <cm:property name="jedis.maxIdle" value="10" />
+            <cm:property name="jedis.minIdle" value="4" />
+            <cm:property name="jedis.testOnBorrow" value="true" />
+
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="redisSentinelConfiguration" class="com.sandata.lab.redis.connection.SandataRedisSentinelConfiguration">
+        <argument value="${redis.sentinel.master}"/>
+        <argument value="${redis.sentinel}"/>
+    </bean>
+
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="${jedis.maxTotal}" />
+        <property name="maxIdle" value="${jedis.maxIdle}" />
+        <property name="minIdle" value="${jedis.minIdle}" />
+        <property name="testOnBorrow" value="${jedis.testOnBorrow}" />
+    </bean>
+
+    <bean id="sandataJedisConnFactory" class="com.sandata.lab.redis.connection.jedis.SandataJedisConnectionFactory" init-method="afterPropertiesSet">
+        <argument ref="redisSentinelConfiguration"/>
+        <argument ref="jedisPoolConfig"/>
+        <property name="database" value="${redis.database}" />
+        <property name="password" value="${redis.password}" />
+        <property name="timeout" value="${redis.timeout}" />
+        <property name="usePool" value="${redis.usepool}" />
+    </bean>
+
+    <service interface="com.sandata.lab.redis.connection.SandataRedisConnectionFactory" ref="sandataJedisConnFactory" depends-on="sandataJedisConnFactory">
+        <service-properties>
+            <entry key="service.exported.interfaces" value="*"/>
+        </service-properties>
+    </service>
+
+    <bean id="appContext" class="com.sandata.lab.redis.app.AppContext" factory-method="initCamelContext" depends-on="sandataRedisContext">
+        <argument ref="sandataRedisContext" />
+    </bean>
+
+    <camelContext id="sandataRedisContext" streamCache="true" useBlueprintPropertyResolver="true" xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- using Camel properties component and refer to the blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <propertyPlaceholder id="properties" location="blueprint:sandata.redis.blueprint.placeholder" />
+    </camelContext>
+</blueprint>

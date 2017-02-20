@@ -1,0 +1,35 @@
+//created on: Jan 31, 2017
+package com.sandata.one.drools.validation
+
+import com.sandata.lab.rules.vv.fact.ScheduleEventFact;
+import com.sandata.lab.rules.vv.fact.VisitEventFact;
+import com.sandata.lab.rules.vv.fact.VisitFact;
+import com.sandata.lab.rules.vv.fact.PatientPhoneNumbersFact;
+import com.sandata.one.drools.utils.Constants;
+import com.sandata.one.drools.utils.CommonUtils;
+
+import org.slf4j.LoggerFactory;
+import com.sandata.lab.rules.vv.log.utils.App;
+import java.math.BigInteger;
+
+import function com.sandata.one.drools.utils.CommonUtils.helper;
+
+dialect  "mvel"
+
+rule "A stand alone rule for unmatched patient Id with originating phone."
+
+    salience 100
+    when
+        $visitFact : VisitFact(patientId != null)
+        $patientPhoneNumbersFact : PatientPhoneNumbersFact ()
+  	    $visitEventFact : VisitEventFact() 
+  	    $scheduleEventFact : ScheduleEventFact()
+    then
+        
+        if(!CommonUtils.verifyAniWithPatientPhoneList($visitEventFact, $patientPhoneNumbersFact, $scheduleEventFact, $visitFact)) {
+        	$visitFact.addVisitException($visitFact.getVisitSk(), Constants.EXCEPTION_TYPE.UNMATCHED_PATIENT_ID_PHONE.getExceptionId());
+        }
+		helper(drools);
+end;
+
+

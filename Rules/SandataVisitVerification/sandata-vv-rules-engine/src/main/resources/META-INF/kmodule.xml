@@ -1,0 +1,11 @@
+<kmodule xmlns="http://jboss.org/kie/6.0.0/kmodule" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<kbase name="sandadaOneDroolsBase" default="true" eventProcessingMode="stream" equalsBehavior="equality" packages="com.sandata.one.drools.validation" >
+    <!-- by default is singleton scope -->
+    <ksession name="sandadaOneDroolsSession" scope="prototype"  type="stateless" default="true" clockType="realtime">
+        <listeners>
+            <ruleRuntimeEventListener type="com.sandata.one.drools.listeners.ExceptionRuleRuntimeEventListener"/>
+            <agendaEventListener type="com.sandata.one.drools.listeners.ExceptionAgendaEventListerner"/>
+        </listeners>
+    </ksession>
+</kbase>
+</kmodule>

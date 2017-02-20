@@ -1,0 +1,65 @@
+/*
+ * Copyright (c) 2015. Sandata Technologies, LLC
+ * 26 Harbor Park Drive, Port Washington, NY 11050, 800-544-7263
+ * All rights reserved.
+ *
+ * This software is the confidential and proprietary information of Sandata Technologies, LLC
+ * ("Confidential Information"). You shall not disclose such Confidential Information and shall
+ * use it only in accordance with the terms of the license agreement you entered into with
+ * Sandata.
+ */
+
+package com.sandata.lab.rest.elig;
+
+import com.sandata.lab.data.model.dl.model.Eligibility;
+import com.sandata.lab.data.model.response.Response;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+
+public class RestfulServices {
+
+    @POST
+    @Path("/")
+    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public final Response PKG_ELIGIBILITY_insertElig_Eligibility(Eligibility data) {
+
+        return null;
+    }
+
+    @PUT
+    @Path("/")
+    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public final Response PKG_ELIGIBILITY_updateElig_Eligibility(Eligibility data) {
+
+        return null;
+    }
+
+    @DELETE
+    @Path("/{sequence_key}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public final Response PKG_ELIGIBILITY_deleteElig_Eligibility(@PathParam("sequence_key") long sequenceKey) {
+
+        return null;
+    }
+
+    @GET
+    @Path("/{sequence_key}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public final Response PKG_ELIGIBILITY_getElig_Eligibility(@PathParam("sequence_key") long sequenceKey) {
+
+        return null;
+    }
+
+    @GET
+    @Path("/")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public final Response PKG_ELIGIBILITY_getElig_Eligibility(
+            @MatrixParam("patient_id") String patientId,
+            @MatrixParam("bsn_ent_id") String busEntId) {
+
+        return null;
+    }
+}

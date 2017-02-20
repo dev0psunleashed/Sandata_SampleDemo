@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+    <!-- TODO: Replace id/persistent-id with an appropriate value -->
+    <cm:property-placeholder id="cacheServicesApp.blueprint.placeholder" persistent-id="com.sandata.lab.cache" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+            <cm:property name="activeMQ.username" value="admin" />
+            <cm:property name="activeMQ.password" value="admin" />
+            <cm:property name="activeMQ.concurrentConsumers" value="100" />
+            <cm:property name="rest.concurrentConsumers" value="20" />
+            <cm:property name="database.path" value="target/cache/leveldb" />
+            <!-- TODO: Add Additional Properties Here -->
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="cacheManagerRef" class="com.sandata.lab.cache.data.manager.CacheManager" depends-on="appCamelContext">
+        <property name="databasePath" value="${database.path}"/>
+    </bean>
+
+    <bean id="responseCacheServiceApi" class="com.sandata.lab.cache.impl.ResponseCacheService" depends-on="cacheManagerRef">
+        <property name="cacheManager" ref="cacheManagerRef"/>
+    </bean>
+
+    <service ref="responseCacheServiceApi" interface="com.sandata.lab.cache.api.CacheService" depends-on="responseCacheServiceApi" />
+
+    <bean id="appContext" class="com.sandata.lab.cache.app.AppContext"
+          factory-method="initCamelContext" depends-on="appCamelContext">
+        <argument ref="appCamelContext" />
+    </bean>
+
+    <!-- connect to the local ActiveMQ broker -->
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="brokerURL" value="${activeMQ.uri}" />
+        <property name="userName" value="${activeMQ.username}" />
+        <property name="password" value="${activeMQ.password}" />
+        <property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+    </bean>
+
+    <camelContext id="appCamelContext" trace="true" streamCache="true" useBlueprintPropertyResolver="true" xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- using Camel properties component and refer to the OSGI-INF.blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <!-- <propertyPlaceholder id="properties" location="OSGI-INF.blueprint:dhs.OSGI-INF.blueprint.placeholder"/>-->
+        <propertyPlaceholder id="properties" location="blueprint:cacheServicesApp.blueprint.placeholder"/>
+        <package>com.sandata.lab.cache.routes</package>
+    </camelContext>
+</blueprint>

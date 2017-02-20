@@ -1,0 +1,92 @@
+package assets;
+import com.sandata.lab.rules.vv.fact.VisitEventFact;
+import com.sandata.lab.rules.vv.model.VisitState;
+import com.sandata.lab.rules.vv.fact.ScheduleEventFact;
+import com.sandata.lab.rules.vv.fact.PatientFact;
+import org.slf4j.LoggerFactory
+import com.sandata.lab.rules.vv.log.utils.App;
+
+dialect  "mvel"
+
+
+rule "Matching patient by PT_ID"
+    agenda-group "call-matching-patient"
+    salience 100
+    when
+        $visitEventFact : VisitEventFact(patientID != null ,visitState == VisitState.NOT_MATCHED, patientFact == null)
+        $patientFact : PatientFact(visitState == null
+            ,(patientVisitVerificationId != null  && !patientVisitVerificationId.isEmpty())
+            , patientVisitVerificationId == $visitEventFact.patientID
+            )
+    then
+        logInfo("Found patient matched to the visit event by PATIENT ID");
+        retract($patientFact);
+        $patientFact.setVisitState(VisitState.MATCHED_PATIENT);
+
+        retract($visitEventFact);
+
+        $visitEventFact.setPatientFact($patientFact);
+        insert($visitEventFact);
+
+end;
+
+
+rule "Matching patient by ANI (PT_HOME_PHONE)"
+    agenda-group "call-matching-patient"
+    salience 90
+    when
+        $visitEventFact : VisitEventFact((patientID == null || patientID.isEmpty() )
+            ,(ani != null && !ani.isEmpty())
+            ,visitState == VisitState.NOT_MATCHED, patientFact == null)
+
+        $patientFact : PatientFact(visitState == null
+            ,(patientId != null  && !patientId.isEmpty())
+            ,ani == $visitEventFact.ani
+            )
+    then
+        logInfo("Found patient matched by ANI (PT_HOME_PHONE)");
+        retract($patientFact);
+        $patientFact.setVisitState(VisitState.MATCHED_PATIENT);
+        retract($visitEventFact);
+        $visitEventFact.setPatientFact($patientFact);
+        insert($visitEventFact);
+end;
+
+//this rule should be the last rule , to clean up the memory
+rule "Retract all the patient that failed to match by ANI or ID"
+    agenda-group "call-matching-patient"
+    salience 70
+    when
+             $visitEventFact : VisitEventFact ()
+             $patientfact : PatientFact(
+                (
+                    $visitEventFact.patientID != null && !$visitEventFact.patientID.isEmpty()
+                    && (patientId == null || patientId != $visitEventFact.patientID)
+                )
+                || (
+                    $visitEventFact.patientID == null && $visitEventFact.ani != ani
+                )
+
+             )
+        then
+            logInfo("Retract all the staff that failed to match by ANI or ID");
+            retract($patientfact);
+end;
+
+//after process matching, if cannot find staff match to the visit, then mark it as UNKNOWN_PATIENT
+rule "There's no PATIENT matched, set as UNKNOWN_PATIENT !"
+    agenda-group "call-matching-patient"
+    salience 80
+    when
+             $visitEventFact : VisitEventFact( visitState == VisitState.NOT_MATCHED , patientFact == null)
+             not PatientFact()
+        then
+            logInfo("There's no PATIENT existing, set as UNKNOWN_PATIENT !");
+            PatientFact patientFact = new PatientFact();
+            patientFact.setVisitState(VisitState.UNKNOWN_PATIENT);
+            retract($visitEventFact);
+            $visitEventFact.setPatientFact(patientFact);
+            insert($visitEventFact);
+end;
+
+

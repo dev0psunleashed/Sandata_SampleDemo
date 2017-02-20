@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.sandata.lab.common.utils</groupId>
+    <artifactId>sandata-lab-kie-server-utils</artifactId>
+    <version>1.0.1</version>
+    <packaging>jar</packaging>
+    <description>Sandata Kie Server Utils</description>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jboss.fuse.bom.version>6.3.0.redhat-187</jboss.fuse.bom.version>
+        <apache.maven.version>3.3.9</apache.maven.version>
+        <com.google.guava.version>14.0.1</com.google.guava.version>
+        <apache.felix.version>1.4.0</apache.felix.version>
+        <javax.ws.rs.version>1.1.1</javax.ws.rs.version>
+        <com.jcraft.version>0.1.50</com.jcraft.version>
+        <commons.langs3.version>3.1</commons.langs3.version>
+        <sandata-lab-common-utils-version>1.0.71</sandata-lab-common-utils-version>
+        <gson.version>2.2.4</gson.version>
+        <joda.version>2.2</joda.version>
+        <drools-version>6.5.0.Final</drools-version>
+        <sandata-data-model-version>1.0.489</sandata-data-model-version>
+
+        <apache-commons-lang3-version>3.4</apache-commons-lang3-version>
+        <jmockit.version>1.18</jmockit.version>
+
+        <sandata-copyright>Copyright © 2015 Sandata Technologies, LLC Operates under U.S. Patent Nos. 5,949,856, and 5,963,912 which are owned by Sandata Technologies, LLC. All rights reserved.</sandata-copyright>
+
+        <sandata-logger-service-version>1.0.4c</sandata-logger-service-version>
+
+        <private />
+        <exports>
+            com.sandata.lab.kie.*
+        </exports>
+        <imports>
+            com.google.gson.*;version="[2.2,3)",
+            org.apache.commons.lang.*;version="[2.6,3)",
+            org.apache.commons.lang3.*,
+            javax.ws.rs.*;version="[1.1,2)",
+            org.apache.commons.lang3.*,
+            org.slf4j.*;version="[1.7,2)",
+            com.google.common.base.*,
+            org.drools.*,
+            org.kie.*
+        </imports>
+
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.fuse.bom</groupId>
+                <artifactId>jboss-fuse-parent</artifactId>
+                <version>${jboss.fuse.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+
+
+            <!--  <dependency>
+                 <groupId>org.jboss.integration.fuse</groupId>
+                 <artifactId>fuse-integration-bom</artifactId>
+                 <version>${jboss.fuse.integration.management.version}</version>
+                 <scope>import</scope>
+                 <type>pom</type>
+             </dependency> -->
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.sandata.lab.common.utils</groupId>
+            <artifactId>sandata-lab-common-utils</artifactId>
+            <version>${sandata-lab-common-utils-version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+     
+
+
+
+        <!-- OSGI BundleActivator -->
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>${apache.felix.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Drools -->
+        <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-api</artifactId>
+            <version>${drools-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-core</artifactId>
+            <version>${drools-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-compiler</artifactId>
+            <version>${drools-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-internal</artifactId>
+            <version>${drools-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.kie.server</groupId>
+            <artifactId>kie-server-api</artifactId>
+            <version>6.5.0.Final-redhat-2</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.kie.server</groupId>
+            <artifactId>kie-server-client</artifactId>
+            <version>${drools-version}</version>
+        </dependency>
+
+       
+        <dependency>
+            <groupId>org.kie.remote</groupId>
+            <artifactId>kie-remote-common</artifactId>
+            <version>6.5.0.Final-redhat-2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.jms</groupId>
+            <artifactId>jms</artifactId>
+            <version>1.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.13.redhat-3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-xc</artifactId>
+            <version>1.9.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.13.redhat-3</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${apache-commons-lang3-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-core</artifactId>
+            <version>5.7.0</version>
+        </dependency>
+
+
+
+
+        <!-- <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-remote-naming</artifactId>
+            <version>2.0.4.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>3.3.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.xnio</groupId>
+            <artifactId>xnio-api</artifactId>
+            <version>3.3.5.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.xnio</groupId>
+            <artifactId>xnio-nio</artifactId>
+            <version>3.2.2.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.remoting</groupId>
+            <artifactId>jboss-remoting</artifactId>
+            <version>4.0.21.Final</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-ejb-client</artifactId>
+            <version>2.1.4.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.marshalling</groupId>
+            <artifactId>jboss-marshalling</artifactId>
+            <version>1.4.11.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.marshalling</groupId>
+            <artifactId>jboss-marshalling-river</artifactId>
+            <version>1.4.11.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-jms-client</artifactId>
+            <version>1.5.1</version>
+        </dependency> -->
+
+
+
+
+        <!--      <dependency>
+           <groupId>org.apache.activemq</groupId>
+           <artifactId>activemq-ra</artifactId>
+           <version>5.8.0</version>
+       </dependency>
+
+       <dependency>
+           <groupId>javax.resource</groupId>
+           <artifactId>connector-api</artifactId>
+           <version>1.5</version>
+       </dependency> -->
+
+
+
+
+
+
+
+        <!-- Begin : Possibility 2 -->
+        <!-- <dependency>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-remote-naming</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-ejb-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.xnio</groupId>
+            <artifactId>xnio-nio</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.marshalling</groupId>
+            <artifactId>jboss-marshalling-river</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.spec.javax.transaction</groupId>
+            <artifactId>jboss-transaction-api_1.2_spec</artifactId>
+        </dependency> -->
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-spring</artifactId>
+            <version>${drools-version}</version>
+            Added exclussion as Kie, Drools projects use a different versin of Spring
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-asm</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency> -->
+
+     
+
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+
+
+        <!-- for wildfly and kie server rest -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+
+        </dependency>
+
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jettison</groupId>
+            <artifactId>jettison</artifactId>
+            <type>jar</type>
+            <scope>provided</scope>
+
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test</artifactId>
+
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jmockit</groupId>
+            <artifactId>jmockit</artifactId>
+            <version>${jmockit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jmockit</groupId>
+            <artifactId>jmockit-coverage</artifactId>
+            <version>${jmockit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model-builder</artifactId>
+            <version>${apache.maven.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>${apache.maven.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <version>2.4.0</version>
+                <configuration>
+                    <instructions>
+                        <Export-Package>${exports}</Export-Package>
+                        <Import-Package>${imports}</Import-Package>
+                        <Private-Package>${private}</Private-Package>
+                        <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+                        <!-- http://camel.apache.org/tutorial-osgi-camel-part2b.html -->
+                        <!-- http://www.davsclaus.com/2012/08/osgi-deployment-made-easy-with-fab.html -->
+                        <!-- http://fuse.fusesource.org/bundle/overview.html -->
+                        <Bundle-Activator>com.sandata.lab.rules.call.matching.service.app.AppActivator
+                        </Bundle-Activator>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Name>${project.name}</Bundle-Name>
+                        <Bundle-Copyright>${sandata-copyright}</Bundle-Copyright>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.15</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*IntegrationTest.java</exclude>
+                    </excludes>
+                    <skipTests>false</skipTests>
+                    <systemPropertyVariables>
+                        <coverage-outputDir>target/my-coverage-report</coverage-outputDir>
+                        other properties, if needed
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <tagBase>http://svn.sandata.local/repos/up/release</tagBase>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.3</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.doxia</groupId>
+                        <artifactId>doxia-module-confluence</artifactId>
+                        <version>1.3</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!-- <plugin>
+                <groupId>org.kie</groupId>
+                <artifactId>kie-maven-plugin</artifactId>
+                <version>${drools-version}</version>
+                <extensions>true</extensions>
+            </plugin> -->
+        </plugins>
+    </build>
+
+
+    <repositories>
+
+        <repository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss.org Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>jboss-releases</id>
+            <name>JBoss.org Fuse Releases</name>
+            <url>http://repository.jboss.org/nexus/content/repositories/fs-releases</url>
+        </repository>
+        <!-- Early access to fuse-eap -->
+        <repository>
+            <id>fuse-eap-staging-repository</id>
+            <url>
+                https://repository.jboss.org/nexus/content/repositories/jboss_thirdparty_releases_staging_profile-1352
+            </url>
+        </repository>
+        <!-- General early access -->
+        <repository>
+            <id>fuse-early-access-repository</id>
+            <url>https://repository.jboss.org/nexus/content/groups/ea</url>
+        </repository>
+        <!-- Note: repo.fusesource.com is the correct repo for JBoss Fuse and it is not a mistake -->
+        <repository>
+            <id>fusesource.ea</id>
+            <name>JBoss Community Early Access Release Repository</name>
+            <url>https://repo.fusesource.com/nexus/content/groups/ea</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+        </repository>
+        <repository>
+            <id>redhat-m2-proxy</id>
+            <name>Red Hat M2 Proxy</name>
+            <url>http://repository.jboss.org/nexus/content/repositories/m2-proxy/</url>
+        </repository>
+
+        <repository>
+            <id>Redhat GA</id>
+            <name>Redhat GA</name>
+            <url>https://maven.repository.redhat.com/ga/</url>
+        </repository>
+
+        <repository>
+            <id>maven2</id>
+            <name>Central Repository</name>
+            <url>http://central.maven.org/maven2/</url>
+        </repository>
+
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss.org Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>jboss-releases</id>
+            <name>JBoss.org Fuse Releases</name>
+            <url>http://repository.jboss.org/nexus/content/repositories/fs-releases</url>
+        </pluginRepository>
+
+
+    </pluginRepositories>
+
+
+    <distributionManagement>
+        <repository>
+            <id>deployment</id>
+            <name>Internal Releases</name>
+            <url>
+                http://mnt-up-repo01.sandata.com:8081/nexus/content/repositories/dev1
+            </url>
+        </repository>
+        <snapshotRepository>
+            <id>deployment</id>
+            <name>Internal Releases</name>
+            <url>
+                http://mnt-up-repo01:8081/nexus/content/repositories/snapshots/
+            </url>
+        </snapshotRepository>
+    </distributionManagement>
+</project>

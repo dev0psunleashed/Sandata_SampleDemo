@@ -1,0 +1,40 @@
+import com.sandata.rules.compliance.domain.BusinessEntityComplianceFact;
+import com.sandata.rules.compliance.domain.StaffFact;
+import com.sandata.rules.compliance.domain.StaffComplianceFact;
+import java.util.Date;
+dialect  "mvel"
+
+// Remove any non-active BusinessEntityComplianceFacts.
+rule "Remove non-active BusinessEntityComplianceFacts"
+    agenda-group "compliance-setup"
+    when
+        $businessEntityComplianceFact : BusinessEntityComplianceFact(effectiveDate > new Date()
+            || (terminationDate != null && terminationDate < new Date()))
+    then
+        System.out.println("Removing non-active BusinessEntityComplianceFact\n"
+            + $businessEntityComplianceFact.toString());
+        retract($businessEntityComplianceFact)
+end;
+
+// Before compliance rules can be run, continueEvalution flag must be true.
+rule "Initialize continueEvaluation Flag to True"
+    agenda-group "compliance-setup"
+    when
+        $staffComplianceFact : StaffComplianceFact(continueEvaluation == false)
+    then
+        System.out.println("Initializing continueEvaluation flag to true\n"
+            + $staffComplianceFact.toString());
+        modify($staffComplianceFact) { setContinueEvaluation(true) };
+end;
+
+// Before compliance rules can be run, compliant flag must be true.
+rule "Initialize compliant Flag to True"
+    agenda-group "compliance-setup"
+    when
+        $staffFact : StaffFact(compliant == false)
+    then
+        System.out.println("Initializing compliant flag to true\n"
+            + $staffFact.toString());
+        modify($staffFact) { setCompliant(true) };
+end;
+

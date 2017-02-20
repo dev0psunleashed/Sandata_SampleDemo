@@ -1,0 +1,415 @@
+package com.sandata.lab.rules.schedules;
+
+import com.sandata.lab.rules.call.model.VisitFact;
+import com.sandata.lab.rules.call.model.State;
+import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.lang.Long;
+
+global ch.qos.logback.classic.Logger rulesLog;
+
+dialect "java"
+//Use on left side only
+function long diffDates(Date d1, Date d2) {
+        long retResult = 0L;
+        LoggerFactory.getLogger("rulesLog").info(String.format("DIFFDATES: First Date d1 = %s, Second Date d2 = %s", d1.toString(), d2.toString()));
+        LoggerFactory.getLogger("rulesLog").info(String.format("DIFFDATES: getTime method results d1.getTime() = %d, d2.getTime() = %d", d1.getTime(), d2.getTime()));
+
+        if(d1.after(d2)) {
+            retResult = d1.getTime() - d2.getTime();
+            LoggerFactory.getLogger("rulesLog").info(String.format("DIFFDATES: First Date is After Second Date (d1.getTime() - d2.getTime() = %d", retResult));
+        }
+        else
+        {
+            retResult = d2.getTime() - d1.getTime();
+            LoggerFactory.getLogger("rulesLog").info(String.format("DIFFDATES: First Date is Equal To or Before Second Date (d2.getTime() - d1.getTime() = %d", retResult));
+
+        }
+
+        return retResult;
+    }
+
+declare Threshold
+    value : Long @key
+end
+
+
+
+rule "cep-engine-schedule-20 new agenda-group"
+    salience 90
+    agenda-group "closest-schedule"
+    when
+        eval(true)
+    then
+
+end
+
+rule "cep-engine-schedule-20 find closest match by threshold from for scheduled"
+    salience 85
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_SCHEDULED)
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_FROM,
+        ( getDiffDatesLessThanEqualTo( scheduledFrom, $inserted.getCallIn(), $threshold.getValue()) ||
+        getDiffDatesLessThanEqualTo( scheduledTo, $inserted.getCallIn(), $threshold.getValue()) ) )
+
+    then
+        $threshold.setValue(Long.valueOf(diffDates($scheduled.getScheduledFrom(), $inserted.getCallIn())));
+        update($threshold);
+        $scheduled.setState(State.CONTENDER_FROM_REDUCED);
+        update($scheduled);
+
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-20 find closest match by threshold from for scheduled", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+
+end
+
+rule "cep-engine-schedule-20b find closest match by threshold for unplanned"
+    salience 80
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_UNSCHEDULED)
+        $scheduled : VisitFact(state == State.CONTENDER_FROM,
+        ( getDiffDatesLessThanEqualTo( scheduledFrom, $inserted.getCallIn(), $threshold.getValue()) ||
+        getDiffDatesLessThanEqualTo( scheduledTo, $inserted.getCallIn(), $threshold.getValue()) ) )
+
+    then
+        $threshold.setValue(Long.valueOf(diffDates($scheduled.getScheduledFrom(), $inserted.getCallIn())));
+        update($threshold);
+        $scheduled.setState(State.CONTENDER_FROM_REDUCED);
+        update($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-20b find closest match by threshold for unplanned", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+
+end
+
+rule "cep-engine-schedule-21 find closest match by threshold to for scheduled"
+    salience 85
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_SCHEDULED)
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_TO,
+        ( getDiffDatesLessThanEqualTo( scheduledFrom, $inserted.getCallIn(), $threshold.getValue()) ||
+        getDiffDatesLessThanEqualTo( scheduledTo, $inserted.getCallIn(), $threshold.getValue()) ) )
+
+    then
+        $threshold.setValue(Long.valueOf(diffDates($scheduled.getScheduledTo(), $inserted.getCallIn())));
+        update($threshold);
+        $scheduled.setState(State.CONTENDER_TO_REDUCED);
+        update($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-21 find closest match by threshold to for scheduled", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+
+
+end
+rule "cep-engine-schedule-21b find closest match by threshold to for unplanned"
+    salience 80
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_UNSCHEDULED)
+        $scheduled : VisitFact( state == State.CONTENDER_TO,
+        ( getDiffDatesLessThanEqualTo( scheduledFrom, $inserted.getCallIn(), $threshold.getValue()) ||
+        getDiffDatesLessThanEqualTo( scheduledTo, $inserted.getCallIn(), $threshold.getValue()) ) )
+    then
+        $threshold.setValue(Long.valueOf(diffDates($scheduled.getScheduledTo(), $inserted.getCallIn())));
+        update($threshold);
+        $scheduled.setState(State.CONTENDER_TO_REDUCED);
+        update($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-21b find closest match by threshold to for unplanned", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+
+end
+
+rule "cep-engine-schedule-11 reduce contenders from for scheduled"
+    salience 85
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_SCHEDULED)
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, ( state == State.CONTENDER_FROM || state == State.CONTENDER_FROM_REDUCED ),
+        getDiffDatesGreaterThan( scheduledFrom, $inserted.getCallIn(), $threshold.getValue()),
+        getDiffDatesGreaterThan( scheduledTo, $inserted.getCallIn(), $threshold.getValue()) )
+
+    then
+        retract($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-11 reduce contenders from for scheduled", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+end
+
+rule "cep-engine-schedule-11b reduce contenders from for unplanned"
+    salience 80
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_UNSCHEDULED)
+        $scheduled : VisitFact(( state == State.CONTENDER_FROM || state == State.CONTENDER_FROM_REDUCED ),
+                                       getDiffDatesGreaterThan( scheduledFrom, $inserted.getCallIn(), $threshold.getValue()),
+                                       getDiffDatesGreaterThan( scheduledTo, $inserted.getCallIn(), $threshold.getValue()) )
+
+    then
+        retract($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-11b reduce contenders from for unplanned", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+end
+
+rule "cep-engine-schedule-12 reduce contenders to for scheduled"
+    salience 85
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_SCHEDULED)
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, 
+        ( state == State.CONTENDER_TO || state == State.CONTENDER_TO_REDUCED ),
+        getDiffDatesGreaterThan( scheduledFrom, $inserted.getCallIn(), $threshold.getValue()),
+        getDiffDatesGreaterThan( scheduledTo, $inserted.getCallIn(), $threshold.getValue()) )
+
+    then
+        retract($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-12 reduce contenders to for scheduled", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+end
+
+rule "cep-engine-schedule-12b reduce contenders to for unplanned"
+    salience 80
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_UNSCHEDULED)
+        $scheduled : VisitFact(( state == State.CONTENDER_TO || state == State.CONTENDER_TO_REDUCED ),
+        getDiffDatesGreaterThan( scheduledFrom, $inserted.getCallIn(), $threshold.getValue()),
+        getDiffDatesGreaterThan( scheduledTo, $inserted.getCallIn(), $threshold.getValue()) )
+
+    then
+        retract($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-12b reduce contenders to for unplanned", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+end
+
+/*  THIS IS REPEATE!!!!
+rule "cep-engine-schedule-13 reduce contenders to for scheduled"
+    salience 85
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_SCHEDULED)
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_TO,
+        ( getDiffDatesLessThanEqualTo( scheduledFrom, $inserted.getCallIn(), $threshold.getValue()) ||
+        getDiffDatesLessThanEqualTo( scheduledTo, $inserted.getCallIn(), $threshold.getValue()) ) )
+
+    then
+        retract($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-13 reduce contenders to for scheduled", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+end
+
+rule "cep-engine-schedule-13b reduce contenders to for unplanned"
+    salience 80
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_UNSCHEDULED)
+        $scheduled : VisitFact(state == State.CONTENDER_TO,
+        ( getDiffDatesLessThanEqualTo( scheduledFrom, $inserted.getCallIn(), $threshold.getValue()) ||
+        getDiffDatesLessThanEqualTo( scheduledTo, $inserted.getCallIn(), $threshold.getValue()) ) )
+
+    then
+        retract($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-13b reduce contenders to for unplanned", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+end
+*/
+rule "cep-engine-schedule-14 split decision pick contender for scheduled"
+    salience 85
+    agenda-group "closest-schedule"
+    when
+        $inserted : VisitFact(state == State.CONTENDER_SCHEDULED)
+        $schedule1 : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_FROM_REDUCED)
+        $schedule2 : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_TO_REDUCED,
+        diffDates(scheduledTo, $inserted.getCallIn()) == diffDates($schedule1.getScheduledFrom(), $inserted.getCallIn()))
+    then
+        retract($schedule2);
+        rulesLog.info(String.format("ALERT SPLIT DECISION::DRL:: (%s) Picking from 2 matches too close to determine.  Schedule1.State=%s, Schedule2.State=%s, Inserted.state=%s, Schedule1.scheduledFrom=%s, Schedule2.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-14 split decision pick contender for scheduled", $schedule1.getState().name(),  $schedule2.getState().name(), $inserted.getState().name(), $schedule1.getScheduledFrom().toString(),  $schedule2.getScheduledFrom().toString(),$inserted.getCallIn().toString()));
+
+end
+
+rule "cep-engine-schedule-14b split decision pick contender for unplanned"
+    salience 80
+    agenda-group "closest-schedule"
+    when
+        $inserted : VisitFact(state == State.CONTENDER_UNSCHEDULED)
+        $schedule1 : VisitFact(state == State.CONTENDER_FROM_REDUCED)
+        $schedule2 : VisitFact(state == State.CONTENDER_TO_REDUCED, diffDates(scheduledTo, $inserted.getCallIn()) == diffDates($schedule1.getScheduledFrom(), $inserted.getCallIn()))
+    then
+        retract($schedule2);
+        rulesLog.info(String.format("ALERT SPLIT DECISION::DRL:: (%s) Picking from 2 matches too close to determine.  Schedule1.State=%s, Schedule2.State=%s, Inserted.state=%s, Schedule1.scheduledFrom=%s, Schedule2.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-14b split decision pick contender for unplanned", $schedule1.getState().name(),  $schedule2.getState().name(), $inserted.getState().name(), $schedule1.getScheduledFrom().toString(),  $schedule2.getScheduledFrom().toString(),$inserted.getCallIn().toString()));
+end
+
+
+rule "cep-engine-schedule-20 found closest match by threshold from for scheduled"
+    salience 83
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_SCHEDULED)
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_FROM_REDUCED,
+        diffDates(scheduledFrom, $inserted.getCallIn()) == $threshold.getValue())
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallCallIn($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($threshold);
+        retract($inserted);
+        update($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-20 found closest match by threshold from for scheduled", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+end
+rule "cep-engine-schedule-20b found closest match by threshold from for unplanned"
+    salience 78
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_UNSCHEDULED)
+        $scheduled : VisitFact(state == State.CONTENDER_FROM_REDUCED,
+        diffDates(scheduledFrom, $inserted.getCallIn()) == $threshold.getValue())
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallCallIn($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($threshold);
+        retract($inserted);
+        update($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-20b found closest match by threshold from for unplanned", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+end
+
+rule "cep-engine-schedule-21 found closest match by threshold to and from not null or to is null for scheduled"
+    salience 83
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_SCHEDULED  )
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_TO_REDUCED,
+        diffDates(scheduledTo, $inserted.getCallIn()) == $threshold.getValue(),
+        (callIn != null || callOut == null))
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        retract($threshold);
+        update($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-21 found closest match by threshold to and from not null or to is null for scheduled", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+end
+rule "cep-engine-schedule-21b found closest match by threshold to and from not null or to is null for unplanned"
+    salience 78
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_UNSCHEDULED  )
+        $scheduled : VisitFact(state == State.CONTENDER_TO_REDUCED,
+        diffDates(scheduledTo, $inserted.getCallIn()) == $threshold.getValue(),
+        (callIn != null || callOut == null))
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        retract($threshold);
+        update($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-21b found closest match by threshold to and from not null or to is null for unplanned", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+end
+
+rule "cep-engine-schedule-22 found closest match by threshold to and from null and to not null for scheduled"
+    salience 83
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_SCHEDULED )
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_TO_REDUCED,
+        diffDates(scheduledTo, $inserted.getCallIn()) == $threshold.getValue(),
+        (callIn == null && callOut != null))
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallIn($scheduled.getCallOut());
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        retract($threshold);
+        update($scheduled);
+        rulesLog.info(String.format("DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-22 found closest match by threshold to and from null and to not null for scheduled", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+end
+
+rule "cep-engine-schedule-22b found closest match by threshold to and from null and to not null for unplanned"
+    salience 78
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_UNSCHEDULED )
+        $scheduled : VisitFact(state == State.CONTENDER_TO_REDUCED,
+        diffDates(scheduledTo, $inserted.getCallIn()) == $threshold.getValue(),
+        (callIn == null && callOut != null))
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallIn($scheduled.getCallOut());
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        retract($threshold);
+        update($scheduled);
+        rulesLog.info(String.format("HIT BOTTOM::DRL:: (%s) Set new Threshold -> from and recalculate for scheduled.  New Threshold=%d, Schedule.State=%s, Inserted.state=%s, Scheduled.scheduledFrom=%s, Inserted.callIn=%s.", "cep-engine-schedule-22b found closest match by threshold to and from null and to not null for unplanned", $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name(), $scheduled.getScheduledFrom().toString(), $inserted.getCallIn().toString()));
+
+end
+
+//invalid alert because we update not retract schedule on previous calls.
+rule "cep-engine-schedule-911 there shouldnt be any insert or schedules left at this level so we need to log it and send alert to check this (Wont happen would have matched above)."
+    salience 70
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_SCHEDULED || state == State.CONTENDER_UNSCHEDULED )
+        $scheduled : VisitFact(state != State.CONTENDER_FROM_REDUCED, state != State.CONTENDER_TO_REDUCED )
+    then
+        rulesLog.info(String.format("PAST BOTTOM::DRL:: (%s) Threshold did not produce a match.  Threshold=%d, Schedule.State=%s, Inserted.state=%s",
+        "cep-engine-schedule-911 there shouldnt be any insert or schedules left at this level so we need to log it and send alert to check this (Wont happen would have matched above).",
+        $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name()));
+end
+
+rule "cep-engine-schedule-911b there shouldnt be any insert or schedules left at this level so we need to log it and send alert to check this (Wont happen would have matched above)."
+    salience 65
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.CONTENDER_SCHEDULED || state == State.CONTENDER_UNSCHEDULED )
+        $scheduled : VisitFact(state != State.AGG_WAITING_FOR_RESPONSE  )
+    then
+        rulesLog.info(String.format("PAST PAST BOTTOM-salience=65::DRL:: (%s) Threshold did not produce a match.  Threshold=%d, Schedule.State=%s, Inserted.state=%s",
+        "cep-engine-schedule-911 there shouldn't be any insert or schedules left at this level so we need to log it and send alert to check this (Wont happen would have matched above).",
+        $threshold.getValue().intValue(), $scheduled.getState().name(), $inserted.getState().name()));
+        $inserted.setState(State.CREATE_UNPLANNED_VISIT);
+        update($inserted);
+        retract($inserted);
+        retract($scheduled);
+end
+
+rule "cep-engine-schedule-911c retract any remaining facts."
+    salience 60
+    agenda-group "closest-schedule"
+    when
+        $remaining: VisitFact()
+    then
+        rulesLog.info("RULES ************   Possibly a remaining VisitFact, will retract and print Information!   ****************** RULES");
+
+        retract($remaining);
+end

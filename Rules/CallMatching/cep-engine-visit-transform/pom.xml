@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.sandata.lab.rules</groupId>
+    <artifactId>cep-engine</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <relativePath>../parent/pom.xml</relativePath>
+  </parent>
+   <groupId>com.sandata.lab.rules</groupId>
+  <artifactId>cep-engine-visitevent-transform</artifactId>
+  <packaging>bundle</packaging>
+  <name>cep-engine : visitEvent transform to Drools fact</name>
+  <description>cep-engine : visitEvent transform to Drools fact</description>
+
+    <properties>
+    <private>
+      com.sandata.lab.rules.call.matching.transform.*
+    </private>
+      <exports>
+        com.sandata.lab.data.model.dl.model.extended.*,
+      </exports>
+      <imports>
+            org.apache.commons.lang3.builder,
+         <!--  org.apache.activemq;version="[5.9,10)", -->
+            org.apache.activemq.camel.component;version="[5.9,10)",
+            org.apache.activemq.spring,
+            org.apache.camel.component.jms,
+         <!--   org.apache.activemq.pool;version="[5.9,10)",-->
+            com.google.gson.*;version="[2.2,3)",
+            org.apache.camel;version="[2.10,3)",
+            com.sandata.lab.rules.cache.service,
+            com.sandata.lab.rules.cache.client,
+            org.eclipse.jdt.internal.compiler,
+            org.osgi.service.blueprint,
+            org.osgi.framework,
+            org.slf4j.*;version="[1.7,2)",
+            org.xml.sax,
+            org.xml.sax.helpers,
+            javax.xml.parsers,
+            javax.naming
+
+      </imports>
+      <fab-provided-dependencies>
+        org.apache.camel:*
+      </fab-provided-dependencies>
+    <!-- 2.15.1.redhat-620133 -->
+    <!-- 2.12.0.redhat-610379 -->
+    <!-- <camel.version>2.12.0.redhat-610379</camel.version> -->
+    <!-- <activemq.version>5.9.0.redhat-610379</activemq.version> -->
+  </properties>
+  <dependencies>
+
+    <dependency>
+      <groupId>com.sandata.lab.rules</groupId>
+      <artifactId>cep-engine-facts</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+          <groupId>org.apache.activemq</groupId>
+          <artifactId>activemq-camel</artifactId>
+          <scope>provided</scope>
+    </dependency>
+      <dependency>
+          <groupId>org.apache.activemq</groupId>
+          <artifactId>activemq-spring</artifactId>
+          <scope>provided</scope>
+      </dependency>
+
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-client</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-pool</artifactId>
+    </dependency>
+
+    <dependency>
+          <groupId>org.apache.camel</groupId>
+          <artifactId>camel-blueprint</artifactId>
+          <scope>provided</scope>
+    </dependency>
+      <dependency>
+          <groupId>org.apache.camel</groupId>
+          <artifactId>camel-jms</artifactId>
+          <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.osgi</groupId>
+          <artifactId>org.osgi.core</artifactId>
+        <scope>provided</scope>
+    </dependency>
+      <!-- OSGI BundleActivator -->
+      <dependency>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>org.osgi.core</artifactId>
+          <version>${apache.felix.version}</version>
+          <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+          <version>2.2.4</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.apache.camel</groupId>
+          <artifactId>camel-test-blueprint</artifactId>
+          <version>${camel.blueprint.test.version}</version>
+          <scope>test</scope>
+          <exclusions>
+              <exclusion>
+                  <groupId>org.apache.felix</groupId>
+                  <artifactId>org.apache.felix.fileinstall</artifactId>
+              </exclusion>
+          </exclusions>
+      </dependency>
+
+      <dependency>
+          <groupId>com.sandata.lab.common.utils</groupId>
+          <artifactId>sandata-lab-common-utils</artifactId>
+          <version>${sandata-lab-common-utils-version}</version>
+          <exclusions>
+              <exclusion>
+                  <groupId>com.sandata.lab.model</groupId>
+                  <artifactId>sandata-lab-data-model</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>com.google.code.gson</groupId>
+                  <artifactId>gson</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>com.oracle</groupId>
+                  <artifactId>ojdbc6</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>com.oracle</groupId>
+                  <artifactId>ucp</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>org.apache.camel</groupId>
+                  <artifactId>camel-beanio</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>joda-time</groupId>
+                  <artifactId>joda-time</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>org.springframework</groupId>
+                  <artifactId>org.springframework.jdbc</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>javax.ws.rs</groupId>
+                  <artifactId>jsr311-api</artifactId>
+              </exclusion>
+          </exclusions>
+          <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+          <groupId>com.sandata.lab.model</groupId>
+          <artifactId>sandata-lab-data-model</artifactId>
+          <version>${sandata-data-model-version}</version>
+          <exclusions>
+              <exclusion>
+                  <groupId>com.google.code.gson</groupId>
+                  <artifactId>gson</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>com.oracle</groupId>
+                  <artifactId>ojdbc6</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>com.oracle</groupId>
+                  <artifactId>ucp</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>org.apache.camel</groupId>
+                  <artifactId>camel-beanio</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>joda-time</groupId>
+                  <artifactId>joda-time</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>org.springframework</groupId>
+                  <artifactId>org.springframework.jdbc</artifactId>
+              </exclusion>
+          </exclusions>
+          <scope>compile</scope>
+      </dependency>
+
+      <dependency>
+          <groupId>commons-lang</groupId>
+          <artifactId>commons-lang</artifactId>
+          <version>${commons.langs.version}</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-lang3</artifactId>
+          <version>${commons.langs3.version}</version>
+      </dependency>
+
+
+      <dependency>
+          <groupId>org.apache.camel</groupId>
+          <artifactId>camel-core</artifactId>
+          <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.camel</groupId>
+          <artifactId>camel-spring</artifactId>
+          <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>com.googlecode.guava-osgi</groupId>
+          <artifactId>guava-osgi</artifactId>
+          <version>11.0.1</version>
+          <scope>compile</scope>
+      </dependency>
+      <!-- logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+
+      <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-core</artifactId>
+          <version>1.0.13</version>
+          <scope>compile</scope>
+      </dependency>
+
+      <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+          <version>1.0.13</version>
+          <scope>compile</scope>
+      </dependency>
+
+
+      <dependency>
+          <groupId>org.jmockit</groupId>
+          <artifactId>jmockit</artifactId>
+          <version>${jmockit.version}</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.jmockit</groupId>
+          <artifactId>jmockit-coverage</artifactId>
+          <version>${jmockit.version}</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <scope>test</scope>
+      </dependency>
+      
+      <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>org.springframework.jdbc</artifactId>
+            <version>3.2.4.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.commons-dbcp</artifactId>
+            <version>${servicemix.bundles.version}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>${oracle.version}</version>
+            <scope>test</scope>
+        </dependency>
+      <dependency>
+          <groupId>com.sandata.lab.rules</groupId>
+          <artifactId>cep-cache</artifactId>
+          <version>1.0-SNAPSHOT</version>
+      </dependency>
+
+  </dependencies>
+  
+  
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>2.4.0</version>
+        <extensions>true</extensions>
+        <configuration>
+
+          <instructions>
+            <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+            <Bundle-Name>${project.name}</Bundle-Name>
+            <Implementation-Version>${project.version}</Implementation-Version>
+            <_failok>true</_failok>
+            <Import-Package>${imports}</Import-Package>
+            <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+            <fab-provided-dependencies>
+                  org.apache.camel:*
+            </fab-provided-dependencies>
+            <Bundle-Activator>com.sandata.lab.rules.call.matching.app.AppActivator</Bundle-Activator>
+          </instructions>
+
+        </configuration>
+
+
+      </plugin>
+
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.5.1</version>
+            <inherited>false</inherited>
+            <configuration>
+                <source>1.7</source>
+                <target>1.7</target>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+        </plugin>
+    </plugins>
+  </build>
+
+</project>

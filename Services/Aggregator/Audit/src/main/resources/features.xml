@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="${project.artifactId}-repository">
+
+    <feature name="${project.artifactId}" version="${project.version}" start-level="60" description="Sandata Aggregator Audit">
+
+        <bundle start-level="60">mvn:org.apache.commons/commons-lang3/${commons.langs3.version}</bundle>
+        <bundle start-level="60">mvn:com.google.code.gson/gson/${gson.version}</bundle>
+
+        <bundle dependency="true" start-level="69">
+            wrap:mvn:org.apache.karaf.jaas/org.apache.karaf.jaas.boot/${karaf.jaas.boot.version}
+        </bundle>
+
+        <bundle start-level="70">wrap:mvn:org.eclipse.jetty.aggregate/jetty-all-server/${jetty.version}</bundle>
+
+        <bundle start-level="73">mvn:commons-net/commons-net/${commons.net.version}</bundle>
+        <bundle start-level="74">mvn:commons-collections/commons-collections/${commons.collections.version}</bundle>
+        <bundle start-level="75">mvn:commons-beanutils/commons-beanutils/${beanutils.version}</bundle>
+        <bundle start-level="77">
+            mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${servicemix.bundles.version}
+        </bundle>
+        <bundle start-level="82">mvn:commons-logging/commons-logging/${commons.logging.version}</bundle>
+        <bundle start-level="83">mvn:commons-lang/commons-lang/${commons.langs.version}</bundle>
+
+        <bundle start-level="70">mvn:commons-pool/commons-pool/${commons.pool.version}</bundle>
+
+        <bundle start-level="77">mvn:org.springframework/org.springframework.transaction/${springframework.version}</bundle>
+        <bundle start-level="78">mvn:org.springframework/org.springframework.context/${springframework.version}</bundle>
+        <bundle start-level="79">mvn:org.springframework/org.springframework.core/${springframework.version}</bundle>
+        <bundle start-level="80">mvn:org.springframework/org.springframework.jdbc/${springframework.version}</bundle>
+        <bundle start-level="81">mvn:org.springframework/org.springframework.beans/${springframework.version}</bundle>
+
+    </feature>
+
+</features>

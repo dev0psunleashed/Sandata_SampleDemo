@@ -1,0 +1,76 @@
+<configuration scan="true" scanPeriod="30 seconds">
+    <appender name="VISITEXCP_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/visitexcp/visitExceptions.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] - %-10.10X{camel.exchangeId} - %-10.10X{camel.messageId} - %-10.10X{camel.correlationId} - %-10.10X{camel.transactionKey} - %-10.10X{camel.routeId} - %-10.10X{camel.breadcrumbId} - %-10.10X{camel.camelContextId} - %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy" >
+            <fileNamePattern>data/log/visitexcp/visitExceptions.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="VISITEXCP_WIRETAP_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/visitexcp/visitExceptionsWiretap.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] - %-10.10X{camel.exchangeId} - %-10.10X{camel.messageId} - %-10.10X{camel.correlationId} - %-10.10X{camel.transactionKey} - %-10.10X{camel.routeId} - %-10.10X{camel.breadcrumbId} - %-10.10X{camel.camelContextId} - %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy" >
+            <fileNamePattern>data/log/visitexcp/visitExceptionsWiretap.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="SCHDLD_VISITEXCP_WIRETAP_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/visitexcp/scheduledVisitExceptionsWiretap.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] - %-10.10X{camel.exchangeId} - %-10.10X{camel.messageId} - %-10.10X{camel.correlationId} - %-10.10X{camel.transactionKey} - %-10.10X{camel.routeId} - %-10.10X{camel.breadcrumbId} - %-10.10X{camel.camelContextId} - %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy" >
+            <fileNamePattern>data/log/visitexcp/scheduledVisitExceptionsWiretap.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="VISITEXCP_DEFAULT_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/visitexcp/visitExceptionsDefaultLog.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %p %c - %X{camel.breadcrumbId} - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>data/log/visitexcp/visitExceptionsDefaultLog.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <logger name="visitExcpLog" level="INFO" additivity="false">
+        <appender-ref ref="VISITEXCP_LOGGER"/>
+    </logger>
+    <logger name="visitExcpWiretapLog" level="INFO" additivity="false">
+        <appender-ref ref="VISITEXCP_WIRETAP_LOGGER"/>
+    </logger>
+    <logger name="schdldVisitExcpWiretapLog" level="INFO" additivity="false">
+        <appender-ref ref="SCHDLD_VISITEXCP_WIRETAP_LOGGER"/>
+    </logger>
+
+
+    <root level="INFO">
+        <appender-ref ref="VISITEXCP_DEFAULT_LOGGER"/>
+    </root>
+</configuration>

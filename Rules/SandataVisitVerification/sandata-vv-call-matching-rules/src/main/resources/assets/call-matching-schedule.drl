@@ -1,0 +1,271 @@
+package assets;
+import com.sandata.lab.rules.vv.fact.VisitEventFact;
+import com.sandata.lab.rules.vv.model.VisitState;
+import com.sandata.lab.rules.vv.fact.ScheduleEventFact;
+import com.sandata.lab.rules.vv.model.CallPreferences;
+import org.slf4j.LoggerFactory
+import com.sandata.lab.rules.vv.log.utils.App;
+
+dialect  "mvel"
+
+/*this rule to avoid sending duplicated VisitEventFact to CALL_MATCHING_VISIT_EVENT_SCHEDULE_MATCHING_AGGREGATOR
+repeatedly
+*/
+rule "Every VisitEventFact should be marked as processing by default "
+    agenda-group "call-matching-schedule"
+    salience 100
+    when
+        $visitEventFact : VisitEventFact(visitState == null)
+    then
+        logInfo("Mark VisitEventFact as processing!");
+        retract($visitEventFact);
+        $visitEventFact.setVisitState(VisitState.PROCESSING);
+        insert($visitEventFact);
+end;
+
+// Validate VisitEventFact data.
+rule "Validate VisitEventFact data"
+    agenda-group "call-matching-schedule"
+    salience 90
+    when
+        $visitEventFact : VisitEventFact((businessEntityId == null || businessEntityId.isEmpty())
+            || (staffID == null || staffID.isEmpty())
+            || ((ani == null || ani.isEmpty())
+                && (patientID == null || patientID.isEmpty()))
+            || visitEventDatetime == null)
+    then
+        logError("VisitEventFact is missing required info!");
+        retract($visitEventFact)
+end;
+
+
+// Validate ScheduleEventFact exist in working memory or not (the sql query to get schedule events).
+rule "There's no schedule event to match."
+    agenda-group "call-matching-schedule"
+    salience 80
+    when
+        $callPreferences : CallPreferences()
+    	$visitEventFact : VisitEventFact(visitState == VisitState.PROCESSING)
+        not ScheduleEventFact()
+    then
+        logError("There's no schedule event in working memory, set VisitEvent as un-matched");
+        retract($visitEventFact);
+        $visitEventFact.setVisitState(VisitState.NOT_MATCHED);
+        $visitEventFact.setCallPreferences($callPreferences);
+        insert($visitEventFact);
+end;
+
+// Validate CallPreferences exist in working memory.
+rule "There's no call preferences from database."
+    agenda-group "call-matching-schedule"
+    salience 70
+    when
+        $visitEventFact : VisitEventFact(visitState == VisitState.PROCESSING)
+        $scheduleEventFact : ScheduleEventFact(businessEntityID == $visitEventFact.getBusinessEntityId())
+        not CallPreferences(be_id == $scheduleEventFact.getBusinessEntityID())
+    then
+        logError("There's no call preferences in working memory for visit event, set VisitEvent as un-matched");
+        retract($scheduleEventFact)
+        retract($visitEventFact);
+        $visitEventFact.setVisitState(VisitState.NOT_MATCHED);
+        insert($visitEventFact);
+end;
+
+// Validate ScheduleEventFact data.
+rule "Validate ScheduleEventFact data."
+    agenda-group "call-matching-schedule"
+    salience 60
+    when
+        $scheduleEvent : ScheduleEventFact((businessEntityID == null || businessEntityID.isEmpty())
+            || (staffVisitVerificationId == null || staffVisitVerificationId.isEmpty())
+            || (patientVisitVerificationId == null || patientVisitVerificationId.isEmpty())
+            || scheduleEventStartDatetime == null
+            || scheduleEventEndDatetime == null)
+    then
+        logError("ScheduleEvent is missing required info!");
+        retract($scheduleEvent)
+end;
+
+
+//rule for check MATCHED should be run before un-matched , in case of have a list of schedule event
+// TODO (jasonscott) Check for match between VisitEventFact and ScheduleEventFact.
+rule "Rule : has valid VisitEventFact , has Valid ScheduleEvent, and visit  matches to schedule"
+    agenda-group "call-matching-schedule"
+    salience 50
+    when
+        $callPreferences : CallPreferences()
+
+        $scheduleEventFact : ScheduleEventFact(businessEntityID != null,
+            !businessEntityID.isEmpty(),
+            businessEntityID == $callPreferences.be_id,
+            staffVisitVerificationId != null,
+            !staffVisitVerificationId.isEmpty(),
+            patientVisitVerificationId != null,
+            !patientVisitVerificationId.isEmpty(),
+            scheduleEventStartDatetime != null,
+            scheduleEventEndDatetime != null)
+        $visitEventFact : VisitEventFact(businessEntityId != null,
+            !businessEntityId.isEmpty(),
+            staffID != null,
+            !staffID.isEmpty(),
+            visitEventDatetime != null,
+            (visitState != null && visitState == VisitState.PROCESSING),
+            businessEntityId == $scheduleEventFact.businessEntityID,
+            (staffID == $scheduleEventFact.staffID
+                /*bizness rule change -
+                || xOfY(7, 9, staffID, $scheduleEventFact.staffVisitVerificationId)
+                || xOfY(6, 9, staffID, $scheduleEventFact.staffVisitVerificationId)*/ ),
+            ((patientID != null && patientID == $scheduleEventFact.patientVisitVerificationId)
+            ||(patientID == null && ani != null && ani == $scheduleEventFact.ani)),
+
+            isCallWithinSchedInOut(visitEventDatetime
+                ,$scheduleEventFact.scheduleEventStartDatetime
+                ,$scheduleEventFact.scheduleEventEndDatetime
+                ,minutesToMilliseconds($callPreferences.deviationThresholdMinutes))
+            )
+
+    then
+        logInfo("VisitEventFact matched to ScheduleEvent , then update VisitState = MATCHED!");
+        retract($scheduleEventFact);
+        retract($visitEventFact);
+        $visitEventFact.setStaffID($scheduleEventFact.getStaffID());
+        $visitEventFact.setPatientID($scheduleEventFact.getPatientID());
+        $visitEventFact.setVisitState(VisitState.MATCHED);
+        $visitEventFact.setScheduleEventFact($scheduleEventFact);
+        $visitEventFact.setCallPreferences($callPreferences);
+        insert($visitEventFact);
+end;
+
+
+//rule has valid VisitEventFact , has Valid ScheduleEvent, but visit not matches to schedule
+rule "Rule : has valid VisitEventFact , has Valid ScheduleEvent, but visit not match to schedule"
+agenda-group "call-matching-schedule"
+    salience 40
+    when
+        $callPreferences : CallPreferences()
+
+        $scheduleEvent : ScheduleEventFact(businessEntityID != null,
+                    !businessEntityID.isEmpty(),
+                    staffVisitVerificationId != null,
+                    !staffVisitVerificationId.isEmpty(),
+                    patientVisitVerificationId != null,
+                    !patientVisitVerificationId.isEmpty(),
+                    scheduleEventStartDatetime != null,
+                    scheduleEventEndDatetime != null)
+         $visitEventFact : VisitEventFact(businessEntityId != null,
+                    !businessEntityId.isEmpty(),
+                    staffID != null,
+                    !staffID.isEmpty(),
+                    ((ani != null && !ani.isEmpty())
+                                    || (patientID != null && !patientID.isEmpty())),
+                    (visitState != null && visitState == VisitState.PROCESSING),
+                    visitEventDatetime != null,
+                        (
+                             businessEntityId != $scheduleEvent.businessEntityID||
+                            (staffID != $scheduleEvent.staffID
+                                /*bizness rule change -
+                                && !xOfY(7, 9, staffID, $scheduleEvent.staffVisitVerificationId)
+                                && !xOfY(6, 9, staffID, $scheduleEvent.staffVisitVerificationId)*/ )||
+                             (
+                                (patientID != null && patientID != $scheduleEvent.patientVisitVerificationId)
+                                || (patientID == null && ani != null && ani != $scheduleEvent.ani)
+                            )
+                            || !isCallWithinSchedInOut(visitEventDatetime
+                                               ,$scheduleEvent.scheduleEventStartDatetime
+                                               ,$scheduleEvent.scheduleEventEndDatetime
+                                               ,minutesToMilliseconds($callPreferences.deviationThresholdMinutes))
+                        )
+                    )
+    then
+        logInfo("Rule : has valid VisitEventFact , has Valid ScheduleEvent, but visit not matches to schedule , set Visit as unplanned");
+        retract($scheduleEvent);
+        retract($visitEventFact);
+        $visitEventFact.setVisitState(VisitState.NOT_MATCHED);
+        $visitEventFact.setCallPreferences($callPreferences);
+        insert($visitEventFact);
+end;
+
+rule "Schedule Flag N call IN"
+    no-loop true
+    salience 30
+    agenda-group "call-matching-schedule"
+    when
+        $callPreferences : CallPreferences(scheduleFlagN)
+        $visitEventFact : VisitEventFact(businessEntityId == $callPreferences.getBe_id(),
+            visitState == VisitState.MATCHED,
+            scheduleEventFact != null,
+            isCallInIndicator() != null,
+            isCallOutIndicator() != null,
+            isCallInIndicator(),
+            !isCallOutIndicator())
+    then
+        logInfo("Overwriting call IN time for Schedule Flag N enabled!");
+        retract($visitEventFact)
+        $visitEventFact.setVisitEventDatetime($visitEventFact.getScheduleEventFact().getScheduleEventStartDatetime());
+        insert($visitEventFact)
+end;
+
+rule "Schedule Flag N call OUT"
+    no-loop true
+     salience 20
+    agenda-group "call-matching-schedule"
+    when
+        $callPreferences : CallPreferences(scheduleFlagN)
+        $visitEventFact : VisitEventFact(businessEntityId == $callPreferences.getBe_id(),
+            visitState == VisitState.MATCHED,
+            scheduleEventFact != null,
+             isCallInIndicator() != null,
+            isCallOutIndicator() != null,
+            !isCallInIndicator(),
+            isCallOutIndicator())
+    then
+        logInfo("Overwriting call OUT time for Schedule Flag N enabled!");
+        retract($visitEventFact)
+        $visitEventFact.setVisitEventDatetime($visitEventFact.getScheduleEventFact().getScheduleEventEndDatetime());
+        insert($visitEventFact)
+end;
+
+//TODO: this rule might be remvoved at this step , and process while inserting visit to datavase
+rule "Determine if matched VisitEventFact is IN or OUT call."
+    agenda-group "call-matching-schedule"
+     salience 10
+    when
+        $visitEventFact : VisitEventFact(getVisitState() == VisitState.MATCHED,
+            getScheduleEventFact() != null,
+            isCallInIndicator() == null,
+            isCallOutIndicator() == null)
+    then
+        logInfo("Setting VisitEventFact call in and call out indicator.");
+        retract($visitEventFact)
+        $visitEventFact.setCallInIndicator(isInCall($visitEventFact.getVisitEventDatetime(),
+        $visitEventFact.getScheduleEventFact().getScheduleEventStartDatetime(),
+        $visitEventFact.getScheduleEventFact().getScheduleEventEndDatetime()));
+        $visitEventFact.setCallOutIndicator(!$visitEventFact.isCallInIndicator());
+        insert($visitEventFact)
+
+end;
+
+
+// Retract CallPreferences when no VisitEventFacts are being processed.
+rule "Retract CallPreferences when no VisitEventFacts are being processed."
+    agenda-group "call-matching-schedule"
+    when
+        $callPreferences : CallPreferences()
+        not VisitEventFact(businessEntityId == $callPreferences.be_id,
+            visitState == null
+            || visitState == VisitState.PROCESSING)
+    then
+        logInfo("Removing CallPreferences after no VisitEventFacts are being processed");
+        retract($callPreferences)
+end;
+
+// Retract CallPreferences when no VisitEventFacts are being processed.
+rule "Clean up Schedule when no visit to process matching"
+    agenda-group "call-matching-schedule"
+    when
+        not VisitEventFact(visitState == VisitState.PROCESSING)
+        $scheduleEventFact : ScheduleEventFact ()
+    then
+        logInfo("Clean up Schedule when no visit to process matching");
+        retract($scheduleEventFact);
+end;

@@ -1,0 +1,76 @@
+<configuration scan="true" scanPeriod="30 seconds">
+<appender name="VISIT_EVENT_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>data/log/visiteventdataservice/visitEventLogger.log</file>
+    <append>true</append>
+    <encoder>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] - %X{camel.breadcrumbId} - %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy" >
+        <fileNamePattern>data/log/visiteventdataservice/visitEventLogger.%d{yyyy-MM-dd}.log</fileNamePattern>
+        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+            <maxFileSize>10MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+        <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        <maxHistory>10</maxHistory>
+    </rollingPolicy>
+</appender>
+<appender name="VISIT_EVENT_EXCEPTION" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>data/log/visiteventdataservice/visitEventException.log</file>
+    <append>true</append>
+    <encoder>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] - %X{camel.breadcrumbId} -  %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <fileNamePattern>data/log/visiteventdataservice/visitEventException.%d{yyyy-MM-dd}.log</fileNamePattern>
+        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+            <maxFileSize>10MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+        <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        <maxHistory>10</maxHistory>
+    </rollingPolicy>
+</appender>
+
+<appender name="VISIT_EVENT_SQL_EXCEPTION" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>data/log/visiteventdataservice/visitEventSqlException.log</file>
+    <append>true</append>
+    <encoder>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] - %X{camel.breadcrumbId} - %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <fileNamePattern>data/log/visiteventdataservice/visitEventSqlException.%d{yyyy-MM-dd}.log</fileNamePattern>
+        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+            <maxFileSize>10MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+        <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        <maxHistory>10</maxHistory>
+    </rollingPolicy>
+</appender>
+<appender name="CEP_DEFAULT_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>data/log/visiteventdataservice/cepDefaultLog.log</file>
+    <append>true</append>
+    <encoder>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %p %c - %X{camel.breadcrumbId} - %m%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <fileNamePattern>data/log/visiteventdataservice/cepDefaultLog.%d{yyyy-MM-dd}.log</fileNamePattern>
+        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+            <maxFileSize>10MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+        <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        <maxHistory>10</maxHistory>
+    </rollingPolicy>
+</appender>
+
+<logger name="visitEventLogger" level="INFO" additivity="false">
+    <appender-ref ref="VISIT_EVENT_LOGGER"/>
+</logger>
+<logger name="visitEventSqlExceptionLogger" level="INFO" additivity="false">
+    <appender-ref ref="VISIT_EVENT_SQL_EXCEPTION"/>
+</logger>
+<logger name="visitEventExceptionLogger" level="INFO" additivity="false">
+    <appender-ref ref="VISIT_EVENT_EXCEPTION"/>
+</logger>
+<root level="INFO">
+    <appender-ref ref="CEP_DEFAULT_LOGGER"/>
+</root>
+</configuration>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+    <cm:property-placeholder id="sandataAuth.blueprint.placeholder" persistent-id="com.sandata.lab.security.auth" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+            <cm:property name="activeMQ.username" value="admin" />
+            <cm:property name="activeMQ.password" value="admin" />
+            <cm:property name="activeMQ.concurrentConsumers" value="100" />
+            <cm:property name="thread.pool.size" value="20" />
+            <cm:property name="thread.pool.max.size" value="100" />
+            <cm:property name="thread.pool.max.queue.size" value="-1" />
+            <cm:property name="rest.concurrentConsumers" value="20" />
+            <cm:property name="webservice.url" value="/data/service/user_management" />
+
+            <cm:property name="openidm.host" value="http://dev-lab-odj01.sandata.com" />
+            <cm:property name="openidm.port" value="8085" />
+            <cm:property name="openidm.user" value="IDM-manager" />
+            <cm:property name="openidm.password" value="GeorgeAdmin1" />
+            <cm:property name="openidm.path" value="/openidm/managed/user/" />
+            <cm:property name="openidm.email.path" value="/openidm/external/email?_action=send" />
+
+            <cm:property name="openam.host" value="http://dev-lab-oam01.sandata.com" />
+            <cm:property name="openam.port" value="8080" />
+            <cm:property name="openam.user" value="weboagent@sandata.com" />
+            <cm:property name="openam.password" value="San26hpd" />
+            <cm:property name="openam.path" value="/openam/oauth2" />
+            <cm:property name="openam.token.path" value="/access_token?realm=/George" />
+            <cm:property name="openam.tokeninfo.path" value="/tokeninfo?access_token=" />
+
+            <cm:property name="min.password.length" value="9" />
+            <cm:property name="max.password.length" value="11" />
+
+            <cm:property name="admin.groups" value="MW_ADMIN_GROUPS"/>
+
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+
+
+    <bean id="appContext" class="com.sandata.lab.security.auth.app.AppContext"
+          factory-method="initCamelContext" depends-on="appCamelContext">
+        <argument ref="appCamelContext" />
+    </bean>
+
+
+    <bean id="gsonProvider" class="com.sandata.lab.common.utils.data.provider.GSONProvider"/>
+
+    <bean id="authInterceptor" class="com.sandata.lab.security.auth.impl.AuthenticationInterceptor">
+        <property name="tokenValidationService" ref="tokenValidate"/>
+    </bean>
+
+
+  <!--  <service ref="authInterceptor"  interface="com.sandata.lab.security.auth.impl.AuthenticationInterceptor"/>-->
+
+    <bean id="tokenValidate" class="com.sandata.lab.security.auth.impl.TokenValidationService">
+        <property name="openAMService" ref="openAMService"/>
+    </bean>
+
+    <service id="tokenValidationServiceApi" ref="tokenValidate"  interface="com.sandata.lab.security.auth.api.ValidationService"
+        depends-on="tokenValidate">
+        <service-properties>
+            <entry key="service.exported.interfaces" value="*" />
+        </service-properties>
+    </service>
+
+
+
+    <bean id="formatTransformer" class="com.sandata.lab.common.utils.data.transformer.FormatTransformer" depends-on="appCamelContext" />
+
+    <!-- connect to the local ActiveMQ broker -->
+    <bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="${activeMQ.uri}" />
+        <property name="userName" value="${activeMQ.username}" />
+        <property name="password" value="${activeMQ.password}" />
+    </bean>
+    <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent" depends-on="jmsConfig">
+        <property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+        <property name="configuration" ref="jmsConfig"/>
+    </bean>
+
+    <bean id="authenticationInterceptor" class="org.apache.cxf.jaxrs.security.JAASAuthenticationFilter">
+        <property name="contextName" value="karaf"/>
+    </bean>
+
+    <bean id="metaDataServiceApi" class="com.sandata.lab.security.auth.services.oracle.MetaDataService" depends-on="appCamelContext" activation="eager">
+        <property name="connectionPoolDataService">
+            <reference
+                    interface="com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService"
+                    availability="mandatory" />
+        </property>
+        <property name="cacheUtil" ref="cacheUtil"/>
+    </bean>
+
+    <bean id="coreDataServiceApi" class="com.sandata.lab.security.auth.services.oracle.CoreDataService" depends-on="appCamelContext" activation="eager">
+        <property name="connectionPoolDataService">
+            <reference
+                    interface="com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService"
+                    availability="mandatory" />
+        </property>
+        <property name="cacheUtil" ref="cacheUtil"/>
+    </bean>
+
+
+    <bean id="authenticationService" class ="com.sandata.lab.security.auth.impl.AuthenticationService" depends-on="restDataService">
+        <property name="openAMService" ref="openAMService"/>
+        <property name="idmService" ref="idmService"/>
+        <property name="restDataService" ref="restDataService"/>
+        <property name="userService" ref="userService"/>
+    </bean>
+
+    <bean id="userService" class ="com.sandata.lab.security.auth.impl.UserService" depends-on="restDataService coreDataServiceApi">
+        <property name="restDataService" ref="restDataService"/>
+        <property name="coreDataService" ref="coreDataServiceApi"/>
+    </bean>
+
+    <bean id="openAMService" class="com.sandata.lab.security.auth.services.OpenAMService"/>
+
+    <bean id="idmService" class="com.sandata.lab.security.auth.services.IDMService"/>
+
+    <bean id="dataTransformer" class="com.sandata.lab.security.auth.utils.oracle.DataTransfomer"/>
+
+    <bean id="restDataService" class="com.sandata.lab.security.auth.impl.RestDataService" depends-on="metaDataServiceApi">
+        <property name="metaDataService" ref="metaDataServiceApi"/>
+        <property name="dataTransformer" ref="dataTransformer"/>
+        <property name="coreDataService" ref="coreDataServiceApi"/>
+    </bean>
+
+    <bean id="cacheUtil" class="com.sandata.lab.security.auth.utils.cache.CacheUtil" scope="singleton"/>
+
+    <cxf:rsServer id="rsServer" address="${webservice.url}"
+                  serviceClass="com.sandata.lab.security.auth.RestfulServices"
+                  loggingFeatureEnabled="true"
+                  loggingSizeLimit="20">
+        <cxf:providers>
+            <ref component-id="authenticationInterceptor"/>
+            <ref component-id="gsonProvider" />
+        </cxf:providers>
+    </cxf:rsServer>
+
+    <camelContext id="appCamelContext" trace="true" streamCache="true" useBlueprintPropertyResolver="true" xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- using Camel properties component and refer to the OSGI-INF.blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <!-- <propertyPlaceholder id="properties" location="OSGI-INF.blueprint:dhs.OSGI-INF.blueprint.placeholder"/>-->
+        <propertyPlaceholder id="properties" location="blueprint:sandataAuth.blueprint.placeholder"/>
+        <package>com.sandata.lab.security.auth.routes</package>
+        <threadPoolProfile id="sandataAuthThreadPool" poolSize="{{thread.pool.size}}" maxPoolSize="{{thread.pool.max.size}}" maxQueueSize="{{thread.pool.max.queue.size}}"/>
+    </camelContext>
+</blueprint>

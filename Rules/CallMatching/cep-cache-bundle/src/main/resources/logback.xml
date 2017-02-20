@@ -1,0 +1,39 @@
+<configuration scan="true" scanPeriod="30 seconds">
+    <appender name="CACHE_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/cache/cache.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread]  - %X{camel.breadcrumbId} - %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy" >
+            <fileNamePattern>data/log/cache/cache.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="CACHE_DEFAULT_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>data/log/cache/cacheDefaultLog.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd MM:dd:yyyy HH:mm:ss.SSS} %p %c - %X{camel.breadcrumbId} - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>data/log/cache/cacheDefaultLog.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <logger name="cacheLog" level="INFO" additivity="false">
+        <appender-ref ref="CACHE_LOGGER"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CACHE_DEFAULT_LOGGER"/>
+    </root>
+</configuration>

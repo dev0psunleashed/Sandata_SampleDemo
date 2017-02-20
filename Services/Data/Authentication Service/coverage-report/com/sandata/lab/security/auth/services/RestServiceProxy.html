@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RestServiceProxy.java</title>
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+  <link rel='stylesheet' type='text/css' href='../../../../../../coverage.css'/>
+  <link rel='shortcut icon' type='image/png' href='../../../../../../logo.png'/>
+  <script type='text/javascript' src='../../../../../../coverage.js'></script>
+  <script type='text/javascript' src='../../../../../../prettify.js'></script>
+</head>
+<body onload='prettyPrint()'>
+  <table cellpadding='0' cellspacing='1'>
+    <caption>Authentication Service\src\main\java\com\sandata\lab\security\auth\services\RestServiceProxy.java</caption>
+    <tr>
+      <td class='line'>1</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>package com.sandata.lab.security.auth.services;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'></td><td>&nbsp;</td>
+      <td><pre class='imports prettyprint' onclick='showHideLines(this)'><div>import com.sandata.lab.common.utils.log.SandataLogger;
+import com.sandata.lab.common.utils.string.StringUtil;
+import com.sandata.lab.security.auth.utils.log.AuthenticationLogger;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.*;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+
+
+import java.util.HashMap;
+import java.util.Map;
+</div><span>import ...</span></pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>18</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l18s0'>public class RestServiceProxy</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>19</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>{</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>20</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    protected String postRequest(String url, HashMap&lt;String,String> headerValue, String content) throws Exception</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>21</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>22</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l22s0'>        HttpPost httpPost = null;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>25</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l25s0'>        SandataLogger logger = AuthenticationLogger.CreateLogger();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>26</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>27</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>29</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l29s0'>            logger.info(String.format("%s: Sending postRequest to %s ", this.getClass().getName(), url));</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>31</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l31s0'>            httpPost = new HttpPost(url);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>34</td><td class='count'>1</td>
+      <td><pre class='prettyprint jmp'>            <span id='l34s0' title='Executions: 1' class='covered'>for (Map.Entry&lt;String, String> entry</span> : <span id='l34s1' title='Executions: 2' class='covered'>headerValue.entrySet())</span></pre></td>
+    </tr>
+    <tr>
+      <td class='line'>35</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>36</td><td class='count'>2</td>
+      <td><pre class='prettyprint covered' id='l36s0'>                httpPost.setHeader(entry.getKey(), entry.getValue());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>37</td><td class='count'>2</td>
+      <td><pre class='prettyprint covered' id='l37s0'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>39</td><td class='count'>1</td>
+      <td><pre class='prettyprint jmp'>            <span id='l39s0' title='Executions: 1' class='covered'>if(!StringUtil.IsNullOrEmpty(content))</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>40</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l40s0'>                httpPost.setEntity(new StringEntity(content));</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>41</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>43</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l43s0'>            HttpClient httpclient = HttpClientBuilder.create().build();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>44</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l44s0'>            HttpResponse response = httpclient.execute(httpPost);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>46</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l46s0'>            HttpEntity entity = response.getEntity();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>47</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l47s0'>            String responseString = EntityUtils.toString(entity, "UTF-8");</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>49</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l49s0'>            return responseString;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>50</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>51</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l51s0'>        catch (Exception e)</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>52</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>53</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l53s0'>            logger.error(e.getMessage());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>54</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l54s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>55</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>56</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        finally</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>57</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>59</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Release current connection to the connection pool once you are</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>60</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // done</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>61</td><td class='count'>1</td>
+      <td><pre class='prettyprint jmp'>            <span id='l61s0' title='Executions: 1' class='covered'>if (httpPost!=null)</span></pre></td>
+    </tr>
+    <tr>
+      <td class='line'>62</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l62s0'>                httpPost.releaseConnection();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>65</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>66</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>68</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    protected String putRequest(String url, HashMap&lt;String,String> headerValue, String content) throws Exception</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>69</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>70</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l70s0'>        HttpPut httpPut = null;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>75</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l75s0'>        SandataLogger logger = AuthenticationLogger.CreateLogger();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>76</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>77</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>79</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l79s0'>            logger.info(String.format("%s: Sending putRequest to %s ", this.getClass().getName(), url));</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>81</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l81s0'>            httpPut = new HttpPut(url);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>84</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l84s0' title='Executions: 0' class='uncovered'>for (Map.Entry&lt;String, String> entry</span> : <span id='l84s1' title='Executions: 0' class='uncovered'>headerValue.entrySet())</span></pre></td>
+    </tr>
+    <tr>
+      <td class='line'>85</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>86</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l86s0'>                httpPut.setHeader(entry.getKey(), entry.getValue());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>87</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l87s0'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>89</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l89s0' title='Executions: 0' class='uncovered'>if(!StringUtil.IsNullOrEmpty(content))</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>90</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l90s0'>                httpPut.setEntity(new StringEntity(content));</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>91</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>93</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l93s0'>            HttpClient httpclient = HttpClientBuilder.create().build();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>94</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l94s0'>            HttpResponse response = httpclient.execute(httpPut);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>96</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l96s0'>            HttpEntity entity = response.getEntity();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>97</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l97s0'>            String responseString = EntityUtils.toString(entity, "UTF-8");</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>99</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l99s0'>            return responseString;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>100</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>101</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l101s0'>        catch (Exception e)</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>102</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>103</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l103s0'>            logger.error(e.getMessage());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>104</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l104s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>105</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>106</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        finally</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>107</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>109</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Release current connection to the connection pool once you are</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>110</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // done</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>111</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l111s0' title='Executions: 0' class='uncovered'>if (httpPut!=null)</span></pre></td>
+    </tr>
+    <tr>
+      <td class='line'>112</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l112s0'>                httpPut.releaseConnection();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>115</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>116</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>118</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    protected String patchRequest(String url, HashMap&lt;String,String> headerValue, String content) throws Exception</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>119</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>120</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l120s0'>        HttpPatch httpPatch = null;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>122</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l122s0'>        SandataLogger logger = AuthenticationLogger.CreateLogger();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>123</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>124</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>126</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l126s0'>            logger.info(String.format("%s: Sending patchRequest to %s ", this.getClass().getName(), url));</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>129</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l129s0'>            httpPatch = new HttpPatch(url);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>132</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l132s0' title='Executions: 0' class='uncovered'>for (Map.Entry&lt;String, String> entry</span> : <span id='l132s1' title='Executions: 0' class='uncovered'>headerValue.entrySet())</span></pre></td>
+    </tr>
+    <tr>
+      <td class='line'>133</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>134</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l134s0'>                httpPatch.setHeader(entry.getKey(), entry.getValue());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>135</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l135s0'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>137</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l137s0' title='Executions: 0' class='uncovered'>if(!StringUtil.IsNullOrEmpty(content))</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>138</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l138s0'>                httpPatch.setEntity(new StringEntity(content));</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>139</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>141</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l141s0'>            HttpClient httpclient = HttpClientBuilder.create().build();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>142</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l142s0'>            HttpResponse response = httpclient.execute(httpPatch);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>144</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l144s0'>            HttpEntity entity = response.getEntity();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>145</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l145s0'>            String responseString = EntityUtils.toString(entity, "UTF-8");</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>147</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l147s0'>            return responseString;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>148</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>149</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l149s0'>        catch (Exception e)</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>150</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>151</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l151s0'>            logger.error(e.getMessage());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>152</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l152s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>153</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>154</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        finally</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>155</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>157</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Release current connection to the connection pool once you are</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>158</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // done</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>159</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l159s0' title='Executions: 0' class='uncovered'>if (httpPatch!=null)</span></pre></td>
+    </tr>
+    <tr>
+      <td class='line'>160</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l160s0'>                httpPatch.releaseConnection();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>163</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>164</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>166</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    protected String getRequest(String url, HashMap&lt;String,String> headerValue) throws Exception</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>167</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>168</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l168s0'>        HttpGet httpGET = null;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>169</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l169s0'>        SandataLogger logger = AuthenticationLogger.CreateLogger();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>170</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>171</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>172</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l172s0'>            logger.info(String.format("%s: Sending getRequest to %s ", this.getClass().getName(), url));</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>175</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l175s0'>            httpGET = new HttpGet(url);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>177</td><td class='count'>1</td>
+      <td><pre class='prettyprint jmp'>            <span id='l177s0' title='Executions: 1' class='covered'>for (Map.Entry&lt;String, String> entry</span> : <span id='l177s1' title='Executions: 1' class='covered'>headerValue.entrySet())</span></pre></td>
+    </tr>
+    <tr>
+      <td class='line'>178</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>179</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l179s0'>                httpGET.setHeader(entry.getKey(), entry.getValue());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>180</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l180s0'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>182</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l182s0'>            HttpClient httpclient = HttpClientBuilder.create().build();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>183</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l183s0'>            HttpResponse response = httpclient.execute(httpGET);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>185</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l185s0'>            HttpEntity entity = response.getEntity();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>186</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l186s0'>            String responseString = EntityUtils.toString(entity, "UTF-8");</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>188</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l188s0'>            return responseString;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>189</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>190</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l190s0'>        catch (Exception e)</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>191</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>192</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l192s0'>            logger.error(e.getMessage());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>193</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l193s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>194</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>195</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        finally</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>196</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>197</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l197s0'>            logger.stop();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>198</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Release current connection to the connection pool once you are</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>199</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // done</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>200</td><td class='count'>1</td>
+      <td><pre class='prettyprint jmp'>            <span id='l200s0' title='Executions: 1' class='covered'>if (httpGET!=null)</span></pre></td>
+    </tr>
+    <tr>
+      <td class='line'>201</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l201s0'>                httpGET.releaseConnection();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>202</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>203</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>205</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    protected String deleteRequest(String url, HashMap&lt;String,String> headerValue) throws Exception</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>206</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>207</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l207s0'>        HttpDelete httpDelete = null;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>208</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l208s0'>        SandataLogger logger = AuthenticationLogger.CreateLogger();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>209</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>210</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>211</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l211s0'>            logger.info(String.format("%s: Sending deleteRequest to %s ", this.getClass().getName(), url));</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>214</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l214s0'>            httpDelete = new HttpDelete(url);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>216</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l216s0' title='Executions: 0' class='uncovered'>for (Map.Entry&lt;String, String> entry</span> : <span id='l216s1' title='Executions: 0' class='uncovered'>headerValue.entrySet())</span></pre></td>
+    </tr>
+    <tr>
+      <td class='line'>217</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>218</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l218s0'>                httpDelete.setHeader(entry.getKey(), entry.getValue());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>219</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l219s0'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>221</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l221s0'>            HttpClient httpclient = HttpClientBuilder.create().build();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>222</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l222s0'>            HttpResponse response = httpclient.execute(httpDelete);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>224</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l224s0'>            HttpEntity entity = response.getEntity();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>225</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l225s0'>            String responseString = EntityUtils.toString(entity, "UTF-8");</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>227</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l227s0'>            return responseString;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>228</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>229</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l229s0'>        catch (Exception e)</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>230</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>231</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l231s0'>            logger.error(e.getMessage());</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>232</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l232s0'>            throw e;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>233</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>234</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        finally</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>235</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>236</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l236s0'>            logger.stop();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>237</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Release current connection to the connection pool once you are</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>238</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // done</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>239</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l239s0' title='Executions: 0' class='uncovered'>if (httpDelete!=null)</span></pre></td>
+    </tr>
+    <tr>
+      <td class='line'>240</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l240s0'>                httpDelete.releaseConnection();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>241</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>242</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>245</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>}</pre></td>
+    </tr>
+  </table>
+</body>
+</html>

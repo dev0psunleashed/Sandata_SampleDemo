@@ -1,0 +1,1198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="2.7" jmeter="2.12 r1636949">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Staff Intake Tests" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="url" elementType="Argument">
+            <stringProp name="Argument.name">url</stringProp>
+            <stringProp name="Argument.value">localhost</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="port" elementType="Argument">
+            <stringProp name="Argument.name">port</stringProp>
+            <stringProp name="Argument.value">8181</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Threads" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <longProp name="ThreadGroup.start_time">1416552811000</longProp>
+        <longProp name="ThreadGroup.end_time">1416552811000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path"></stringProp>
+          <stringProp name="HTTPSampler.concurrentPool">4</stringProp>
+        </ConfigTestElement>
+        <hashTree/>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="DHSInterfaces HTTP Header Manager" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="soid" elementType="Header">
+              <stringProp name="Header.name">Authorization</stringProp>
+              <stringProp name="Header.value">Basic YWRtaW46YWRtaW4=</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Insert Staff Member" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;staffId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;type&quot;: &quot;Nurse&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos0020&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;taxIdEin&quot;: null,&#xd;
+  &quot;santraxID&quot;: null,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;preferredContactId&quot;: null,&#xd;
+  &quot;npiNumber&quot;: null,&#xd;
+  &quot;apiNumber&quot;: null,&#xd;
+  &quot;agencyLocation&quot;: &quot;&quot;,&#xd;
+  &quot;admissionType&quot;: null,&#xd;
+  &quot;position&quot;: null,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1974-04-03 00:00:00&quot;,&#xd;
+  &quot;maritalStatus&quot;: &quot;Single&quot;,&#xd;
+  &quot;gender&quot;: &quot;Female&quot;,&#xd;
+  &quot;language&quot;: &quot;Russian&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Asian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Staff&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;county&quot;: null,&#xd;
+  &quot;region&quot;: null,&#xd;
+  &quot;homeLocation&quot;: null,&#xd;
+  &quot;hireDate&quot;: null,&#xd;
+  &quot;firstDayWorked&quot;: &quot;2013-07-03 00:00:00&quot;,&#xd;
+  &quot;releasedDate&quot;: &quot;2015-07-14 00:00:00&quot;,&#xd;
+  &quot;rehireDate&quot;: null,&#xd;
+  &quot;staffManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;team&quot;: null,&#xd;
+  &quot;staffClass&quot;: null,&#xd;
+  &quot;militaryStatus&quot;: null,&#xd;
+  &quot;transportationType&quot;: null,&#xd;
+  &quot;travelRadius&quot;: null,&#xd;
+  &quot;referral&quot;: null,&#xd;
+  &quot;staffStatus&quot;: null,&#xd;
+  &quot;federalExemptions&quot;: null,&#xd;
+  &quot;federalMaritalStatus&quot;: null,&#xd;
+  &quot;stateExemptions&quot;: null,&#xd;
+  &quot;stateMaritalStatus&quot;: null,&#xd;
+  &quot;stateTax&quot;: null,&#xd;
+  &quot;liveInState&quot;: null,&#xd;
+  &quot;cityTax1&quot;: null,&#xd;
+  &quot;cityTax2&quot;: null,&#xd;
+  &quot;payType&quot;: null,&#xd;
+  &quot;lastRaiseDate&quot;: null,&#xd;
+  &quot;payFrequency&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularHourlyRate&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularDailyRate&quot;: null,&#xd;
+  &quot;isBypassHolidayPayRate&quot;: null,&#xd;
+  &quot;isOvernightOk&quot;: true&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/cxf/sintake/staffmember</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Insert Staff Members List" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">[{&#xd;
+  &quot;staffId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;type&quot;: &quot;Nurse&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos0018&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;taxIdEin&quot;: null,&#xd;
+  &quot;santraxID&quot;: null,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;preferredContactId&quot;: null,&#xd;
+  &quot;npiNumber&quot;: null,&#xd;
+  &quot;apiNumber&quot;: null,&#xd;
+  &quot;agencyLocation&quot;: &quot;&quot;,&#xd;
+  &quot;admissionType&quot;: null,&#xd;
+  &quot;position&quot;: null,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1974-04-03 00:00:00&quot;,&#xd;
+  &quot;maritalStatus&quot;: &quot;Single&quot;,&#xd;
+  &quot;gender&quot;: &quot;Female&quot;,&#xd;
+  &quot;language&quot;: &quot;Russian&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Asian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Staff&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;county&quot;: null,&#xd;
+  &quot;region&quot;: null,&#xd;
+  &quot;homeLocation&quot;: null,&#xd;
+  &quot;hireDate&quot;: null,&#xd;
+  &quot;firstDayWorked&quot;: &quot;2013-07-03 00:00:00&quot;,&#xd;
+  &quot;releasedDate&quot;: &quot;2015-07-14 00:00:00&quot;,&#xd;
+  &quot;rehireDate&quot;: null,&#xd;
+  &quot;staffManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;team&quot;: null,&#xd;
+  &quot;staffClass&quot;: null,&#xd;
+  &quot;militaryStatus&quot;: null,&#xd;
+  &quot;transportationType&quot;: null,&#xd;
+  &quot;travelRadius&quot;: null,&#xd;
+  &quot;referral&quot;: null,&#xd;
+  &quot;staffStatus&quot;: null,&#xd;
+  &quot;federalExemptions&quot;: null,&#xd;
+  &quot;federalMaritalStatus&quot;: null,&#xd;
+  &quot;stateExemptions&quot;: null,&#xd;
+  &quot;stateMaritalStatus&quot;: null,&#xd;
+  &quot;stateTax&quot;: null,&#xd;
+  &quot;liveInState&quot;: null,&#xd;
+  &quot;cityTax1&quot;: null,&#xd;
+  &quot;cityTax2&quot;: null,&#xd;
+  &quot;payType&quot;: null,&#xd;
+  &quot;lastRaiseDate&quot;: null,&#xd;
+  &quot;payFrequency&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularHourlyRate&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularDailyRate&quot;: null,&#xd;
+  &quot;isBypassHolidayPayRate&quot;: null,&#xd;
+  &quot;isOvernightOk&quot;: true&#xd;
+},&#xd;
+{&#xd;
+  &quot;staffId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;type&quot;: &quot;Nurse&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos0019&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;taxIdEin&quot;: null,&#xd;
+  &quot;santraxID&quot;: null,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;preferredContactId&quot;: null,&#xd;
+  &quot;npiNumber&quot;: null,&#xd;
+  &quot;apiNumber&quot;: null,&#xd;
+  &quot;agencyLocation&quot;: &quot;&quot;,&#xd;
+  &quot;admissionType&quot;: null,&#xd;
+  &quot;position&quot;: null,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1974-04-03 00:00:00&quot;,&#xd;
+  &quot;maritalStatus&quot;: &quot;Single&quot;,&#xd;
+  &quot;gender&quot;: &quot;Female&quot;,&#xd;
+  &quot;language&quot;: &quot;Russian&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Asian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Staff&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;county&quot;: null,&#xd;
+  &quot;region&quot;: null,&#xd;
+  &quot;homeLocation&quot;: null,&#xd;
+  &quot;hireDate&quot;: null,&#xd;
+  &quot;firstDayWorked&quot;: &quot;2013-07-03 00:00:00&quot;,&#xd;
+  &quot;releasedDate&quot;: &quot;2015-07-14 00:00:00&quot;,&#xd;
+  &quot;rehireDate&quot;: null,&#xd;
+  &quot;staffManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;team&quot;: null,&#xd;
+  &quot;staffClass&quot;: null,&#xd;
+  &quot;militaryStatus&quot;: null,&#xd;
+  &quot;transportationType&quot;: null,&#xd;
+  &quot;travelRadius&quot;: null,&#xd;
+  &quot;referral&quot;: null,&#xd;
+  &quot;staffStatus&quot;: null,&#xd;
+  &quot;federalExemptions&quot;: null,&#xd;
+  &quot;federalMaritalStatus&quot;: null,&#xd;
+  &quot;stateExemptions&quot;: null,&#xd;
+  &quot;stateMaritalStatus&quot;: null,&#xd;
+  &quot;stateTax&quot;: null,&#xd;
+  &quot;liveInState&quot;: null,&#xd;
+  &quot;cityTax1&quot;: null,&#xd;
+  &quot;cityTax2&quot;: null,&#xd;
+  &quot;payType&quot;: null,&#xd;
+  &quot;lastRaiseDate&quot;: null,&#xd;
+  &quot;payFrequency&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularHourlyRate&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularDailyRate&quot;: null,&#xd;
+  &quot;isBypassHolidayPayRate&quot;: null,&#xd;
+  &quot;isOvernightOk&quot;: true&#xd;
+}]&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/cxf/sintake/staffmembers</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update Staff Member" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;staffId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;type&quot;: &quot;Nurse&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;taxIdEin&quot;: null,&#xd;
+  &quot;santraxID&quot;: null,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;preferredContactId&quot;: null,&#xd;
+  &quot;npiNumber&quot;: null,&#xd;
+  &quot;apiNumber&quot;: null,&#xd;
+  &quot;agencyLocation&quot;: &quot;&quot;,&#xd;
+  &quot;admissionType&quot;: null,&#xd;
+  &quot;position&quot;: null,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1974-04-03 00:00:00&quot;,&#xd;
+  &quot;maritalStatus&quot;: &quot;Single&quot;,&#xd;
+  &quot;gender&quot;: &quot;Female&quot;,&#xd;
+  &quot;language&quot;: &quot;Russian&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Asian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Staff&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;county&quot;: null,&#xd;
+  &quot;region&quot;: null,&#xd;
+  &quot;homeLocation&quot;: null,&#xd;
+  &quot;hireDate&quot;: null,&#xd;
+  &quot;firstDayWorked&quot;: &quot;2013-07-03 00:00:00&quot;,&#xd;
+  &quot;releasedDate&quot;: &quot;2015-07-14 00:00:00&quot;,&#xd;
+  &quot;rehireDate&quot;: null,&#xd;
+  &quot;staffManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;team&quot;: null,&#xd;
+  &quot;staffClass&quot;: null,&#xd;
+  &quot;militaryStatus&quot;: null,&#xd;
+  &quot;transportationType&quot;: null,&#xd;
+  &quot;travelRadius&quot;: null,&#xd;
+  &quot;referral&quot;: null,&#xd;
+  &quot;staffStatus&quot;: null,&#xd;
+  &quot;federalExemptions&quot;: null,&#xd;
+  &quot;federalMaritalStatus&quot;: null,&#xd;
+  &quot;stateExemptions&quot;: null,&#xd;
+  &quot;stateMaritalStatus&quot;: null,&#xd;
+  &quot;stateTax&quot;: null,&#xd;
+  &quot;liveInState&quot;: null,&#xd;
+  &quot;cityTax1&quot;: null,&#xd;
+  &quot;cityTax2&quot;: null,&#xd;
+  &quot;payType&quot;: null,&#xd;
+  &quot;lastRaiseDate&quot;: null,&#xd;
+  &quot;payFrequency&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularHourlyRate&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularDailyRate&quot;: null,&#xd;
+  &quot;isBypassHolidayPayRate&quot;: null,&#xd;
+  &quot;isOvernightOk&quot;: true&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/cxf/sintake/staffmember</stringProp>
+          <stringProp name="HTTPSampler.method">PUT</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Update Staff Members List" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">[{&#xd;
+  &quot;staffId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;type&quot;: &quot;Nurse&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;taxIdEin&quot;: null,&#xd;
+  &quot;santraxID&quot;: null,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;preferredContactId&quot;: null,&#xd;
+  &quot;npiNumber&quot;: null,&#xd;
+  &quot;apiNumber&quot;: null,&#xd;
+  &quot;agencyLocation&quot;: &quot;&quot;,&#xd;
+  &quot;admissionType&quot;: null,&#xd;
+  &quot;position&quot;: null,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1974-04-03 00:00:00&quot;,&#xd;
+  &quot;maritalStatus&quot;: &quot;Single&quot;,&#xd;
+  &quot;gender&quot;: &quot;Female&quot;,&#xd;
+  &quot;language&quot;: &quot;Russian&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Asian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Staff&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;county&quot;: null,&#xd;
+  &quot;region&quot;: null,&#xd;
+  &quot;homeLocation&quot;: null,&#xd;
+  &quot;hireDate&quot;: null,&#xd;
+  &quot;firstDayWorked&quot;: &quot;2013-07-03 00:00:00&quot;,&#xd;
+  &quot;releasedDate&quot;: &quot;2015-07-14 00:00:00&quot;,&#xd;
+  &quot;rehireDate&quot;: null,&#xd;
+  &quot;staffManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;team&quot;: null,&#xd;
+  &quot;staffClass&quot;: null,&#xd;
+  &quot;militaryStatus&quot;: null,&#xd;
+  &quot;transportationType&quot;: null,&#xd;
+  &quot;travelRadius&quot;: null,&#xd;
+  &quot;referral&quot;: null,&#xd;
+  &quot;staffStatus&quot;: null,&#xd;
+  &quot;federalExemptions&quot;: null,&#xd;
+  &quot;federalMaritalStatus&quot;: null,&#xd;
+  &quot;stateExemptions&quot;: null,&#xd;
+  &quot;stateMaritalStatus&quot;: null,&#xd;
+  &quot;stateTax&quot;: null,&#xd;
+  &quot;liveInState&quot;: null,&#xd;
+  &quot;cityTax1&quot;: null,&#xd;
+  &quot;cityTax2&quot;: null,&#xd;
+  &quot;payType&quot;: null,&#xd;
+  &quot;lastRaiseDate&quot;: null,&#xd;
+  &quot;payFrequency&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularHourlyRate&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularDailyRate&quot;: null,&#xd;
+  &quot;isBypassHolidayPayRate&quot;: null,&#xd;
+  &quot;isOvernightOk&quot;: true&#xd;
+},&#xd;
+{&#xd;
+  &quot;staffId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;type&quot;: &quot;Nurse&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;taxIdEin&quot;: null,&#xd;
+  &quot;santraxID&quot;: null,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;preferredContactId&quot;: null,&#xd;
+  &quot;npiNumber&quot;: null,&#xd;
+  &quot;apiNumber&quot;: null,&#xd;
+  &quot;agencyLocation&quot;: &quot;&quot;,&#xd;
+  &quot;admissionType&quot;: null,&#xd;
+  &quot;position&quot;: null,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1974-04-03 00:00:00&quot;,&#xd;
+  &quot;maritalStatus&quot;: &quot;Single&quot;,&#xd;
+  &quot;gender&quot;: &quot;Female&quot;,&#xd;
+  &quot;language&quot;: &quot;Russian&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Asian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Staff&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;county&quot;: null,&#xd;
+  &quot;region&quot;: null,&#xd;
+  &quot;homeLocation&quot;: null,&#xd;
+  &quot;hireDate&quot;: null,&#xd;
+  &quot;firstDayWorked&quot;: &quot;2013-07-03 00:00:00&quot;,&#xd;
+  &quot;releasedDate&quot;: &quot;2015-07-14 00:00:00&quot;,&#xd;
+  &quot;rehireDate&quot;: null,&#xd;
+  &quot;staffManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;team&quot;: null,&#xd;
+  &quot;staffClass&quot;: null,&#xd;
+  &quot;militaryStatus&quot;: null,&#xd;
+  &quot;transportationType&quot;: null,&#xd;
+  &quot;travelRadius&quot;: null,&#xd;
+  &quot;referral&quot;: null,&#xd;
+  &quot;staffStatus&quot;: null,&#xd;
+  &quot;federalExemptions&quot;: null,&#xd;
+  &quot;federalMaritalStatus&quot;: null,&#xd;
+  &quot;stateExemptions&quot;: null,&#xd;
+  &quot;stateMaritalStatus&quot;: null,&#xd;
+  &quot;stateTax&quot;: null,&#xd;
+  &quot;liveInState&quot;: null,&#xd;
+  &quot;cityTax1&quot;: null,&#xd;
+  &quot;cityTax2&quot;: null,&#xd;
+  &quot;payType&quot;: null,&#xd;
+  &quot;lastRaiseDate&quot;: null,&#xd;
+  &quot;payFrequency&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularHourlyRate&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularDailyRate&quot;: null,&#xd;
+  &quot;isBypassHolidayPayRate&quot;: null,&#xd;
+  &quot;isOvernightOk&quot;: true&#xd;
+}]&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/cxf/sintake/staffmembers</stringProp>
+          <stringProp name="HTTPSampler.method">PUT</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Delete Staff Member" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+  &quot;staffId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;type&quot;: &quot;Nurse&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;taxIdEin&quot;: null,&#xd;
+  &quot;santraxID&quot;: null,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;preferredContactId&quot;: null,&#xd;
+  &quot;npiNumber&quot;: null,&#xd;
+  &quot;apiNumber&quot;: null,&#xd;
+  &quot;agencyLocation&quot;: &quot;&quot;,&#xd;
+  &quot;admissionType&quot;: null,&#xd;
+  &quot;position&quot;: null,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1974-04-03 00:00:00&quot;,&#xd;
+  &quot;maritalStatus&quot;: &quot;Single&quot;,&#xd;
+  &quot;gender&quot;: &quot;Female&quot;,&#xd;
+  &quot;language&quot;: &quot;Russian&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Asian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Staff&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;county&quot;: null,&#xd;
+  &quot;region&quot;: null,&#xd;
+  &quot;homeLocation&quot;: null,&#xd;
+  &quot;hireDate&quot;: null,&#xd;
+  &quot;firstDayWorked&quot;: &quot;2013-07-03 00:00:00&quot;,&#xd;
+  &quot;releasedDate&quot;: &quot;2015-07-14 00:00:00&quot;,&#xd;
+  &quot;rehireDate&quot;: null,&#xd;
+  &quot;staffManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;team&quot;: null,&#xd;
+  &quot;staffClass&quot;: null,&#xd;
+  &quot;militaryStatus&quot;: null,&#xd;
+  &quot;transportationType&quot;: null,&#xd;
+  &quot;travelRadius&quot;: null,&#xd;
+  &quot;referral&quot;: null,&#xd;
+  &quot;staffStatus&quot;: null,&#xd;
+  &quot;federalExemptions&quot;: null,&#xd;
+  &quot;federalMaritalStatus&quot;: null,&#xd;
+  &quot;stateExemptions&quot;: null,&#xd;
+  &quot;stateMaritalStatus&quot;: null,&#xd;
+  &quot;stateTax&quot;: null,&#xd;
+  &quot;liveInState&quot;: null,&#xd;
+  &quot;cityTax1&quot;: null,&#xd;
+  &quot;cityTax2&quot;: null,&#xd;
+  &quot;payType&quot;: null,&#xd;
+  &quot;lastRaiseDate&quot;: null,&#xd;
+  &quot;payFrequency&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularHourlyRate&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularDailyRate&quot;: null,&#xd;
+  &quot;isBypassHolidayPayRate&quot;: null,&#xd;
+  &quot;isOvernightOk&quot;: true&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/cxf/sintake/staffmember</stringProp>
+          <stringProp name="HTTPSampler.method">DELETE</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Delete Staff Members List" enabled="false">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">[{&#xd;
+  &quot;staffId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;type&quot;: &quot;Nurse&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;taxIdEin&quot;: null,&#xd;
+  &quot;santraxID&quot;: null,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;preferredContactId&quot;: null,&#xd;
+  &quot;npiNumber&quot;: null,&#xd;
+  &quot;apiNumber&quot;: null,&#xd;
+  &quot;agencyLocation&quot;: &quot;&quot;,&#xd;
+  &quot;admissionType&quot;: null,&#xd;
+  &quot;position&quot;: null,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1974-04-03 00:00:00&quot;,&#xd;
+  &quot;maritalStatus&quot;: &quot;Single&quot;,&#xd;
+  &quot;gender&quot;: &quot;Female&quot;,&#xd;
+  &quot;language&quot;: &quot;Russian&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Asian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Staff&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;county&quot;: null,&#xd;
+  &quot;region&quot;: null,&#xd;
+  &quot;homeLocation&quot;: null,&#xd;
+  &quot;hireDate&quot;: null,&#xd;
+  &quot;firstDayWorked&quot;: &quot;2013-07-03 00:00:00&quot;,&#xd;
+  &quot;releasedDate&quot;: &quot;2015-07-14 00:00:00&quot;,&#xd;
+  &quot;rehireDate&quot;: null,&#xd;
+  &quot;staffManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;team&quot;: null,&#xd;
+  &quot;staffClass&quot;: null,&#xd;
+  &quot;militaryStatus&quot;: null,&#xd;
+  &quot;transportationType&quot;: null,&#xd;
+  &quot;travelRadius&quot;: null,&#xd;
+  &quot;referral&quot;: null,&#xd;
+  &quot;staffStatus&quot;: null,&#xd;
+  &quot;federalExemptions&quot;: null,&#xd;
+  &quot;federalMaritalStatus&quot;: null,&#xd;
+  &quot;stateExemptions&quot;: null,&#xd;
+  &quot;stateMaritalStatus&quot;: null,&#xd;
+  &quot;stateTax&quot;: null,&#xd;
+  &quot;liveInState&quot;: null,&#xd;
+  &quot;cityTax1&quot;: null,&#xd;
+  &quot;cityTax2&quot;: null,&#xd;
+  &quot;payType&quot;: null,&#xd;
+  &quot;lastRaiseDate&quot;: null,&#xd;
+  &quot;payFrequency&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularHourlyRate&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularDailyRate&quot;: null,&#xd;
+  &quot;isBypassHolidayPayRate&quot;: null,&#xd;
+  &quot;isOvernightOk&quot;: true&#xd;
+},&#xd;
+{&#xd;
+  &quot;staffId&quot;: 0,&#xd;
+  &quot;agencyId&quot;: 1,&#xd;
+  &quot;type&quot;: &quot;Nurse&quot;,&#xd;
+  &quot;firstName&quot;: &quot;David&quot;,&#xd;
+  &quot;lastName&quot;: &quot;Rutgos&quot;,&#xd;
+  &quot;middleInitial&quot;: &quot;M&quot;,&#xd;
+  &quot;ssn&quot;: &quot;816-46-9325&quot;,&#xd;
+  &quot;taxIdEin&quot;: null,&#xd;
+  &quot;santraxID&quot;: null,&#xd;
+  &quot;homePhone&quot;: &quot;(230)-898-7825&quot;,&#xd;
+  &quot;cellPhone&quot;: &quot;(912)-616-5337&quot;,&#xd;
+  &quot;email&quot;: &quot;drutgos@sandata.com&quot;,&#xd;
+  &quot;preferredContactId&quot;: null,&#xd;
+  &quot;npiNumber&quot;: null,&#xd;
+  &quot;apiNumber&quot;: null,&#xd;
+  &quot;agencyLocation&quot;: &quot;&quot;,&#xd;
+  &quot;admissionType&quot;: null,&#xd;
+  &quot;position&quot;: null,&#xd;
+  &quot;dateOfBirth&quot;: &quot;1974-04-03 00:00:00&quot;,&#xd;
+  &quot;maritalStatus&quot;: &quot;Single&quot;,&#xd;
+  &quot;gender&quot;: &quot;Female&quot;,&#xd;
+  &quot;language&quot;: &quot;Russian&quot;,&#xd;
+  &quot;ethnicity&quot;: &quot;Asian&quot;,&#xd;
+  &quot;religion&quot;: &quot;Christian&quot;,&#xd;
+  &quot;address1&quot;: &quot;1675 East 18th Street&quot;,&#xd;
+  &quot;address2&quot;: &quot;JMeter: Test Staff&quot;,&#xd;
+  &quot;apt&quot;: null,&#xd;
+  &quot;city&quot;: &quot;Brooklyn&quot;,&#xd;
+  &quot;state&quot;: &quot;NY&quot;,&#xd;
+  &quot;zip&quot;: &quot;11229&quot;,&#xd;
+  &quot;county&quot;: null,&#xd;
+  &quot;region&quot;: null,&#xd;
+  &quot;homeLocation&quot;: null,&#xd;
+  &quot;hireDate&quot;: null,&#xd;
+  &quot;firstDayWorked&quot;: &quot;2013-07-03 00:00:00&quot;,&#xd;
+  &quot;releasedDate&quot;: &quot;2015-07-14 00:00:00&quot;,&#xd;
+  &quot;rehireDate&quot;: null,&#xd;
+  &quot;staffManager&quot;: null,&#xd;
+  &quot;coordinator&quot;: null,&#xd;
+  &quot;team&quot;: null,&#xd;
+  &quot;staffClass&quot;: null,&#xd;
+  &quot;militaryStatus&quot;: null,&#xd;
+  &quot;transportationType&quot;: null,&#xd;
+  &quot;travelRadius&quot;: null,&#xd;
+  &quot;referral&quot;: null,&#xd;
+  &quot;staffStatus&quot;: null,&#xd;
+  &quot;federalExemptions&quot;: null,&#xd;
+  &quot;federalMaritalStatus&quot;: null,&#xd;
+  &quot;stateExemptions&quot;: null,&#xd;
+  &quot;stateMaritalStatus&quot;: null,&#xd;
+  &quot;stateTax&quot;: null,&#xd;
+  &quot;liveInState&quot;: null,&#xd;
+  &quot;cityTax1&quot;: null,&#xd;
+  &quot;cityTax2&quot;: null,&#xd;
+  &quot;payType&quot;: null,&#xd;
+  &quot;lastRaiseDate&quot;: null,&#xd;
+  &quot;payFrequency&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularHourlyRate&quot;: null,&#xd;
+  &quot;isAlwaysPayRegularDailyRate&quot;: null,&#xd;
+  &quot;isBypassHolidayPayRate&quot;: null,&#xd;
+  &quot;isOvernightOk&quot;: true&#xd;
+}]&#xd;
+</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${url}</stringProp>
+          <stringProp name="HTTPSampler.port">${port}</stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/cxf/sintake/staffmembers</stringProp>
+          <stringProp name="HTTPSampler.method">DELETE</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>false</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <threadCounts>true</threadCounts>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

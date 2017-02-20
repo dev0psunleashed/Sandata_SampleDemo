@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:kie="http://drools.org/schema/kie-aries-blueprint/1.0.0"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0
+           http://drools.org/schema/kie-aries-blueprint/1.0.0 http://drools.org/schema/kie-aries-blueprint/1.0.0
+           http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd">
+
+    <bean id="ruleListener" class="com.sandata.lab.rules.exceptions.listeners.ExceptionListener" />
+    <bean id="callPreferences" class="com.sandata.lab.rules.call.model.CallPreferences"/>
+    <kie:kmodule id="visitExceptionsModule">
+        <kie:kbase name="visitExceptions" packages="com.sandata.lab.rules.exceptions.allvisits"  equalsBehavior="equality"  >
+            <kie:ksession name="ksessionVisitExceptions" listeners-ref="listeners" type="stateful">
+                <!--<kie:fileLogger file="C:\\fuse\\jboss-fuse-6.1.0.redhat-379\\data\\log\\cep-engine-drools-log1.log" threaded="true" interval="10000"/>-->
+                <kie:batch>
+                    <!--kie:set-global identifier="callPreferences" ref="callPreferences"/-->
+                    <kie:fire-all-rules />
+                </kie:batch>
+            </kie:ksession>
+        </kie:kbase>
+        <kie:kbase name="scheduledVisitsExceptions" packages="com.sandata.lab.rules.exceptions.scheduledvisits"  equalsBehavior="equality"  >
+            <kie:ksession name="ksessionScheduledVisitExceptions" listeners-ref="listeners" type="stateful">
+                <!--<kie:fileLogger file="C:\\fuse\\jboss-fuse-6.1.0.redhat-379\\data\\log\\cep-engine-drools-log1.log" threaded="true" interval="10000"/>-->
+                <kie:batch>
+                    <!--kie:set-global identifier="callPreferences" ref="callPreferences"/-->
+                    <kie:fire-all-rules />
+                </kie:batch>
+            </kie:ksession>
+        </kie:kbase>
+
+    </kie:kmodule>
+    <kie:eventListeners id="listeners">
+        <kie:ruleRuntimeEventListener ref="ruleListener"/>
+    </kie:eventListeners>
+    <cm:property-placeholder id="cep.engine.blueprint.placeholder" persistent-id="com.sandata.lab.rules"   update-strategy="none">
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+            <cm:property name="activeMQ.username" value="admin" />
+            <cm:property name="activeMQ.password" value="admin" />
+            <cm:property name="activeMQ.concurrentConsumers" value="100" />
+            <cm:property name="activeMQ.endpoint.CEP_VISIT_EXCEPTIONS" value="activemq:queue:CEP_VISIT_EXCEPTIONS"/>
+            <cm:property name="activeMQ.endpoint.CEP_VISIT_EXCEPTIONS_REQUEST" value="activemq:queue:CEP_VISIT_EXCEPTIONS_REQUEST" />
+            <cm:property name="activeMQ.endpoint.CEP_EXC_LKUP_RESPONSE" value="activemq:queue:CEP_EXC_LKUP_RESPONSE"/>
+            <cm:property name="activeMQ.endpoint.CEP_VISIT_EXCEPTIONS_RESPONSE" value="activemq:queue:CEP_VISIT_EXCEPTIONS_RESPONSE" />
+            <cm:property name="activeMQ.endpoint.CEP_ENGINE_VISIT_AND_SCHEDULE_EXCEPTION_ROUTE" value="activemq:queue:CEP_ENGINE_VISIT_AND_SCHEDULE_EXCEPTION_ROUTE" />
+            <cm:property name="activeMQ.endpoint.CEP_ENGINE_VISIT_EXCEPTION_ROUTE" value="activemq:queue:CEP_ENGINE_VISIT_EXCEPTION_ROUTE" />
+            <cm:property name="timerPeriodPropertyExceptionLookup" value="600s" />
+            <cm:property name="timerDelayPropertyExceptionLookup" value="-1s" />
+            <cm:property name="timerRepeatCountPropertyVisitExceptions" value="0" />
+            <cm:property name="timerDelayPropertyVisitExceptions" value="43200s" />
+            <cm:property name="timerPeriodPropertyVisitExceptions" value="86400s" />
+            <cm:property name="timerDelayPropertyScheduledVisitExceptions" value="3600s" />
+            <cm:property name="timerPeriodPropertyScheduledVisitExceptions" value="86400s" />
+            <cm:property name="timerRepeatCountPropertyScheduledVisitExceptions" value="1" />
+            <cm:property name="createFromToStartingHour" value="7" />
+            <cm:property name="createFromToQuittingHour" value="19" />
+            <cm:property name="createFromToMinutesBack" value="-6" />
+            <cm:property name="createFromToDaysBack" value="-15" />
+            <cm:property name="createFromToDaysTo" value="0" />
+            <cm:property name="createFromToUseDays" value="true" />
+            <cm:property name="createFromToIncremental" value="1" />
+            <cm:property name="autoCheckExceptionsShortRepeatCount" value="-1"/>
+            <cm:property name="autoCheckExceptionsShortPeriod" value="3600s"/>
+            <cm:property name="autoCheckExceptionsShortDelay" value="900s"/>
+
+        </cm:default-properties>
+    </cm:property-placeholder>
+    <!-- for spring only bean id="kiePostProcessor" class="org.kie.spring.KModuleBeanFactoryPostProcessor"  for spring only -->
+</blueprint>

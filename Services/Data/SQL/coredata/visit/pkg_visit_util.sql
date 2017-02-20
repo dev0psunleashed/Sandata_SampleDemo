@@ -1,0 +1,166 @@
+CREATE OR REPLACE PACKAGE PKG_VISIT_UTIL IS
+
+  FUNCTION CLEAR_VISIT_EVT_CALL_IN_OUT(v_visit_sk IN VISIT_EVNT.VISIT_SK%TYPE) RETURN NUMBER;
+
+  FUNCTION SET_VISIT_EVT_CALL_IN(v_visit_envt_sk IN VISIT_EVNT.VISIT_EVNT_SK%TYPE) RETURN NUMBER;
+
+  FUNCTION SET_VISIT_EVT_CALL_OUT(v_visit_envt_sk IN VISIT_EVNT.VISIT_EVNT_SK%TYPE) RETURN NUMBER;
+
+  FUNCTION UPDATE_VISIT_ACT_STRT_END_TIME(v_start_str IN VARCHAR2, v_end_str IN VARCHAR2, v_visit_sk IN VISIT.VISIT_SK%TYPE) RETURN NUMBER;
+
+  FUNCTION UPDATE_VISIT_ACT_START_TMSTP(v_start_tmstp IN TIMESTAMP, v_visit_sk IN VISIT.VISIT_SK%TYPE) RETURN NUMBER;
+
+  FUNCTION UPDATE_VISIT_ACT_END_TMSTP(v_end_tmstp IN TIMESTAMP, v_visit_sk IN VISIT.VISIT_SK%TYPE) RETURN NUMBER;
+  
+  FUNCTION UPDATE_VISIT(v_visit_sk IN VISIT.VISIT_SK%TYPE, v_update_tsmp IN VARCHAR2, v_update_by IN VISIT.REC_UPDATED_BY%TYPE, v_reason_memo IN VISIT.CHANGE_REASON_MEMO%TYPE, v_staff_id IN VISIT.STAFF_ID%TYPE, v_act_start_tmstp IN VARCHAR2, v_act_end_tmstp IN VARCHAR2) RETURN NUMBER;
+
+  FUNCTION UPDATE_VISIT_EVNT_CALL_IN_IND(v_visit_sk IN VISIT.VISIT_SK%TYPE, v_evnt_time IN VARCHAR2) RETURN NUMBER;
+  
+  FUNCTION UPDATE_VISIT_EVNT_IND(v_visit_sk IN VISIT.VISIT_SK%TYPE, v_is_in_call_ind IN NUMBER) RETURN NUMBER;
+  
+  FUNCTION CLEAR_EXCEPTIONS_BY_VISIT_SK(v_visit_sk IN VISIT.VISIT_SK%TYPE, v_is_sched_visit_only IN NUMBER, v_exception_ids IN NUMBER_ARRAY) RETURN NUMBER;
+  
+END PKG_VISIT_UTIL;
+/
+
+CREATE OR REPLACE PACKAGE BODY PKG_VISIT_UTIL IS
+
+  FUNCTION CLEAR_VISIT_EVT_CALL_IN_OUT(v_visit_sk IN VISIT_EVNT.VISIT_SK%TYPE) RETURN NUMBER
+  AS
+  BEGIN
+
+    UPDATE VISIT_EVNT
+    SET
+      CALL_IN_IND = 0,
+      CALL_OUT_IND = 0
+    WHERE VISIT_SK = v_visit_sk;
+
+    RETURN SQL%ROWCOUNT;
+
+  END CLEAR_VISIT_EVT_CALL_IN_OUT;
+
+  ------------------------------------------------------------------
+  FUNCTION SET_VISIT_EVT_CALL_IN(v_visit_envt_sk IN VISIT_EVNT.VISIT_EVNT_SK%TYPE) RETURN NUMBER
+  AS
+  BEGIN
+
+    UPDATE VISIT_EVNT SET CALL_IN_IND = 1 WHERE VISIT_EVNT_SK = v_visit_envt_sk;
+
+    RETURN SQL%ROWCOUNT;
+
+  END SET_VISIT_EVT_CALL_IN;
+
+  ------------------------------------------------------------------
+  FUNCTION SET_VISIT_EVT_CALL_OUT(v_visit_envt_sk IN VISIT_EVNT.VISIT_EVNT_SK%TYPE) RETURN NUMBER
+  AS
+  BEGIN
+
+    UPDATE VISIT_EVNT SET CALL_OUT_IND = 1 WHERE VISIT_EVNT_SK = v_visit_envt_sk;
+
+    RETURN SQL%ROWCOUNT;
+
+  END SET_VISIT_EVT_CALL_OUT;
+
+  ------------------------------------------------------------------
+  FUNCTION UPDATE_VISIT_ACT_STRT_END_TIME(v_start_str IN VARCHAR2, v_end_str IN VARCHAR2, v_visit_sk IN VISIT.VISIT_SK%TYPE) RETURN NUMBER
+  AS
+  BEGIN
+
+    UPDATE VISIT
+    SET
+      VISIT_ACT_START_TMSTP = TO_DATE(v_start_str, 'YYYY-MM-DD HH24:MI:SS'),
+      VISIT_ACT_END_TMSTP = TO_DATE(v_end_str, 'YYYY-MM-DD HH24:MI:SS')
+    WHERE VISIT_SK = v_visit_sk;
+
+    RETURN SQL%ROWCOUNT;
+
+  END UPDATE_VISIT_ACT_STRT_END_TIME;
+
+  ------------------------------------------------------------------
+  FUNCTION UPDATE_VISIT_ACT_START_TMSTP(v_start_tmstp IN TIMESTAMP, v_visit_sk IN VISIT.VISIT_SK%TYPE) RETURN NUMBER
+  AS
+  BEGIN
+
+    UPDATE VISIT SET VISIT_ACT_START_TMSTP = v_start_tmstp WHERE VISIT_SK = v_visit_sk;
+
+    RETURN SQL%ROWCOUNT;
+
+  END UPDATE_VISIT_ACT_START_TMSTP;
+
+  ------------------------------------------------------------------
+  FUNCTION UPDATE_VISIT_ACT_END_TMSTP(v_end_tmstp IN TIMESTAMP, v_visit_sk IN VISIT.VISIT_SK%TYPE) RETURN NUMBER
+  AS
+  BEGIN
+
+    UPDATE VISIT SET VISIT_ACT_END_TMSTP = v_end_tmstp WHERE VISIT_SK = v_visit_sk;
+
+    RETURN SQL%ROWCOUNT;
+
+  END UPDATE_VISIT_ACT_END_TMSTP;
+  
+  ------------------------------------------------------------------
+  FUNCTION UPDATE_VISIT(v_visit_sk IN VISIT.VISIT_SK%TYPE, v_update_tsmp IN VARCHAR2, v_update_by IN VISIT.REC_UPDATED_BY%TYPE, v_reason_memo IN VISIT.CHANGE_REASON_MEMO%TYPE, v_staff_id IN VISIT.STAFF_ID%TYPE, v_act_start_tmstp IN VARCHAR2, v_act_end_tmstp IN VARCHAR2) RETURN NUMBER
+  AS
+  BEGIN
+  
+    UPDATE VISIT
+    SET
+      REC_UPDATE_TMSTP = TO_DATE(v_update_tsmp, 'YYYY-MM-DD HH24:MI:SS'),
+      REC_UPDATED_BY = v_update_by,
+      CHANGE_REASON_MEMO = v_reason_memo
+    WHERE VISIT_SK = v_visit_sk;
+
+    IF (v_staff_id IS NOT NULL) THEN
+      UPDATE VISIT SET STAFF_ID = v_staff_id WHERE VISIT_SK = v_visit_sk;
+    END IF;
+    
+    IF (v_act_start_tmstp IS NOT NULL) THEN
+      UPDATE VISIT SET VISIT_ACT_START_TMSTP = TO_DATE(v_act_start_tmstp, 'YYYY-MM-DD HH24:MI:SS') WHERE VISIT_SK = v_visit_sk;
+    END IF;
+    
+    IF (v_act_end_tmstp IS NOT NULL) THEN
+      UPDATE VISIT SET VISIT_ACT_END_TMSTP = TO_DATE(v_act_end_tmstp, 'YYYY-MM-DD HH24:MI:SS') WHERE VISIT_SK = v_visit_sk;
+    END IF;
+    
+    RETURN SQL%ROWCOUNT;
+
+  END UPDATE_VISIT;
+  
+  ------------------------------------------------------------------
+  FUNCTION UPDATE_VISIT_EVNT_CALL_IN_IND(v_visit_sk IN VISIT.VISIT_SK%TYPE, v_evnt_time IN VARCHAR2) RETURN NUMBER
+  AS
+  BEGIN
+    UPDATE VISIT_EVNT SET CALL_IN_IND = 1 WHERE VISIT_SK = v_visit_sk AND VISIT_EVNT_DTIME = TO_DATE(v_evnt_time, 'YYYY-MM-DD HH24:MI:SS');
+    
+    RETURN SQL%ROWCOUNT;
+  END UPDATE_VISIT_EVNT_CALL_IN_IND;
+  
+  ------------------------------------------------------------------
+  FUNCTION UPDATE_VISIT_EVNT_IND(v_visit_sk IN VISIT.VISIT_SK%TYPE, v_is_in_call_ind IN NUMBER) RETURN NUMBER
+  AS
+  BEGIN
+
+    IF (v_is_in_call_ind = 1) THEN
+      UPDATE VISIT_EVNT SET CALL_IN_IND = 0 WHERE VISIT_SK = v_visit_sk;
+    ELSE 
+      UPDATE VISIT_EVNT SET CALL_OUT_IND = 0 WHERE VISIT_SK = v_visit_sk;
+    END IF;
+    
+    RETURN SQL%ROWCOUNT;
+  END UPDATE_VISIT_EVNT_IND;
+  
+  ------------------------------------------------------------------
+  FUNCTION CLEAR_EXCEPTIONS_BY_VISIT_SK(v_visit_sk IN VISIT.VISIT_SK%TYPE, v_is_sched_visit_only IN NUMBER, v_exception_ids IN NUMBER_ARRAY) RETURN NUMBER
+  AS
+  BEGIN
+    IF (v_is_sched_visit_only = 1) THEN
+      UPDATE VISIT_EXCP SET REC_TERM_TMSTP = CURRENT_DATE, REC_UPDATE_TMSTP = CURRENT_DATE, REC_UPDATED_BY='VISIT_EXCEPTION_RULES', CURR_REC_IND = 0 WHERE VISIT_SK = v_visit_sk AND EXCP_ID IN (SELECT * FROM TABLE(v_exception_ids));
+    ELSE 
+      UPDATE VISIT_EXCP SET REC_TERM_TMSTP = CURRENT_DATE, REC_UPDATE_TMSTP = CURRENT_DATE, REC_UPDATED_BY='VISIT_EXCEPTION_RULES', CURR_REC_IND = 0 WHERE VISIT_SK = v_visit_sk AND EXCP_ID < 100;
+    END IF;
+  
+    RETURN SQL%ROWCOUNT;
+  END CLEAR_EXCEPTIONS_BY_VISIT_SK;
+  
+END PKG_VISIT_UTIL;
+/

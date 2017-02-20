@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+    <!-- Properties Stored in fuse/etc folder persistent-id.cfg -->
+    <cm:property-placeholder id="quartz.datasource.blueprint.placeholder" persistent-id="com.sandata.quartz.datasource" update-strategy="reload">
+        <cm:default-properties>
+
+            <!-- Quartz2 JDBC Jobstore -->           
+            <cm:property name="org.quartz.dataSource.quartzDataSource.driver" value="oracle.jdbc.driver.OracleDriver" />
+            <cm:property name="org.quartz.dataSource.quartzDataSource.URL" value="jdbc:oracle:thin:@xxx:1526:devdb" />
+            <cm:property name="org.quartz.dataSource.quartzDataSource.user" value="xxx" />
+            <cm:property name="org.quartz.dataSource.quartzDataSource.password" value="xxx" />
+            <cm:property name="org.quartz.dataSource.quartzDataSource.initialSize" value="2" />
+            <cm:property name="org.quartz.dataSource.quartzDataSource.maxConnections" value="5" />
+            <cm:property name="org.quartz.dataSource.quartzDataSource.minIdle" value="5" />
+            <cm:property name="org.quartz.dataSource.quartzDataSource.maxIdle" value="5" />
+            <cm:property name="org.quartz.dataSource.quartzDataSource.validationQuery" value="select 0 from dual" />
+            
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="appContext" class="com.sandata.lab.AppContext" factory-method="InitCamelContext" depends-on="quartzDataSourceContext">
+        <argument ref="quartzDataSourceContext" />
+    </bean>
+
+    <bean id="quartzDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${org.quartz.dataSource.quartzDataSource.driver}"/>
+        <property name="url" value="${org.quartz.dataSource.quartzDataSource.URL}" />
+        <property name="username" value="${org.quartz.dataSource.quartzDataSource.user}" />
+        <property name="password" value="${org.quartz.dataSource.quartzDataSource.password}" />
+        <property name="initialSize" value="${org.quartz.dataSource.quartzDataSource.initialSize}" />
+        <property name="maxActive" value="${org.quartz.dataSource.quartzDataSource.maxConnections}" />
+        <property name="minIdle" value="${org.quartz.dataSource.quartzDataSource.minIdle}"/>
+        <property name="maxIdle" value="${org.quartz.dataSource.quartzDataSource.maxIdle}" />
+        <property name="validationQuery" value="${org.quartz.dataSource.quartzDataSource.validationQuery}"/>
+    </bean>
+
+	<service interface="javax.sql.DataSource" ref="quartzDataSource">
+        <service-properties>
+            <entry key="osgi.jndi.service.name" value="jdbc/quartz_datasource"/>
+        </service-properties>
+	</service>
+
+    <camelContext id="quartzDataSourceContext" useBlueprintPropertyResolver="true" xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- using Camel properties component and refer to the blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <propertyPlaceholder id="properties" location="quartz.datasource.blueprint.placeholder" />
+        <package>com.sandata</package>
+    </camelContext>
+</blueprint>

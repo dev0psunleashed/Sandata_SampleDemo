@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<features name="${project.artifactId}-repository">
+    <feature name="${project.artifactId}" version="${project.version}" description="Sandata Redis Service">
+
+        <feature dependency="true">camel-core</feature>
+        <feature dependency="true">spring</feature>
+        <feature dependency="true">spring-oxm</feature>
+        <feature dependency="true">spring-tx</feature>
+
+        <bundle start-level="82">mvn:commons-logging/commons-logging/${commons.logging.version}</bundle>
+
+    </feature>
+</features>

@@ -1,0 +1,7 @@
+%ORACLE_HOME%\BIN\loadjava.bat -u db.user/db.password@db.server:db.port:db.sid -force -v -r -t -debug -verbose %LAB_ORA_COMMONS_PATH%\sandata-oracle-commons-1.0.1.jar
+
+### Example ###
+set ORACLE_HOME=C:\app\Oracle\product\11.2.0\client_1
+%ORACLE_HOME%\BIN\loadjava.bat -u coredata/z3U0kCdbdN@stxdevdb.sandata.com:1526:sdbdev1 -force -v -r -t -debug -verbose H:\projects\Sandata\LAB\dev\george.java\Commons\OracleCommons\src\main\resources\lib\sandata-oracle-commons.jar
+
+install.bat coredata z3U0kCdbdN stxdevdb.sandata.com 1526 sdbdev1 1.0.1

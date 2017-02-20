@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+    <cm:property-placeholder id="eligibility.process.blueprint.placeholder" persistent-id="com.sandata.lab.eligibility" update-strategy="reload">
+        <cm:default-properties>
+
+            <!-- ActiveMQ configuration -->
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+            <cm:property name="activeMQ.username" value="admin" />
+            <cm:property name="activeMQ.password" value="admin" />
+            <cm:property name="activeMQ.concurrentConsumers" value="1" />
+
+            <cm:property name="thread.pool.size" value="20" />
+            <cm:property name="thread.pool.max.size" value="100" />
+            <cm:property name="thread.pool.max.queue.size" value="-1" />
+            <!-- <cm:property name="rest.concurrentConsumers" value="20" /> -->
+
+            <!-- <cm:property name="webservice.url" value="/data/service/eligibility/process" /> -->
+
+            <!-- Setting to define how frequent the Agency Config db will be polled HH:mm:ss  -->
+            <cm:property name="send.eligibility.inquiry.all.agencies.route.first.fire" value="01:00:00" />
+            <cm:property name="send.eligibility.inquiry.all.agencies.route.frequency.period" value="24h"/>
+
+            <cm:property name="eligibility.process.base.folder" value="target/sandata-eligibility-process" />
+            <cm:property name="temp.folder" value="{{eligibility.process.base.folder}}/ELIGIBILL" />
+            <cm:property name="archive.folder" value="archive" />
+            <cm:property name="error.folder" value="error" />
+
+            <cm:property name="response.temp.folder" value="{{temp.folder}}/responses" />
+
+            <!-- ***************************************************************************************** -->
+            <!-- START: configuration for downloading eligibility response 271 files from ELIGIBILL server -->
+
+            <!-- 'from' endpoint where response JSON files on ELIGIBILL to download to temp folder
+            remove prefix "master:eligibility-process-download-responses:" when deploying the bundle to non-HA environment or local -->
+            <cm:property name="elig.response.download.source" value="master:eligibility-process-download-responses:smb://MDWuser@DEV-LAB-ELIGIBILL01/George_Eligibility_Response_Output?password=RAW(270and271)&amp;idempotentRepository=#redisIdempotentRepo&amp;idempotent=true&amp;idempotentKey=$simple{file:name}-$simple{file:modified}&amp;delay=3s&amp;localWorkDirectory=/tmp&amp;readLock=changed&amp;noop=true" />
+
+            <!-- 'to' endpoint to temporarily save response 271 JSON files before processing -->
+            <cm:property name="elig.response.download.target" value="file://{{response.temp.folder}}" />
+
+            <!-- 'from' endpoint to get/read response 271 JSON files (which were temporarily saved to temp folder) to update eligibility status in database
+            remove prefix "master:eligibility-process-update-responses:" when deploying the bundle to non-HA environment or local -->
+            <cm:property name="elig.response.process.local.dir" value="master:eligibility-process-update-responses:file://{{response.temp.folder}}?antInclude=*.json&amp;move={{archive.folder}}&amp;moveFailed={{error.folder}}" />
+
+            <cm:property name="elig.response.download.redeliverydelay" value="1000" />
+            <cm:property name="elig.response.download.maximumRedeliveries" value="3" />
+            <!-- END: configuration for downloading eligibility response 271 files from ELIGIBILL server -->
+            <!-- ***************************************************************************************** -->
+
+            <!-- ***************************************************************************************** -->
+            <!-- #START: configuration for sending eligibility inquiry 270 files to ELIGIBILL server -->
+
+            <cm:property name="inquiry.temp.folder" value="{{temp.folder}}/inquiries" />
+
+            <!-- 'to' endpoint to temporarily save inquiry 270 JSON files before sending to ELIGIBILL -->
+            <cm:property name="send.eligibility.inquiry.temp.to.endpoint" value="file://{{inquiry.temp.folder}}" />
+
+            <!-- 'from' endpoint where inquiry JSON files are temporarily stored and to be sent to ELIGIBILL
+            remove prefix "master:eligibility-process-sends-inquiry:" when deploying the bundle to non-HA environment or local -->
+            <cm:property name="send.eligibility.inquiry.temp.from.endpoint" value="master:eligibility-process-sends-inquiry:file://{{inquiry.temp.folder}}?readLock=markerFile&amp;move={{archive.folder}}" />
+
+            <!-- shared folder on ELIGIBILL to put inquiry 270 JSON files -->
+            <cm:property name="send.eligibility.inquiry.endpoint" value="smb://MDWuser@DEV-LAB-ELIGIBILL01/George_Eligibility_Import?password=RAW(270and271)" />
+
+            <!-- END: configuration for sending eligibility inquiry 270 files to ELIGIBILL server -->
+            <!-- ***************************************************************************************** -->
+
+            <!-- Quartz2 JDBC Jobstore properties -->
+            <cm:property name="org.quartz.scheduler.instanceName" value="EligibilityProcessClusteredScheduler" />
+            <cm:property name="org.quartz.scheduler.instanceId" value="AUTO" />
+            <cm:property name="org.quartz.scheduler.rmi.export" value="false" />
+            <cm:property name="org.quartz.scheduler.rmi.proxy" value="false" />
+            <cm:property name="org.quartz.scheduler.jmx.export" value="true" />
+            <cm:property name="org.quartz.scheduler.jobFactory.class" value="org.quartz.simpl.SimpleJobFactory" />
+            <cm:property name="org.quartz.threadPool.class" value="org.quartz.simpl.SimpleThreadPool" />
+            <cm:property name="org.quartz.threadPool.threadCount" value="5" />
+            <cm:property name="org.quartz.jobStore.class" value="org.quartz.impl.jdbcjobstore.JobStoreTX" />
+            <cm:property name="org.quartz.jobStore.driverDelegateClass" value="org.quartz.impl.jdbcjobstore.oracle.OracleDelegate" />
+            <cm:property name="org.quartz.jobStore.useProperties" value="false" />
+            <cm:property name="org.quartz.jobStore.dataSource" value="quartzDataSource" />
+            <cm:property name="org.quartz.jobStore.tablePrefix" value="QRTZ_" />
+            <cm:property name="org.quartz.jobStore.isClustered" value="true" />
+            <cm:property name="org.quartz.dataSource.quartzDataSource.jndiURL" value="osgi:service/jdbc/quartz_datasource" />
+
+            <!-- LevelDB configuration -->
+            <cm:property name="level.db.directory" value="${eligibility.process.base.folder}/level-db/eligibility" />
+            <cm:property name="level.db.max.retry" value="5" />
+            <!-- wait time in milliseconds between retries -->
+            <cm:property name="level.db.retry.wait" value="500" />
+
+            <!-- ***************************************************************************************** -->
+            <!-- START: Cleanup archive folders configuration -->
+
+            <!-- 'from' endpoint from which the CleanupArchiveFolderRoute to start
+            remove prefix "master:eligibility-process-cleanup-archive-folder:" when deploying the bundle to non-HA environment or local -->
+            <cm:property name="cleanup.archive.folder.from.endpoint" value="master:eligibility-process-cleanup-archive-folder:file://{{temp.folder}}?recursive=true&amp;delete=true&amp;antInclude={{cleanup.archive.folder.ant.include.pattern}}&amp;delay={{cleanup.archive.folder.delay}}&amp;filter=#obsoleteArchiveFileFilter" />
+
+            <cm:property name="cleanup.archive.folder.ant.include.pattern" value="**/{{archive.folder}}/*" />
+
+            <!-- delay time to run CleanupArchiveFolderRoute (remove obsolete archived files) -->
+            <cm:property name="cleanup.archive.folder.delay" value="24h"/>
+
+            <!-- Retention duration in days in archive folders before being obsolete -->
+            <cm:property name="cleanup.archive.folder.retention.duration" value="180"/>
+
+            <!-- END: Cleanup archive folders configuration -->
+            <!-- ***************************************************************************************** -->
+
+            <!-- idempotent repository name in Redis for downloading response 271 JSON files. It should be in format {project.artifactId}.{name of repository} -->
+            <cm:property name="redis.idempotent.repo.download.271.files.name" value="sandata-eligibility-process.download-271-files-repo" />
+
+             <!-- mapping from BenefitInformationCode in ELIGIBILL service to Eligibility status in GEORGE -->
+             <!-- when overwriting in .cfg, use this format: eligibility.status.mapping={ActiveCoverage=Active, HealthCareFacility=Pending, ManagedCareCoorinator=Pending} -->
+             <cm:property name="eligibility.status.mapping">
+                 <map>
+                     <entry key="ActiveCoverage" value="Active" />
+                     <entry key="ActiveFullRiskCapitation" value="Active" />
+                     <entry key="ActiveServicesCapitated" value="Active" />
+                     <entry key="ActiveServicesCapitatedToPrimaryCarePhysician" value="Active" />
+                     <entry key="ActivePendingInvestigation" value="Active" />
+                     <entry key="Inactive" value="Inactive" />
+                     <entry key="InactivePendingEligibilityUpdate" value="Inactive" />
+                     <entry key="InactivePendingInvestigation" value="Inactive" />
+                     <entry key="CoInsurance" value="Pending" />
+                     <entry key="CoPayment" value="Pending" />
+                     <entry key="Deductible" value="Pending" />
+                     <entry key="CoverageBasis" value="Pending" />
+                     <entry key="BenefitDescription" value="Pending" />
+                     <entry key="Exclusions" value="Pending" />
+                     <entry key="Limitations" value="Pending" />
+                     <entry key="OutOfPocket" value="Pending" />
+                     <entry key="Unlimited" value="Pending" />
+                     <entry key="NonCovered" value="Pending" />
+                     <entry key="CostContainment" value="Pending" />
+                     <entry key="Reserve" value="Pending" />
+                     <entry key="PrimaryCareProvider" value="Pending" />
+                     <entry key="PreExistingCondition" value="Pending" />
+                     <entry key="ManagedCareCoorinator" value="Pending" />
+                     <entry key="ServiceRestrictedToFollowingProvider" value="Pending" />
+                     <entry key="NotDeemedAMedicalNecessity" value="Pending" />
+                     <entry key="BenefitDisclaimer" value="Pending" />
+                     <entry key="SecondSurgicalOpinionRequired" value="Pending" />
+                     <entry key="OtherOrAdditionalPayer" value="Pending" />
+                     <entry key="PriorYearsHistory" value="Pending" />
+                     <entry key="CardsReportedLostOrStolen" value="Pending" />
+                     <entry key="ContactFollowingEntityForEligibilityOrBenefitInformation" value="Active" />
+                     <entry key="CannotProcess" value="Pending" />
+                     <entry key="OtherSourceOfData" value="Pending" />
+                     <entry key="HealthCareFacility" value="Pending" />
+                     <entry key="SpendDown" value="Pending" />
+                 </map>
+             </cm:property>
+
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="oracleDataService" class="com.sandata.lab.eligibility.impl.OracleDataService" depends-on="eligibilityProcessCamelContext">
+        <property name="connectionPoolDataService">
+            <reference
+                    interface="com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService"
+                    availability="mandatory" />
+        </property>
+    </bean>
+
+    <bean id="coreDataSource" class="com.sandata.lab.eligibility.data.SandataOracleCoreDataSourceAdapter" depends-on="eligibilityProcessCamelContext">
+        <argument>
+            <reference
+                    interface="com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService"
+                    availability="mandatory" />
+        </argument>
+    </bean>
+
+    <bean id="eligibilityInquiryProcessor" class="com.sandata.lab.eligibility.processors.EligibilityInquiryProcessor" depends-on="oracleDataService">
+        <property name="oracleDataService" ref="oracleDataService" />
+    </bean>
+
+    <bean id="eligibilityResponseProcessor" class="com.sandata.lab.eligibility.processors.EligibilityResponseProcessor" depends-on="oracleDataService keyValueStorageService">
+        <argument value="${eligibility.status.mapping}" />
+        <property name="oracleDataService" ref="oracleDataService" />
+        <property name="keyValueStorageService" ref="keyValueStorageService" />
+    </bean>
+
+    <bean id="keyValueStorageService" class="com.sandata.lab.eligibility.leveldb.LevelDbStorageService" depends-on="eligibilityProcessCamelContext">
+        <!-- dbDirectory -->
+        <argument value="${level.db.directory}" />
+        <property name="maxRetry" value="${level.db.max.retry}" />
+        <property name="retryWait" value="${level.db.retry.wait}" />
+    </bean>
+
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate" depends-on="eligibilityProcessCamelContext" init-method="afterPropertiesSet">
+        <property name="connectionFactory">
+            <reference
+                    interface="org.springframework.data.redis.connection.RedisConnectionFactory"
+                    availability="mandatory" />
+        </property>
+    </bean>
+
+    <bean id="appContext" class="com.sandata.lab.eligibility.app.AppContext"
+          factory-method="initCamelContext" depends-on="eligibilityProcessCamelContext">
+        <argument ref="eligibilityProcessCamelContext" />
+    </bean>
+
+    <bean id="gsonProvider" class="com.sandata.lab.common.utils.data.provider.GSONProvider"/>
+
+    <!-- connect to the local ActiveMQ broker -->
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="brokerURL" value="${activeMQ.uri}" />
+        <property name="userName" value="${activeMQ.username}" />
+        <property name="password" value="${activeMQ.password}" />
+        <property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+    </bean>
+
+    <!-- Quartz component bean  -->
+    <bean id="quartz2" class="org.apache.camel.component.quartz2.QuartzComponent">
+        <property name="properties">
+            <props>
+                <prop key="org.quartz.scheduler.instanceName" value="${org.quartz.scheduler.instanceName}" />
+                <prop key="org.quartz.scheduler.instanceId" value="${org.quartz.scheduler.instanceId}" />
+                <prop key="org.quartz.scheduler.rmi.export" value="${org.quartz.scheduler.rmi.export}" />
+                <prop key="org.quartz.scheduler.rmi.proxy" value="${org.quartz.scheduler.rmi.proxy}" />
+                <prop key="org.quartz.scheduler.jmx.export" value="${org.quartz.scheduler.jmx.export}" />
+                <prop key="org.quartz.scheduler.jobFactory.class" value="${org.quartz.scheduler.jobFactory.class}" />
+                <prop key="org.quartz.threadPool.class" value="${org.quartz.threadPool.class}" />
+                <prop key="org.quartz.threadPool.threadCount" value="${org.quartz.threadPool.threadCount}" />
+                <prop key="org.quartz.jobStore.class" value="${org.quartz.jobStore.class}" />
+                <prop key="org.quartz.jobStore.driverDelegateClass" value="${org.quartz.jobStore.driverDelegateClass}" />
+                <prop key="org.quartz.jobStore.useProperties" value="${org.quartz.jobStore.useProperties}" />
+                <prop key="org.quartz.jobStore.dataSource" value="${org.quartz.jobStore.dataSource}" />
+                <prop key="org.quartz.jobStore.tablePrefix" value="${org.quartz.jobStore.tablePrefix}" />
+                <prop key="org.quartz.jobStore.isClustered" value="${org.quartz.jobStore.isClustered}" />
+                <prop  key="org.quartz.dataSource.quartzDataSource.jndiURL"  value="${org.quartz.dataSource.quartzDataSource.jndiURL}"/>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="redisIdempotentRepo" class="com.sandata.lab.redis.idempotent.RedisIdempotentRepositoryDelegator">
+        <argument ref="redisTemplate" />
+        <argument value="${redis.idempotent.repo.download.271.files.name}" />
+    </bean>
+
+    <bean id="obsoleteArchiveFileFilter" class="com.sandata.lab.eligibility.filters.ObsoleteArchiveFileFilter">
+        <property name="retentionDuration" value="${cleanup.archive.folder.retention.duration}"/>
+    </bean>
+
+    <camelContext id="eligibilityProcessCamelContext" trace="false" streamCache="true" useBlueprintPropertyResolver="true" xmlns="http://camel.apache.org/schema/blueprint" managementNamePattern="#name#-#version#">
+        <!-- using Camel properties component and refer to the OSGI-INF.blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <!-- <propertyPlaceholder id="properties" location="OSGI-INF.blueprint:dhs.OSGI-INF.blueprint.placeholder"/>-->
+        <propertyPlaceholder id="properties" location="blueprint:eligibility.process.blueprint.placeholder"/>
+        <package>com.sandata.lab.eligibility.routes.system</package>
+        <threadPoolProfile id="eligibilityProcessThreadPool" poolSize="{{thread.pool.size}}" maxPoolSize="{{thread.pool.max.size}}" maxQueueSize="{{thread.pool.max.queue.size}}"/>
+    </camelContext>
+</blueprint>

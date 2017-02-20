@@ -1,0 +1,34 @@
+import com.sandata.rules.compliance.domain.StaffFact;
+import com.sandata.rules.compliance.domain.StaffComplianceResult
+dialect  "mvel"
+
+rule "Collect Non-Compliant Results"
+    agenda-group "compliance-collect"
+    when
+        $staffFact : StaffFact()
+        $staffComplianceResult : StaffComplianceResult(staffFact == $staffFact,
+            compliant)
+    then
+        System.out.println("Compliant result collected!\n"
+        + $staffFact.toString()
+        + "\n"
+        + $staffComplianceResult.toString());
+        $staffFact.addStaffComplianceResult($staffComplianceResult);
+        retract($staffComplianceResult)
+end;
+
+rule "Collect Compliant Results"
+agenda-group "compliance-collect"
+    when
+        $staffFact : StaffFact()
+        $staffComplianceResult : StaffComplianceResult(staffFact == $staffFact,
+            !compliant)
+    then
+        System.out.println("Non-compliant result collected!\n"
+            + $staffFact.toString()
+            + "\n"
+            + $staffComplianceResult.toString());
+        $staffFact.setCompliant(false);
+        $staffFact.addStaffComplianceResult($staffComplianceResult);
+        retract($staffComplianceResult)
+end;

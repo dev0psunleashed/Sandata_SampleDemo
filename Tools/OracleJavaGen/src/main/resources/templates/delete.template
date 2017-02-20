@@ -1,0 +1,6 @@
+    @DELETE
+    @Path("/__PATH__/{sequence_key}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public final Response __METHOD__(@PathParam("sequence_key") int sequenceKey) {
+        return null;
+    }

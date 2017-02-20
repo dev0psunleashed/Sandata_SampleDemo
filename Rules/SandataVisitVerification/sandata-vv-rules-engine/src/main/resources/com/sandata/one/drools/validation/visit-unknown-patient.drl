@@ -1,0 +1,33 @@
+//created on: Jan 24, 2017
+package com.sandata.one.drools.validation
+
+import com.sandata.lab.rules.vv.fact.ScheduleEventFact;
+import com.sandata.lab.rules.vv.fact.VisitEventFact;
+import com.sandata.lab.rules.vv.fact.VisitFact;
+import com.sandata.one.drools.utils.Constants;
+import com.sandata.one.drools.utils.CommonUtils;
+
+import org.slf4j.LoggerFactory;
+import com.sandata.lab.rules.vv.log.utils.App;
+import java.math.BigInteger;
+
+import function com.sandata.one.drools.utils.CommonUtils.helper;
+
+dialect  "mvel"
+
+rule "A stand alone rule for unknow patient validation"
+
+    salience 100
+    when
+        $visitFact : VisitFact(patientId == null)
+        $scheduleEventFact : ScheduleEventFact ()
+        $visitEventFact : VisitEventFact() 
+
+    then
+        
+        if(CommonUtils.getApplicableExceptions($scheduleEventFact, $visitEventFact, $visitFact).contains(Constants.EXCEPTION_TYPE.UNKNOWN_PATIENT.getExceptionId())) {
+        	$visitFact.addVisitException($visitFact.getVisitSk(), Constants.EXCEPTION_TYPE.UNKNOWN_PATIENT.getExceptionId());
+        }
+		helper(drools);
+end;
+

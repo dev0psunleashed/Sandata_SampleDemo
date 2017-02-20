@@ -1,0 +1,100 @@
+SELECT *
+FROM
+  (SELECT ROWNUM ROW_NUMBER,
+    COUNT(*) OVER() TOTAL_ROWS,
+    R1.*
+  FROM
+    (SELECT DISTINCT PKG_STAFF_UTIL.HIRE_DATE(T1.STAFF_ID, T2.BE_ID) AS ORIGINAL_STAFF_HIRE_DATE,
+      T1.STAFF_POSITION_NAME,
+      T1.STAFF_ID,
+      T1.STAFF_SK,
+      T1.STAFF_FIRST_NAME,
+      T1.STAFF_LAST_NAME,
+      T1.STAFF_DOB,
+      T1.STAFF_EMPLT_STATUS_TYP_NAME,
+      T1.STAFF_HIRE_DATE,
+      T3.BE_ID_NUM AS STAFF_LOCATION_XWALK,
+      T1.STAFF_LAST_HIRE_DATE,
+      T1Addr.STAFF_ADDR1,
+      T1Addr.STAFF_ADDR2,
+      T1Addr.STAFF_CITY,
+      T1Addr.STAFF_STATE,
+      T1Addr.STAFF_PSTL_CODE,
+      T2.BE_ID,
+      T2.BE_SK,
+      T2.BE_NAME,
+      T2.BE_TYP,
+      T2.BE_PRMY_ADDR1,
+      T2.BE_PRMY_ADDR2,
+      T2.BE_PRMY_CITY,
+      T2.BE_PRMY_STATE,
+      T2.BE_PRMY_PSTL_CODE,
+      T2.BE_PRMY_ZIP4,
+      T2.BE_PRMY_PHONE_1,
+      T1Phone.STAFF_PHONE,
+      CAST(PKG_STAFF_UTIL.LAST_DATE_WORKED(T1.STAFF_SK) AS DATE) AS LAST_DATE_WORKED
+    FROM STAFF T1
+    LEFT JOIN
+      (SELECT BE_ID,
+        STAFF_ID,
+        STAFF_ADDR1,
+        STAFF_ADDR2,
+        STAFF_CITY,
+        STAFF_STATE,
+        STAFF_PSTL_CODE,
+        REC_TERM_TMSTP,
+        CURR_REC_IND
+      FROM STAFF_CONT_ADDR
+      WHERE (TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+      AND CURR_REC_IND                             = '1')
+      AND UPPER(ADDR_PRIO_NAME)                    = 'PRIMARY'
+      ) T1Addr
+    ON T1.STAFF_ID = T1Addr.STAFF_ID
+    AND T1.BE_ID   = T1Addr.BE_ID
+    LEFT JOIN
+      (SELECT BE_ID,
+        STAFF_ID,
+        STAFF_PHONE,
+        REC_TERM_TMSTP,
+        CURR_REC_IND
+      FROM STAFF_CONT_PHONE
+      WHERE (TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+      AND CURR_REC_IND                             = '1')
+      AND UPPER(ADDR_PRIO_NAME)                    = 'PRIMARY'
+      AND STAFF_PHONE_PRMY_IND                     = 1
+      ) T1Phone
+    ON T1.STAFF_ID = T1Phone.STAFF_ID
+    AND T1.BE_ID   = T1Phone.BE_ID
+    INNER JOIN
+      (SELECT BE_SK,
+        BE_ID,
+        BE_NAME,
+        BE_TYP,
+        BE_PRMY_ADDR1,
+        BE_PRMY_ADDR2,
+        BE_PRMY_CITY,
+        BE_PRMY_STATE,
+        BE_PRMY_PSTL_CODE,
+        BE_PRMY_ZIP4,
+        BE_PRMY_PHONE_1,
+        REC_TERM_TMSTP,
+        CURR_REC_IND
+      FROM BE
+      ) T2
+    ON T1.BE_ID = T2.BE_ID
+    LEFT JOIN
+      (SELECT BE_ID, BE_ID_TYP, BE_ID_QLFR, BE_ID_NUM FROM BE_ID_XWALK
+      ) T3
+    ON T1.STAFF_LOC = T3.BE_ID
+    WHERE T1.BE_ID  = 1
+    AND UPPER(T1.STAFF_LAST_NAME) LIKE '%LAST%'
+    AND (TO_CHAR(T1.REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+    AND T1.CURR_REC_IND                           = '1')
+    AND (TO_CHAR(T2.REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31'
+    AND T2.CURR_REC_IND                           = '1')
+    AND T3.BE_ID_TYP                              = 'LOCATION'
+    AND T3.BE_ID_QLFR                             = 'CODE'
+    ORDER BY T1.STAFF_LAST_NAME ASC
+    ) R1
+  )
+WHERE ROW_NUMBER BETWEEN 1 AND 50

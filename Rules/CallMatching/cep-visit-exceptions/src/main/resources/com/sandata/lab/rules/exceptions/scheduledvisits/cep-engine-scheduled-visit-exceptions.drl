@@ -1,0 +1,215 @@
+package com.sandata.lab.rules.exceptions.scheduledvisits;
+
+import com.sandata.lab.rules.call.model.VisitFact;
+import com.sandata.lab.rules.call.model.Schedule;
+import com.sandata.lab.rules.call.model.State;
+import com.sandata.lab.data.model.dl.model.VisitTaskList;
+import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory
+import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.List
+import java.util.Iterator;
+import java.lang.Boolean;
+
+
+//import function com.sandata.lab.rules.call.matching.drools.HelperFunctions.diffDates
+function Date currentTime() {
+    return new Date();
+}
+
+function Calendar DateToCalendar(Date date) {
+         		Calendar cal = Calendar.getInstance();
+         		cal.setTime(date);
+         		return cal;
+}
+
+function Date CreateDateWithOffset(Date startDate, int i) {
+         		Calendar calendar = DateToCalendar(startDate);
+         		calendar.add(Calendar.HOUR_OF_DAY, i);
+         		return calendar.getTime();
+}
+
+function long diffDates(Date d1, Date d2) {
+    long retResult = 0L;
+    LoggerFactory.getLogger("RulesCallMatching.diffDates").info(String.format("First Date d1 = %s, Second Date d2 = %s", d1.toString(), d2.toString()));
+    LoggerFactory.getLogger("RulesCallMatching.diffDates").info(String.format("getTime method results d1.getTime() = %d, d2.getTime() = %d", d1.getTime(), d2.getTime()));
+
+    if(d1.after(d2)) {
+        retResult = d1.getTime() - d2.getTime();
+        LoggerFactory.getLogger("RulesCallMatching.diffDates").info(String.format("First Date is After Second Date (d1.getTime() - d2.getTime() = %d", retResult));
+    }
+    else
+    {
+        retResult = d2.getTime() - d1.getTime();
+        LoggerFactory.getLogger("RulesCallMatching.diffDates").info(String.format("First Date is Equal To or Before Second Date (d2.getTime() - d1.getTime() = %d", retResult));
+
+    }
+
+    return retResult;
+}
+
+global com.sandata.lab.rules.call.model.CallPreferences callPreferences;//callPreferences
+global ch.qos.logback.classic.Logger visitExcpLog;
+
+declare Threshold
+  value : Long @key
+end
+
+dialect "java"
+
+rule "cep-visit-exceptions-init-check-global-callPreferences-0000"
+    salience 1000
+    agenda-group "scheduled-visit"
+    when
+        eval(true)
+    then
+        visitExcpLog.info("Initialized rules checking global");
+        visitExcpLog.info(String.format("callPreferences.getDeviationThresholdMinutes() returned : %d", callPreferences.getDeviationThresholdMinutes()));
+        visitExcpLog.info(String.format("callPreferences.getMinVisitDurationMS() returned : %d", callPreferences.getMinVisitDurationMS()));
+        visitExcpLog.info(String.format("callPreferences.getStaffIdMatchLength() returned : %d", callPreferences.getStaffIdMatchLength()));
+end
+
+
+rule "cep-scheduled-visit-exceptions-no-show-000"
+    salience 999
+    agenda-group "scheduled-visit"
+   when
+        $visit : VisitFact(stateIsLessThan(State.VISIT_NO_SHOW), callIn == null, callOut == null)
+        $schedule : Schedule( forVisit($visit), startTime.before(currentTime()), diff(startTime, currentTime()) > (callPreferences.getVisitNoShowMinutes() * 60000) )
+
+   then
+        $visit.setState(State.VISIT_NO_SHOW);
+        update($visit);
+        retract($visit);
+        retract($schedule);
+        visitExcpLog.info(String.format("cep-engine-schedule-visit-exceptions.drl::rule=%s, description=%s","RulesVisitExceptions::cep-scheduled-visit-exceptions-no-show-000::", "Adding No Show Exception"));
+end
+
+rule "cep-scheduled-visit-exceptions-actual-hours-more-than-scheduled-hours-001"
+    salience 998
+    agenda-group "scheduled-visit"
+   when
+        $visit : VisitFact(stateIsLessThan(State.ACTUAL_HOURS_EXCEED_SCHEDULED_HOURS), callIn != null, callOut != null)
+        $schedule : Schedule(forVisit($visit), timeSpan < diff($visit.getCallIn(), $visit.getCallOut()) )
+
+   then
+        $visit.setState(State.ACTUAL_HOURS_EXCEED_SCHEDULED_HOURS);
+        update($visit);
+        visitExcpLog.info(String.format("cep-engine-schedule-visit-exceptions.drl::rule=%s, description=%s","RulesVisitExceptions::cep-scheduled-visit-exceptions-actual-hours-more-than-scheduled-hours-001", "Adding Actual Hours Exceeded Scheduled Hours Exception"));
+end
+
+rule "cep-scheduled-visit-exceptions-loaded_vsr_1"
+         salience 997
+         agenda-group "scheduled-visit"
+        when
+             $visit : VisitFact( stateIsLessThan(State.ACTUAL_HOURS_EXCEED_SCHEDULED_HOURS) )
+   then
+        $visit.setState(State.LOADED_VSR_1);
+        update($visit);
+    end
+
+rule "cep-scheduled-visit-exceptions-unmatched-payroll-and-scheduled-hours-002"
+    salience 996
+    agenda-group "scheduled-visit"
+   when
+        $visit : VisitFact(stateIsLessThan(State.UNMATCHED_PAYROLL_AND_SCHEDULED_HOURS), callIn != null, callOut != null)
+        $schedule : Schedule(forVisit($visit), timeSpan < diff($visit.getCallIn(), $visit.getCallOut()) )
+
+   then
+        $visit.setState(State.UNMATCHED_PAYROLL_AND_SCHEDULED_HOURS);
+        update($visit);
+        visitExcpLog.info(String.format("cep-engine-schedule-visit-exceptions.drl::rule=%s, description=%s","RulesVisitExceptions::cep-scheduled-visit-exceptions-unmatched-payroll-and-scheduled-hours-002::", "Adding Unmatched Payroll And Scheduled Hours Exception"));
+end
+
+rule "cep-scheduled-visit-exceptions-loaded_vsr_2"
+    salience 995
+    agenda-group "scheduled-visit"
+   when
+        $visit : VisitFact(stateIsLessThan(State.UNMATCHED_PAYROLL_AND_SCHEDULED_HOURS) )
+   then
+        $visit.setState(State.LOADED_VSR_2);
+        update($visit);
+
+    end
+rule "cep-scheduled-visit-exceptions-late-in-call-003"
+    salience 994
+    agenda-group "scheduled-visit"
+   when
+        $visit : VisitFact(stateIsLessThan(State.VISIT_LATE_IN_CALL), callIn != null, callOut != null)
+        $schedule : Schedule(forVisit($visit), startTime.before($visit.getCallIn()), diff($visit.getCallIn(), startTime) > (callPreferences.getVisitLateInMinutes() * 60000) )
+   then
+        $visit.setState(State.VISIT_LATE_IN_CALL);
+        update($visit);
+        visitExcpLog.info(String.format("cep-engine-schedule-visit-exceptions.drl::rule=%s, description=%s","RulesVisitExceptions::cep-scheduled-visit-exceptions-late-in-call-003::", "Adding Late In Call Exception"));
+end
+rule "cep-scheduled-visit-exceptions-loaded_vsr_3"
+    salience 993
+    agenda-group "scheduled-visit"
+   when
+        $visit : VisitFact(stateIsLessThan(State.VISIT_LATE_IN_CALL) )
+   then
+        $visit.setState(State.LOADED_VSR_3);
+            update($visit);
+
+    end
+
+rule "cep-scheduled-visit-exceptions-early-out-call-004"
+    salience 992
+    agenda-group "scheduled-visit"
+   when
+        $visit : VisitFact(stateIsLessThan(State.VISIT_EARLY_OUT_CALL), callIn != null, callOut != null)
+        $schedule : Schedule(forVisit($visit), endTime.after($visit.getCallOut()), diff($visit.getCallOut(), endTime) > (callPreferences.getVisitEarlyOutMinutes() * 60000) )
+
+   then
+        $visit.setState(State.VISIT_EARLY_OUT_CALL);
+        update($visit);
+        visitExcpLog.info(String.format("cep-engine-schedule-visit-exceptions.drl::rule=%s, description=%s","RulesVisitExceptions::cep-scheduled-visit-exceptions-unmatched-payroll-and-scheduled-hours-002::", "Adding Early Out Exception"));
+end
+rule "cep-scheduled-visit-exceptions-loaded_vsr_4"
+    salience 991
+    agenda-group "scheduled-visit"
+   when
+        $visit : VisitFact(stateIsLessThan(State.VISIT_EARLY_OUT_CALL) )
+   then
+        $visit.setState(State.LOADED_VSR_4);
+            update($visit);
+
+    end
+
+rule "cep-scheduled-visit-exceptions-short-visit-005"
+    salience 990
+    agenda-group "scheduled-visit"
+   when
+        $visit : VisitFact(stateIsLessThan(State.VISIT_SHORT), callIn != null, callOut != null)
+        $schedule : Schedule(forVisit($visit), diffDates(startTime, endTime) > diff($visit.getCallIn(), $visit.getCallOut()),  ( diffDates(startTime, endTime) - diffDates($visit.getCallIn(), $visit.getCallOut()) ) > (callPreferences.getVisitShortMinutes() * 60000) )
+
+   then
+        $visit.setState(State.VISIT_SHORT);
+        update($visit);
+        visitExcpLog.info(String.format("cep-engine-schedule-visit-exceptions.drl::rule=%s, description=%s","RulesVisitExceptions::cep-scheduled-visit-exceptions-short-visit-005::", "Adding Short Visit Exception"));
+end
+
+rule "cep-scheduled-visit-exceptions-loaded_vsr_5"
+    salience 989
+    agenda-group "scheduled-visit"
+   when
+        $visit : VisitFact(stateIsLessThan(State.VISIT_SHORT) )
+        $schedule : Schedule (forVisit($visit))
+   then
+        $visit.setState(State.LOADED_VSR_5);
+        update($visit);
+        retract($visit);
+        retract($schedule);
+    end
+
+
+/*  Ordinal order
+    ACTUAL_HOURS_EXCEED_SCHEDULED_HOURS,
+	UNMATCHED_PAYROLL_AND_SCHEDULED_HOURS,
+	VISIT_LATE_IN_CALL,
+	VISIT_EARLY_OUT_CALL,
+	VISIT_SHORT,
+	VISIT_NO_SHOW
+*/

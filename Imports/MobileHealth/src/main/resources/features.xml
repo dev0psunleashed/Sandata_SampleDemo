@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<features name="sandata-mobile-health-repository">
+    <feature name="sandata-mobile-health" version="${project.version}" start-leve="60"
+             description="Sandata Mobile Health">
+        <feature dependency="true">camel-quartz2</feature>
+        <feature dependency="true">camel-bindy</feature>
+        <feature dependency="true">camel-ftp</feature>
+        
+        <bundle start-level="60">mvn:org.apache.commons/commons-lang3/${commons.langs3.version}</bundle>
+        <bundle start-level="60">mvn:com.google.code.gson/gson/${gson.version}</bundle>
+        <bundle start-level="60">mvn:joda-time/joda-time/${joda.version}</bundle>
+
+        <bundle start-level="71">wrap:mvn:com.microsoft.sqlserver/sqljdbc4/${mssql.version}</bundle>
+        <bundle start-level="77">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${servicemix.bundles.version}</bundle>
+        <bundle start-level="77">wrap:mvn:org.springframework/spring-jdbc/${springframework.version}</bundle>
+        <!-- fix bug related to MBean Exception while using quartz2 jobstore  -->
+        <bundle start-level="85">mvn:com.sandata/sandata-mobile-health/${project.version}</bundle> 
+    </feature>
+</features>

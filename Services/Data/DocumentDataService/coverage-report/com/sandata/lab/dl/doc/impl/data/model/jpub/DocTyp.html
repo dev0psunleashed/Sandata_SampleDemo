@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DocT.java</title>
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+  <link rel='stylesheet' type='text/css' href='../../../../../../../../../coverage.css'/>
+  <link rel='shortcut icon' type='image/png' href='../../../../../../../../../logo.png'/>
+  <script type='text/javascript' src='../../../../../../../../../coverage.js'></script>
+  <script type='text/javascript' src='../../../../../../../../../prettify.js'></script>
+</head>
+<body onload='prettyPrint()'>
+  <table cellpadding='0' cellspacing='1'>
+    <caption>DocumentDataService\src\main\java\com\sandata\lab\dl\doc\impl\data\model\jpub\DocT.java</caption>
+    <tr>
+      <td class='line'>1</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>package com.sandata.lab.dl.doc.impl.data.model.jpub;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'></td><td>&nbsp;</td>
+      <td><pre class='imports prettyprint' onclick='showHideLines(this)'><div>import java.sql.SQLException;
+import java.sql.Connection;
+import oracle.jdbc.OracleTypes;
+import oracle.sql.ORAData;
+import oracle.sql.ORADataFactory;
+import oracle.sql.Datum;
+import oracle.sql.STRUCT;
+import oracle.jpub.runtime.MutableStruct;
+</div><span>import ...</span></pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>12</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>public class DocT implements ORAData, ORADataFactory</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>13</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>{</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>14</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public static final String _SQL_NAME = "LOBDATA.DOC_TYP";</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>15</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public static final int _SQL_TYPECODE = OracleTypes.STRUCT;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>17</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  protected MutableStruct _struct;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>19</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l19s0'>  protected static int[] _sqlType =  { 2,12,2,91,91,2004 };</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>20</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l20s0'>  protected static ORADataFactory[] _factory = new ORADataFactory[6];</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>21</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l21s0'>  protected static final DocT _DocTypFactory = new DocT();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>23</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public static ORADataFactory getORADataFactory()</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>24</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l24s0'>  { return _DocTypFactory; }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>25</td><td>&nbsp;</td>
+      <td><pre class='comment'>  /* constructors */</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>26</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  protected void _init_struct(boolean init)</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>27</td><td class='count'>2</td>
+      <td><pre class='prettyprint jmp'>  <span id='l27s0' title='Executions: 2' class='covered'>{ if (init)</span> <span id='l27s1' title='Executions: 2' class='covered'>_struct = new MutableStruct(new Object[6], _sqlType, _factory); }</span></pre></td>
+    </tr>
+    <tr>
+      <td class='line'>28</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public DocT()</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>29</td><td class='count'>2</td>
+      <td><pre class='prettyprint covered' id='l29s0'>  { _init_struct(true); }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>30</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public DocT(java.math.BigDecimal docSk, String docId, java.math.BigDecimal docTypLkupSk, java.sql.Timestamp createTmstp, java.sql.Timestamp updateTmstp, oracle.sql.BLOB doc) throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>31</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l31s0'>  { _init_struct(true);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>32</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l32s0'>    setDocSk(docSk);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>33</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l33s0'>    setDocId(docId);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>34</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l34s0'>    setDocTypLkupSk(docTypLkupSk);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>35</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l35s0'>    setRecCreateTmstp(createTmstp);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>36</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l36s0'>    setRecUpdateTmstp(updateTmstp);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>37</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l37s0'>    setDoc(doc);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>38</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l38s0'>  }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>40</td><td>&nbsp;</td>
+      <td><pre class='comment'>  /* ORAData interface */</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>41</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public Datum toDatum(Connection c) throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>42</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>43</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l43s0'>    return _struct.toDatum(c, _SQL_NAME);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>44</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>47</td><td>&nbsp;</td>
+      <td><pre class='comment'>  /* ORADataFactory interface */</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>48</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public ORAData create(Datum d, int sqlType) throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>49</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l49s0'>  { return create(null, d, sqlType); }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>50</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  protected ORAData create(DocT o, Datum d, int sqlType) throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>51</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>52</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>    <span id='l52s0' title='Executions: 0' class='uncovered'>if (d == null)</span> <span id='l52s1' title='Executions: 0' class='uncovered'>return null;</span> </pre></td>
+    </tr>
+    <tr>
+      <td class='line'>53</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>    <span id='l53s0' title='Executions: 0' class='uncovered'>if (o == null)</span> <span id='l53s1' title='Executions: 0' class='uncovered'>o = new DocT();</span></pre></td>
+    </tr>
+    <tr>
+      <td class='line'>54</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l54s0'>    o._struct = new MutableStruct((STRUCT) d, _sqlType, _factory);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>55</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l55s0'>    return o;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>56</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>57</td><td>&nbsp;</td>
+      <td><pre class='comment'>  /* accessor methods */</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>58</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public java.math.BigDecimal getDocSk() throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>59</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l59s0'>  { return (java.math.BigDecimal) _struct.getAttribute(0); }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>61</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public void setDocSk(java.math.BigDecimal docSk) throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>62</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l62s0'>  { _struct.setAttribute(0, docSk); }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>65</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public String getDocId() throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>66</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l66s0'>  { return (String) _struct.getAttribute(1); }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>68</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public void setDocId(String docId) throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>69</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l69s0'>  { _struct.setAttribute(1, docId); }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>72</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public java.math.BigDecimal getDocTypLkupSk() throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>73</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l73s0'>  { return (java.math.BigDecimal) _struct.getAttribute(2); }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>75</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public void setDocTypLkupSk(java.math.BigDecimal docTypLkupSk) throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>76</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l76s0'>  { _struct.setAttribute(2, docTypLkupSk); }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>79</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public java.sql.Timestamp getRecCreateTmstp() throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>80</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l80s0'>  { return (java.sql.Timestamp) _struct.getAttribute(3); }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>82</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public void setRecCreateTmstp(java.sql.Timestamp createTmstp) throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>83</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l83s0'>  { _struct.setAttribute(3, createTmstp); }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>86</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public java.sql.Timestamp getRecUpdateTmstp() throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>87</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l87s0'>  { return (java.sql.Timestamp) _struct.getAttribute(4); }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>89</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public void setRecUpdateTmstp(java.sql.Timestamp updateTmstp) throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>90</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l90s0'>  { _struct.setAttribute(4, updateTmstp); }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>93</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public oracle.sql.BLOB getDoc() throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>94</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l94s0'>  { return (oracle.sql.BLOB) _struct.getOracleAttribute(5); }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>96</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>  public void setDoc(oracle.sql.BLOB doc) throws SQLException</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>97</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l97s0'>  { _struct.setOracleAttribute(5, doc); }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>99</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>}</pre></td>
+    </tr>
+  </table>
+</body>
+</html>

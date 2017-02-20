@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User.java</title>
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+  <link rel='stylesheet' type='text/css' href='../../../../../../../coverage.css'/>
+  <link rel='shortcut icon' type='image/png' href='../../../../../../../logo.png'/>
+  <script type='text/javascript' src='../../../../../../../coverage.js'></script>
+  <script type='text/javascript' src='../../../../../../../prettify.js'></script>
+</head>
+<body onload='prettyPrint()'>
+  <table cellpadding='0' cellspacing='1'>
+    <caption>Authentication Service\src\main\java\com\sandata\lab\security\auth\model\forgeRock\User.java</caption>
+    <tr>
+      <td class='line'>1</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>package com.sandata.lab.security.auth.model.forgeRock;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'></td><td>&nbsp;</td>
+      <td><pre class='imports prettyprint' onclick='showHideLines(this)'><div>import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.Date;
+</div><span>import ...</span></pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>8</td><td class='count'>3</td>
+      <td><pre class='prettyprint covered' id='l8s0'>public class User {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>10</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("familyName")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>11</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String lastName;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>13</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("sn")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>14</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String sn;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>16</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("givenName")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>17</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String firstName;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>19</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("MI")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>20</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String middleInitial;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>22</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("DOB")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>23</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    Date dateOfBirth;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>25</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("telephoneNumber")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>26</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String phoneNumber;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>28</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("password")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>29</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String password;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>31</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("ou")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>32</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String organizationalUnit;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>34</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("o")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>35</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    ArrayList&lt;String> organization;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>37</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("address1")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>38</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String address1;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>40</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("address2")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>41</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String address2;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>43</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("city")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>44</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String city;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>46</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("stateProvince")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>47</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String state;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>49</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("userType")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>50</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String userType;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>52</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("mail")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>53</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String email;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>55</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("mobile")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>56</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String mobilePhone;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>58</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("homePhone")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>59</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String homePhone;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>61</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("postalCode")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>62</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String zipCode;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>64</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("SandataAccess")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>65</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String isSandataAccess;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>67</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("description")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>68</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String description;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>70</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("inetUserStatus")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>71</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String userStatus;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>73</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("userName")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>74</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String userName;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>76</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("displayName")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>77</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String displayName;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>79</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("SandataGUID")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>80</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String sandataGUID;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>82</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("Persona")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>83</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    ArrayList&lt;String> personas;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>85</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("sanreports")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>86</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    ArrayList&lt;String> sanReports;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>88</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("code")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>89</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String code;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>91</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("StaffManager")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>92</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String staffManager;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>94</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("PatientManager")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>95</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String patientManager;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>97</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("PatientHIPAA")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>98</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String patientHIPAA;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>100</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("StaffHIPAA")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>101</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String staffHIPAA;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>103</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("BEID")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>104</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String businessEntityID;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>107</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("pwdAccountLockedTime")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>108</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String passwordAccountLockedTime;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>110</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @SerializedName("pwdChangedTime")</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>111</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    String passwordChangedTime;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>113</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getPasswordAccountLockedTime() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>114</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l114s0'>        return passwordAccountLockedTime;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>115</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>117</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setPasswordAccountLockedTime(String passwordAccountLockedTime) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>118</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l118s0'>        this.passwordAccountLockedTime = passwordAccountLockedTime;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>119</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l119s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>121</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getPasswordChangedTime() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>122</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l122s0'>        return passwordChangedTime;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>123</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>125</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setPasswordChangedTime(String passwordChangedTime) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>126</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l126s0'>        this.passwordChangedTime = passwordChangedTime;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>127</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l127s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>129</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getCode() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>130</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l130s0'>        return code;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>131</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>133</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setCode(String code) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>134</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l134s0'>        this.code = code;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>135</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l135s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>137</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getSandataGUID() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>138</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l138s0'>        return sandataGUID;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>139</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>141</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setSandataGUID(String sandataGUID) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>142</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l142s0'>        this.sandataGUID = sandataGUID;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>143</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l143s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>145</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getLastName() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>146</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l146s0'>        return lastName;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>147</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>149</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setLastName(String lastName) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>150</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l150s0'>        this.lastName = lastName;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>151</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l151s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>153</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getSn() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>154</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l154s0'>        return sn;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>155</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>157</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setSn(String sn) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>158</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l158s0'>        this.sn = sn;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>159</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l159s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>161</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getFirstName() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>162</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l162s0'>        return firstName;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>163</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>165</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setFirstName(String firstName) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>166</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l166s0'>        this.firstName = firstName;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>167</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l167s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>169</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getPhoneNumber() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>170</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l170s0'>        return phoneNumber;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>171</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>173</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setPhoneNumber(String phoneNumber) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>174</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l174s0'>        this.phoneNumber = phoneNumber;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>175</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l175s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>177</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getPassword() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>178</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l178s0'>        return password;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>179</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>181</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setPassword(String password) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>182</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l182s0'>        this.password = password;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>183</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l183s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>185</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getOrganizationalUnit() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>186</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l186s0'>        return organizationalUnit;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>187</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>189</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setOrganizationalUnit(String organizationalUnit) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>190</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l190s0'>        this.organizationalUnit = organizationalUnit;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>191</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l191s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>193</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public ArrayList&lt;String> getOrganization() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>194</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l194s0'>        return organization;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>195</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>197</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setOrganization(ArrayList&lt;String> organization) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>198</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l198s0'>        this.organization = organization;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>199</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l199s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>201</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getAddress1() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>202</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l202s0'>        return address1;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>203</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>205</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setAddress1(String address1) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>206</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l206s0'>        this.address1 = address1;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>207</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l207s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>209</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getCity() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>210</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l210s0'>        return city;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>211</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>213</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setCity(String city) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>214</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l214s0'>        this.city = city;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>215</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l215s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>217</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getState() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>218</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l218s0'>        return state;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>219</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>221</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setState(String state) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>222</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l222s0'>        this.state = state;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>223</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l223s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>225</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getUserType() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>226</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l226s0'>        return userType;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>227</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>229</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setUserType(String userType) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>230</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l230s0'>        this.userType = userType;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>231</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l231s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>233</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getEmail() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>234</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l234s0'>        return email;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>235</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>237</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setEmail(String email) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>238</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l238s0'>        this.email = email;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>239</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l239s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>241</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getMobilePhone() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>242</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l242s0'>        return mobilePhone;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>243</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>245</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setMobilePhone(String mobilePhone) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>246</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l246s0'>        this.mobilePhone = mobilePhone;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>247</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l247s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>249</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getHomePhone() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>250</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l250s0'>        return homePhone;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>251</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>253</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setHomePhone(String homePhone) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>254</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l254s0'>        this.homePhone = homePhone;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>255</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l255s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>257</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String isSandataAccess() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>258</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l258s0'>        return isSandataAccess;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>259</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>261</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setSandataAccess(String sandataAccess) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>262</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l262s0'>        isSandataAccess = sandataAccess;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>263</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l263s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>266</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getDescription() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>267</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l267s0'>        return description;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>268</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>270</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setDescription(String description) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>271</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l271s0'>        this.description = description;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>272</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l272s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>274</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getUserStatus() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>275</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l275s0'>        return userStatus;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>276</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>278</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setUserStatus(String userStatus) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>279</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l279s0'>        this.userStatus = userStatus;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>280</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l280s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>282</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getUserName() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>283</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l283s0'>        return userName;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>284</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>286</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setUserName(String userName) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>287</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l287s0'>        this.userName = userName;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>288</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l288s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>290</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getDisplayName() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>291</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l291s0'>        return displayName;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>292</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>294</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setDisplayName(String displayName) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>295</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l295s0'>        this.displayName = displayName;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>296</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l296s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>298</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getMiddleInitial() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>299</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l299s0'>        return middleInitial;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>300</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>302</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setMiddleInitial(String middleInitial) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>303</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l303s0'>        this.middleInitial = middleInitial;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>304</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l304s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>306</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public Date getDateOfBirth() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>307</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l307s0'>        return dateOfBirth;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>308</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>310</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setDateOfBirth(Date dateOfBirth) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>311</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l311s0'>        this.dateOfBirth = dateOfBirth;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>312</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l312s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>314</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getZipCode() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>315</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l315s0'>        return zipCode;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>316</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>318</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setZipCode(String zipCode) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>319</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l319s0'>        this.zipCode = zipCode;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>320</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l320s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>322</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getIsSandataAccess() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>323</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l323s0'>        return isSandataAccess;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>324</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>326</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setIsSandataAccess(String isSandataAccess) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>327</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l327s0'>        this.isSandataAccess = isSandataAccess;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>328</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l328s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>330</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public ArrayList&lt;String> getPersonas() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>331</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l331s0'>        return personas;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>332</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>334</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setPersonas(ArrayList&lt;String> personas) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>335</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l335s0'>        this.personas = personas;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>336</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l336s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>338</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getStaffManager() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>339</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l339s0'>        return staffManager;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>340</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>342</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setStaffManager(String staffManager) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>343</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l343s0'>        this.staffManager = staffManager;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>344</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l344s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>346</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getPatientManager() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>347</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l347s0'>        return patientManager;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>348</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>350</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setPatientManager(String patientManager) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>351</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l351s0'>        this.patientManager = patientManager;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>352</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l352s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>354</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getPatientHIPAA() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>355</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l355s0'>        return patientHIPAA;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>356</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>358</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setPatientHIPAA(String patientHIPAA) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>359</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l359s0'>        this.patientHIPAA = patientHIPAA;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>360</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l360s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>362</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getStaffHIPAA() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>363</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l363s0'>        return staffHIPAA;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>364</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>366</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setStaffHIPAA(String staffHIPAA) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>367</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l367s0'>        this.staffHIPAA = staffHIPAA;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>368</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l368s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>370</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getBusinessEntityID() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>371</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l371s0'>        return businessEntityID;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>372</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>374</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setBusinessEntityID(String businessEntityID) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>375</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l375s0'>        this.businessEntityID = businessEntityID;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>376</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l376s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>378</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public ArrayList&lt;String> getSanReports() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>379</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l379s0'>        return sanReports;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>380</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>382</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setSanReports(ArrayList&lt;String> sanReports) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>383</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l383s0'>        this.sanReports = sanReports;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>384</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l384s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>386</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public String getAddress2() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>387</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l387s0'>        return address2;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>388</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>390</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setAddress2(String address2) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>391</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l391s0'>        this.address2 = address2;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>392</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l392s0'>    }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>393</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>}</pre></td>
+    </tr>
+  </table>
+</body>
+</html>

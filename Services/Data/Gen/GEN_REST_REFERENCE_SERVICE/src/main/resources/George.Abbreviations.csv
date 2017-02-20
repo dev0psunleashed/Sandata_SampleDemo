@@ -1,0 +1,222 @@
+Logical,Physical,Prime,Qualifier,Class,Illegal,Priority
+Absence,ABS,No,No,No,No,Primary
+Accounts Receivable,AR,No,No,No,No,Primary
+Acknowledgable,ACK,No,No,No,No,Primary
+Actual,ACT,No,No,No,No,Primary
+Address Line 1,ADDR1,No,No,No,No,Primary
+Address Line 2,ADDR2,No,No,No,No,Primary
+Adjudication,ADJD,No,No,No,No,Primary
+Adjusted,ADJ,No,No,No,No,Primary
+Adjustment,ADJMT,No,No,No,No,Primary
+Administrative,ADMIN,No,No,No,No,Primary
+Admission,ADM,No,No,No,No,Primary
+Advance Directive,AD,No,No,No,No,Primary
+Agreement,AGRMT,No,No,No,No,Primary
+Allowed,ALWD,No,No,No,No,Primary
+Ambulance,AMBL,No,No,No,No,Primary
+Ambulatory,AMBUL,No,No,No,No,Primary
+Ambulatory Patient Group,APG,No,No,No,No,Primary
+Amendment,AMDT,No,No,No,No,Primary
+American National Standards Institute,ANSI,No,No,No,No,Primary
+Amount,AMT,No,No,No,No,Primary
+Apartment,APT,No,No,No,No,Primary
+Approved,APRVD,No,No,No,No,Primary
+Assessment,ASMT,No,No,No,No,Primary
+Assistance,ASST,No,No,No,No,Primary
+Attachment,ATT,No,No,No,No,Primary
+Attribute,ATTR,No,No,No,No,Primary
+Atypical Provider Identifier,API,No,No,No,No,Primary
+Authorization,AUTH,No,No,No,No,Primary
+Automatic Number Identification,ANI,No,No,No,No,Primary
+Availability,AVAIL,No,No,No,No,Primary
+Barrier,BRR,No,No,No,No,Primary
+Barriers,BRRS,No,No,No,No,Primary
+Begin,BEG,No,No,No,No,Primary
+Benefit,BNFT,No,No,No,No,Primary
+Business,BSN,No,No,No,No,Primary
+Business Entity,BE,No,No,No,No,Primary
+Calculated,CALC,No,No,No,No,Primary
+Cancel,CAN,No,No,No,No,Primary
+Casualty,CAS,No,No,No,No,Primary
+Certificate,CTF,No,No,No,No,Primary
+Certification,CERT,No,No,No,No,Primary
+Classification,CLAS,No,No,No,No,Primary
+Cleared,CLRD,No,No,No,No,Primary
+Clearinghouse,CH,No,No,No,No,Primary
+Clinical Laboratory Improvement Amendment,CLIA,No,No,No,No,Primary
+Comments,CMNT,No,No,No,No,Primary
+Commissionable,COMM,No,No,No,No,Primary
+Completed,CMPLD,No,No,No,No,Primary
+Completion,COMPL,No,No,No,No,Primary
+Compliance,COMP,No,No,No,No,Primary
+Condition,COND,No,No,No,No,Primary
+Consumer Directed Service,CDS,No,No,No,No,Primary
+Contact,CONT,No,No,No,No,Primary
+Contract,CONTR,No,No,No,No,Primary
+Coordinate,COORD,No,No,No,No,Primary
+Coverage,CVG,No,No,No,No,Primary
+Credentials,CRED,No,No,No,No,Primary
+Cross Reference,XREF,No,No,No,No,Primary
+Crosswalk,XWALK,No,No,No,No,Primary
+Currency,CCY,No,No,No,No,Primary
+Current,CURR,No,No,No,No,Primary
+Date of Birth,DOB,No,No,No,No,Primary
+Date of Death,DOD,No,No,No,No,Primary
+Datetime,DTIME,No,No,No,No,Primary
+Deduction,DED,No,No,No,No,Primary
+Demonstration,DEMO,No,No,No,No,Primary
+Description,DESC,No,No,No,No,Primary
+Detail,DETL,No,No,No,No,Primary
+Dialed Number Identification Service,DNIS,No,No,No,No,Primary
+Disability,DIS,No,No,No,No,Primary
+Do Not Resuscitate,DNR,No,No,No,No,Primary
+Document,DOC,No,No,No,No,Primary
+Durable Medical Equipment,DME,No,No,No,No,Primary
+Duration,DUR,No,No,No,No,Primary
+Earning,EARN,No,No,No,No,Primary
+Effective,EFF,No,No,No,No,Primary
+Electronic Data Interchange,EDI,No,No,No,No,Primary
+Electronic Funds Transfer,EFT,No,No,No,No,Primary
+Eligibility,ELIG,No,No,No,No,Primary
+Emergency,EMERG,No,No,No,No,Primary
+Employer Identification Number,EIN,No,No,No,No,Primary
+Employment,EMPLT,No,No,No,No,Primary
+End Stage Renal Disease,ESRD,No,No,No,No,Primary
+Entity,ENT,No,No,No,No,Primary
+Environment,ENV,No,No,No,No,Primary
+Evacuation,EVAC,No,No,No,No,Primary
+Evaluation,EVAL,No,No,No,No,Primary
+Event,EVNT,No,No,No,No,Primary
+Exception,EXCP,No,No,No,No,Primary
+Exclusion,EXCL,No,No,No,No,Primary
+Exemption,EXPT,No,No,No,No,Primary
+Expiration,EXPR,No,No,No,No,Primary
+Explanation,EXPLN,No,No,No,No,Primary
+Extension,EXT,No,No,No,No,Primary
+Federal Information Processing Standard,FIPS,No,No,No,No,Primary
+Format,FMT,No,No,No,No,Primary
+Frequency,FREQ,No,No,No,No,Primary
+Functional,FUNC,No,No,No,No,Primary
+Geographic Names Information System,GNIS,No,No,No,No,Primary
+Globally Unique Identifier,GUID,No,No,No,No,Primary
+Health,HLTH,No,No,No,No,Primary
+History,HIST,No,No,No,No,Primary
+Hospitalization,HOSP,No,No,No,No,Primary
+Hours,HRS,No,No,No,No,Primary
+Identifier,ID,No,No,No,No,Primary
+Immunization,IMMUN,No,No,No,No,Primary
+Improvement,IMPROV,No,No,No,No,Primary
+InCaseOfEmergency,ICE,No,No,No,No,Primary
+Include,INCL,No,No,No,No,Primary
+Indicator,IND,No,No,No,No,Primary
+Individual,INDIV,No,No,No,No,Primary
+Information,INFO,No,No,No,No,Primary
+Insurance,INS,No,No,No,No,Primary
+International Mobile Station Equipment Identity,IMEI,No,No,No,No,Primary
+Investigational Device Exemption,IDE,No,No,No,No,Primary
+Laboratory,LAB,No,No,No,No,Primary
+Language,LANG,No,No,No,No,Primary
+Length Of Medical Necessity,LMN,No,No,No,No,Primary
+Level,LVL,No,No,No,No,Primary
+Limit,LMT,No,No,No,No,Primary
+Line of Business,LOB,No,No,No,No,Primary
+List,LST,No,No,No,No,Primary
+Lookup,LKUP,No,No,No,No,Primary
+Mammography,MMG,No,No,No,No,Primary
+Manager,MGR,No,No,No,No,Primary
+Manually,MANUAL,No,No,No,No,Primary
+Marketer,MKTR,No,No,No,No,Primary
+Medical,MEDCL,No,No,No,No,Primary
+Medical Record Number,MRN,No,No,No,No,Primary
+Medication,MED,No,No,No,No,Primary
+Message,MSG,No,No,No,No,Primary
+Method,MTHD,No,No,No,No,Primary
+Mileage,MLG,No,No,No,No,Primary
+Modifier,MDFR,No,No,No,No,Primary
+National Institute of Standards and Technology,NIST,No,No,No,No,Primary
+National Provider Identifier,NPI,No,No,No,No,Primary
+Necessity,NECESS,No,No,No,No,Primary
+Nonpayable,NONPAY,No,No,No,No,Primary
+Notification,NTFCTN,No,No,No,No,Primary
+Notify,NTFY,No,No,No,No,Primary
+Number,NUM,No,No,No,No,Primary
+Nutritional,NUTR,No,No,No,No,Primary
+Optional,OPT,No,No,No,No,Primary
+Ordering,ORD,No,No,No,No,Primary
+Organization,ORG,No,No,No,No,Primary
+Overtime,OT,No,No,No,No,Primary
+Oxygen Saturation,SAO2,No,No,No,No,Primary
+Parameter,PARAM,No,No,No,No,Primary
+Participant,PTC,No,No,No,No,Primary
+Participation,PART,No,No,No,No,Primary
+Patient,PT,No,No,No,No,Primary
+Patient Designee,PD,No,No,No,No,Primary
+Payroll,PR,No,No,No,No,Primary
+Performed,PERF,No,No,No,No,Primary
+Period,PRD,No,No,No,No,Primary
+Physical,PHYS,No,No,No,No,Primary
+Plan of Care,POC,No,No,No,No,Primary
+Postal,PSTL,No,No,No,No,Primary
+Preference,PREF,No,No,No,No,Primary
+Preferred,PREFD,No,No,No,No,Primary
+Prescription,RX,No,No,No,No,Primary
+Primary,PRMY,No,No,No,No,Primary
+Private,PRVT,No,No,No,No,Primary
+Procedure,PROC,No,No,No,No,Primary
+Professional,PROFNL,No,No,No,No,Primary
+Projected,PROJ,No,No,No,No,Primary
+Property,PROPTY,No,No,No,No,Primary
+Purchased,PURCH,No,No,No,No,Primary
+Qualification,QUAL,No,No,No,No,Primary
+Qualifier,QLFR,No,No,No,No,Primary
+Quantity,QTY,No,No,No,No,Primary
+Reading,RDNG,No,No,No,No,Primary
+Received,RCVD,No,No,No,No,Primary
+Record,REC,No,No,No,No,Primary
+Reference,REF,No,No,No,No,Primary
+Referral,RFRL,No,No,No,No,Primary
+Referring,REFING,No,No,No,No,Primary
+Reimbursment,REIMB,No,No,No,No,Primary
+Relationship,REL,No,No,No,No,Primary
+Relinquished,RINQ,No,No,No,No,Primary
+Rendering,RENDER,No,No,No,No,Primary
+Repeat,RPT,No,No,No,No,Primary
+Repriced,REPR,No,No,No,No,Primary
+Request,REQ,No,No,No,No,Primary
+Required,RQD,No,No,No,No,Primary
+Requirement,RQMT,No,No,No,No,Primary
+Requirements,RQMTS,No,No,No,No,Primary
+Responsibility,RESP,No,No,No,No,Primary
+Responsible,RESPN,No,No,No,No,Primary
+Safety,SFTY,No,No,No,No,Primary
+Schedule,SCHED,No,No,No,No,Primary
+Secondary,SCNDRY,No,No,No,No,Primary
+Service,SVC,No,No,No,No,Primary
+Services,SVCS,No,No,No,No,Primary
+Signature,SIG,No,No,No,No,Primary
+Social Security Number,SSN,No,No,No,No,Primary
+Source,SRC,No,No,No,No,Primary
+Structural,STRUCT,No,No,No,No,Primary
+Submission,SUBM,No,No,No,No,Primary
+Subscriber,SUBS,No,No,No,No,Primary
+Supervising,SUPV,No,No,No,No,Primary
+Supplemental,SUPPL,No,No,No,No,Primary
+Supplies,SPLY,No,No,No,No,Primary
+Taxpayer Identification Number,TIN,No,No,No,No,Primary
+Termination,TERM,No,No,No,No,Primary
+Tertiary,TER,No,No,No,No,Primary
+Timestamp,TMSTP,No,No,No,No,Primary
+Timezone,TZ,No,No,No,No,Primary
+Tracking,TRK,No,No,No,No,Primary
+Training,TRNG,No,No,No,No,Primary
+Transaction,TXN,No,No,No,No,Primary
+Transmission,TRNSMSN,No,No,No,No,Primary
+Transportation,TRANSPORT,No,No,No,No,Primary
+Transportation Assistance Level,TAL,No,No,No,No,Primary
+Treatment,TREAT,No,No,No,No,Primary
+Type,TYP,No,No,No,No,Primary
+Unique Physician Identification Number,UPIN,No,No,No,No,Primary
+Validation,VALID,No,No,No,No,Primary
+Verification,VERIF,No,No,No,No,Primary
+Verified,VFYD,No,No,No,No,Primary
+Working,WRK,No,No,No,No,Primary

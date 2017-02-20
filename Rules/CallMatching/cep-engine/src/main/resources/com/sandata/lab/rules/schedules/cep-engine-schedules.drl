@@ -1,0 +1,591 @@
+package com.sandata.lab.rules.schedules;
+import com.sandata.lab.rules.call.model.VisitFact;
+import com.sandata.lab.rules.call.model.State;
+import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory
+import java.util.Calendar
+//import function com.sandata.lab.rules.call.matching.drools.HelperFunctions.diffDates
+
+
+
+function Date CreateDateWithOffset(Date startDate, int i) {
+         		Calendar calendar = Calendar.getInstance();
+         		calendar.setTime(startDate);
+         		//DateToCalendar(startDate);
+         		calendar.add(Calendar.HOUR_OF_DAY, i);
+         		return calendar.getTime();
+}
+
+
+global com.sandata.lab.rules.call.model.CallPreferences callPreferences;//callPreferences
+global ch.qos.logback.classic.Logger rulesLog;
+//global org.slf4j.Logger rulesLog;
+
+declare Threshold
+  value : Long @key
+end
+
+declare DeviationThreshold
+    value : Long @key
+end
+
+declare MinVisitDuration
+    value : Long @key
+end
+
+declare SecondCallStillValidThreshold
+    Value : Long @key
+end
+
+dialect "java"
+
+rule "cep-engine-init-check-global-callPreferences-000"
+    salience 1000
+    agenda-group "pick-schedule"
+    when
+        eval(true)
+    then
+        //LoggerFactory.getLogger("rulesLog").info("Initialized rules checking global");
+        rulesLog.info("Initialized rules checking globals");
+        //LoggerFactory.getLogger("rulesLog").info(String.format("callPreferences.getDeviationThresholdMinutes() returned : %d", callPreferences.getDeviationThresholdMinutes()));
+        rulesLog.info(String.format("callPreferences.getDeviationThresholdMinutes() returned : %d", callPreferences.getDeviationThresholdMinutes()));
+        insert( new DeviationThreshold(Long.valueOf(callPreferences.getDeviationThresholdMinutes() * 60 * 1000)));
+        //LoggerFactory.getLogger("rulesLog").info(String.format("callPreferences.getMinVisitDurationMS() returned : %d", callPreferences.getMinVisitDurationMS()));
+        rulesLog.info(String.format("callPreferences.getMinVisitDurationMS() returned : %d", callPreferences.getMinVisitDurationMS()));
+        insert( new MinVisitDuration(Long.valueOf(callPreferences.getMinVisitDurationMS())));
+        //LoggerFactory.getLogger("rulesLog").info(String.format("callPreferences.getSecondCallStillValidThresholdMinutes() returned : %d", callPreferences.getSecondCallStillValidThresholdMinutes()));
+        rulesLog.info(String.format("callPreferences.getSecondCallStillValidThresholdMinutes() returned : %d", callPreferences.getSecondCallStillValidThresholdMinutes()));
+        insert( new SecondCallStillValidThreshold(Long.valueOf(callPreferences.getSecondCallStillValidThresholdMinutes() * 60 * 1000)));
+        //LoggerFactory.getLogger("rulesLog").info(String.format("callPreferences.getStaffIdMatchLength() returned : %d", callPreferences.getStaffIdMatchLength()));
+        rulesLog.info(String.format("callPreferences.getStaffIdMatchLength() returned : %d", callPreferences.getStaffIdMatchLength()));
+
+
+end
+
+rule "cep-engine-schedules-matched-02 closer to start time callin null, callout null"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+        $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+        $scheduled : VisitFact(state == State.POSSIBLE_MATCH_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, patientId),
+        scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED,
+        callIn == null, callOut == null, diffDates($inserted.getCallIn(), scheduledFrom) < diffDates($inserted.getCallIn, scheduledTo))
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallCallIn($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+    retract($inserted);
+    update($scheduled);
+    rulesLog.info("cep-engine-schedules-matched-02 closer to start time callin null, callout null : call inserted was closer to scheduledFrom");
+end
+
+rule "cep-engine-schedules-matched-03 closer to start time callin not null callout null > min duration (Ex:5 minutes)"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+    $minVisit : MinVisitDuration()
+    $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+    $scheduled : VisitFact(state == State.IN_PROGRESS || state == State.POSSIBLE_MATCH_FROM_RESPONSE,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED,
+    $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn != null, callOut == null,
+     diffDates($inserted.getCallIn(), scheduledFrom) < diffDates($inserted.getCallIn, scheduledTo),
+     diffDates(callIn, $inserted.getCallIn()) > $minVisit.getValue())
+
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-matched-03 closer to start time callin not null callout null > min duration (Ex:5 minutes) : call inserted was closer to scheduledTo and > getMinVisitDurationMS()");
+end
+
+rule "cep-engine-schedules-matched-03b closer to start time callin not null callout null < min duration (Ex:5 minutes) Extraneous"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+    $minVisit : MinVisitDuration()
+    $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+    $scheduled : VisitFact(state == State.IN_PROGRESS || state == State.POSSIBLE_MATCH_FROM_RESPONSE,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED,
+    $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn != null, callOut == null,
+     diffDates($inserted.getCallIn(), scheduledFrom) < diffDates($inserted.getCallIn, scheduledTo),
+     diffDates(callIn, $inserted.getCallIn()) <= $minVisit.getValue())
+
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+
+        $scheduled.addTaskList($inserted.getTaskList());
+        $scheduled.addExtraneousCalls($inserted.getCallCallIn());
+        retract($inserted);
+        update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-matched-03b closer to start time callin not null callout null < min duration (Ex:5 minutes) EXTRANEOUS! : call inserted was closer to scheduledTo and < getMinVisitDurationMS()");
+end
+
+//rule "cep-engine-schedules-matched-04 closer to start time callin not null callout not null > min duration (Ex:5 minutes) inbetween -MVV"
+//INCORRECT RULE
+rule "cep-engine-schedules-matched-04 After start time callin not null callout not null > min duration (Ex:5 minutes) inbetween Extraneous -MVV"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+    $minVisit : MinVisitDuration()
+    $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+    $scheduled : VisitFact(state == State.IN_PROGRESS || state == State.POSSIBLE_MATCH_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()),
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, callIn != null, callOut != null,
+     callOut.after($inserted.callIn), callIn.before($inserted.callIn))
+
+     //diffDates(callIn, $inserted.getCallIn()) > $minVisit.getValue(),
+     //diffDates(callOut, $inserted.getCallIn()) > $minVisit.getValue(),
+
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.addTaskList($inserted.getTaskList());
+        $scheduled.getVisit().getVisitEvent().add($inserted.getCallCallIn());
+        retract($inserted);
+        update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-matched-04 closer to start time callin not null callout not null > min duration (Ex:5 minutes) inbetween -MVV");
+end
+
+/* DOESNT MATTER I THINK INSTEAD I WILL MODIFY PARENT ABOVE TO REMOVE CHECK FOR > MINVISIT WHICH IS SAME RESULT COMBINED with top rule by removing condition of minVisit
+rule "cep-engine-schedules-matched-04b closer to start time callin not null callout not null < min duration (Ex:5 minutes) EXTRANEOUS inbetween -MVV"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+    $minVisit : MinVisitDuration()
+    $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+    $scheduled : VisitFact(state == State.IN_PROGRESS || state == State.POSSIBLE_MATCH_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn != null, callOut != null,
+     diffDates($inserted.getCallIn(), scheduledFrom) < diffDates($inserted.getCallIn, scheduledTo),
+     diffDates(callIn, $inserted.getCallIn()) < $minVisit.getValue() ||
+     diffDates(callOut, $inserted.getCallIn()) < $minVisit.getValue(), callOut.after($inserted.callIn))
+
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.addTaskList($inserted.getTaskList());
+        $scheduled.getVisit().getVisitEvent().add($inserted.getCallCallIn());
+        retract($inserted);
+        update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-matched-04 closer to start time callin not null callout not null > min duration (Ex:5 minutes) inbetween -MVV");
+end
+*/
+
+rule "cep-engine-schedules-matched-05 callin not null callout not null > min duration (Ex:5 minutes) call recieved after callout"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+    $minVisit : MinVisitDuration()
+    $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+    $scheduled : VisitFact(state == State.IN_PROGRESS || state == State.POSSIBLE_MATCH_FROM_RESPONSE,
+    $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()),
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, callIn != null, callOut != null,
+     diffDates(callOut, $inserted.getCallIn()) > $minVisit.getValue(), callOut.before($inserted.callIn))
+
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.addTaskList($inserted.getTaskList());
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+        retract($inserted);
+        update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-matched-05 callin not null callout not null > min duration (Ex:5 minutes) call recieved after callout");
+end
+
+rule "cep-engine-schedules-matched-05b callin not null callout not null < min duration (Ex:5 minutes) call recieved after callout EXTRANEOUS"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+    $minVisit : MinVisitDuration()
+    $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+    $scheduled : VisitFact(state == State.IN_PROGRESS || state == State.POSSIBLE_MATCH_FROM_RESPONSE,
+    $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()),
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, callIn != null, callOut != null,
+     diffDates(callOut, $inserted.getCallIn()) < $minVisit.getValue(), callOut.before($inserted.callIn))
+
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.addTaskList($inserted.getTaskList());
+        $scheduled.addExtraneousCalls($inserted.getCallCallIn());
+        retract($inserted);
+        update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-matched-05 callin not null callout not null < min duration (Ex:5 minutes) call recieved after callout EXTRANEOUS");
+end
+
+
+rule "cep-engine-schedules-matched-06 closer to end time callin null callout null"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+    $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+    $scheduled : VisitFact(state == State.POSSIBLE_MATCH_FROM_RESPONSE,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn == null, callOut == null, diffDates($inserted.getCallIn(), scheduledTo) < diffDates($inserted.getCallIn, scheduledFrom))
+
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-matched-06 closer to end time callin null callout null : call inserted was closer to scheduledTo, No CallIn no CallOut");
+end
+
+rule "cep-engine-schedules-matched-07 callin not null callout null call after callin"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+    $minVisit : MinVisitDuration()
+    $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+    $scheduled : VisitFact(state == State.POSSIBLE_MATCH_FROM_RESPONSE, scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED,
+    $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn != null, callOut == null,
+    diffDates(callIn, $inserted.getCallIn()) > $minVisit.getValue(), callIn.before($inserted.getCallIn()))
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        update($scheduled);
+        rulesLog.info("DRL::cep-engine-schedules-matched-07 callin not null callout null call after callin : call after CallIn no CallOut");
+end
+
+rule "cep-engine-schedules-matched-07b callin not null callout null call after callin < minVisit EXTRANEOUS"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+    $minVisit : MinVisitDuration()
+    $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+    $scheduled : VisitFact(state == State.POSSIBLE_MATCH_FROM_RESPONSE,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn != null, callOut == null,
+    diffDates(callIn, $inserted.getCallIn()) < $minVisit.getValue(), callIn.before($inserted.getCallIn()))
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.addExtraneousCalls($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        update($scheduled);
+        rulesLog.info("DRL::cep-engine-schedules-matched-07 callin not null callout null call after callin < minVisit : call after CallIn no CallOut EXTRANEOUS");
+end
+
+rule "cep-engine-schedules-matched-08 callin not null callout not null call after callout"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+    $minVisit : MinVisitDuration()
+    $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+    $scheduled : VisitFact(state == State.POSSIBLE_MATCH_FROM_RESPONSE, scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED,
+    $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn != null, callOut != null,
+    callOut.before($inserted.getCallIn()),
+    diffDates(callOut, $inserted.getCallIn()) > $minVisit.getValue())
+
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        update($scheduled);
+        rulesLog.info("DRL::cep-engine-schedules-matched-08 callin not null callout not null call after callout : call after callout");
+end
+
+rule "cep-engine-schedules-matched-08b callin not null callout not null call after callout < minVisit EXTRANEOUS"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+    $minVisit : MinVisitDuration()
+    $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+    $scheduled : VisitFact(state == State.POSSIBLE_MATCH_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn != null, callOut != null,
+    callOut.before($inserted.getCallIn()),scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED,
+    diffDates(callOut, $inserted.getCallIn()) < $minVisit.getValue())
+
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.addExtraneousCalls($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        update($scheduled);
+        rulesLog.info("DRL::cep-engine-schedules-matched-08 callin not null callout not null call after callout < minVisit : call after callout EXTRANEOUS too soon");
+end
+
+
+rule "cep-engine-schedules-matched-09 callin null callout not null call after callout"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+    $minVisit : MinVisitDuration()
+    $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+    $scheduled : VisitFact(state == State.POSSIBLE_MATCH_FROM_RESPONSE,
+    $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED,
+    callIn == null, callOut != null,
+    callOut.before($inserted.getCallIn()),
+    diffDates(callOut, $inserted.getCallIn()) > $minVisit.getValue())
+
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        //remove from visitEventList first.
+        $scheduled.setCallIn($scheduled.getCallOut());
+
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+
+        $scheduled.addTaskList($inserted.getTaskList());
+        update($scheduled);
+        retract($inserted);
+
+        rulesLog.info("DRL::cep-engine-schedules-matched-09 callin null callout not null call after callout : call after callout, no callin, move old callout to callin.");
+end
+
+
+rule "cep-engine-schedules-matched-09b callin null callout not null call after callout EXTRANEOUS"
+    salience 999
+    agenda-group "pick-schedule"
+    when
+    $minVisit : MinVisitDuration()
+    $inserted : VisitFact(state == State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE )
+    $scheduled : VisitFact(state == State.POSSIBLE_MATCH_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn == null, callOut != null,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, callOut.before($inserted.getCallIn()),
+    diffDates(callOut, $inserted.getCallIn()) < $minVisit.getValue())
+
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        //remove from visitEventList first.
+
+        $scheduled.addExtraneousCalls($inserted.getCallCallIn());
+
+        $scheduled.addTaskList($inserted.getTaskList());
+        update($scheduled);
+        retract($inserted);
+
+        rulesLog.info("DRL::cep-engine-schedules-matched-09 callin null callout not null call after callout < minVisit : call after callout, no callin, move old callout to callin EXTRANEOUS.");
+end
+
+
+rule "cep-engine-schedules-0 in between from and to possible match"
+    salience 100
+    agenda-group "pick-schedule"
+    when
+    $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+    $scheduled : VisitFact(state == State.AGG_INSERTED_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()),
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, scheduledFrom.before($inserted.getCallIn()),
+    scheduledTo.after($inserted.getCallIn()))
+    then
+    $inserted.setState(State.POSSIBLE_MATCH_WAITING_FOR_RESPONSE);
+    $scheduled.setState(State.POSSIBLE_MATCH_FROM_RESPONSE);
+    update($inserted);
+    update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-0 in between from and to possible match : In between From and To");
+end
+
+rule "cep-engine-schedules-1 outside schedule-00 callIn null Before schedule"
+    salience 98
+    agenda-group "pick-schedule"
+    when
+    $deviation : DeviationThreshold()
+    $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+    $scheduled : VisitFact(state == State.AGG_INSERTED_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn == null, callOut == null,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, scheduledFrom.after($inserted.getCallIn()), diffDates(scheduledFrom, $inserted.getCallIn()) <=  $deviation.getValue())
+    then
+    $scheduled.setState(State.CONTENDER_FROM);
+    update($scheduled);
+
+    rulesLog.info("DRL::cep-engine-schedules-1 outside schedule-00 callIn null : Setting Contender From!");
+end
+
+rule "cep-engine-schedules-1 outside schedule-00 callIn null After schedule"
+    salience 98
+    agenda-group "pick-schedule"
+    when
+    $deviation : DeviationThreshold()
+    $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+    $scheduled : VisitFact(state == State.AGG_INSERTED_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn == null, callOut == null,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, scheduledTo.before($inserted.getCallIn()), diffDates(scheduledTo, $inserted.getCallIn()) <=  $deviation.getValue())
+    then
+    $scheduled.setState(State.CONTENDER_TO);
+    update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-1 outside schedule-00 callIn null : Setting Contender From!");
+end
+
+
+/// No longer unlinked schedules
+
+rule "cep-engine-schedules-1 outside schedule-01 callIn not null schedule before"
+    salience 98
+    agenda-group "pick-schedule"
+    when
+    $deviation : DeviationThreshold()
+    $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+    $scheduled : VisitFact(state == State.AGG_INSERTED_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn != null,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, scheduledFrom.before($inserted.getCallIn()),
+    callIn.before($inserted.getCallIn()), diffDates(scheduledTo,$inserted.getCallIn()) <= $deviation.getValue())
+    then
+    $scheduled.setState(State.CONTENDER_TO);
+    update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-1 outside schedule-01 callIn not null : Setting Contender To!");
+
+end
+
+rule "cep-engine-schedules-1 outside schedule-01 callIn not null schedule before MVV or Other"
+    salience 98
+    agenda-group "pick-schedule"
+    when
+    $deviation : DeviationThreshold()
+    $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+    $scheduled : VisitFact(state == State.AGG_INSERTED_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn != null,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, scheduledFrom.before($inserted.getCallIn()),
+    callIn.after($inserted.getCallIn()), diffDates(scheduledTo,$inserted.getCallIn()) <= $deviation.getValue())
+    then
+    $scheduled.setState(State.CONTENDER_FROM);
+    update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-1 outside schedule-01 callIn not null : Setting Contender To!");
+
+end
+
+rule "cep-engine-schedules-1 outside schedule-01 callIn not null schedule after"
+    salience 98
+    agenda-group "pick-schedule"
+    when
+    $deviation : DeviationThreshold()
+    $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+    $scheduled : VisitFact(state == State.AGG_INSERTED_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn != null,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, scheduledFrom.after($inserted.getCallIn()), callIn.before($inserted.getCallIn()),
+    diffDates(scheduledFrom,$inserted.getCallIn()) <= $deviation.getValue())
+    then
+    $scheduled.setState(State.CONTENDER_TO);
+    update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-1 outside schedule-01 callIn not null : Setting Contender To!");
+
+end
+
+rule "cep-engine-schedules-1 outside schedule-01 callIn not null schedule after MVV or Other"
+    salience 98
+    agenda-group "pick-schedule"
+    when
+    $deviation : DeviationThreshold()
+    $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+    $scheduled : VisitFact(state == State.AGG_INSERTED_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn != null,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, scheduledFrom.after($inserted.getCallIn()), callIn.after($inserted.getCallIn()),
+    diffDates(scheduledFrom,$inserted.getCallIn()) <= $deviation.getValue())
+    then
+    $scheduled.setState(State.CONTENDER_FROM);
+    update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-1 outside schedule-01 callIn not null : Setting Contender To!");
+
+end
+
+//verify is this only if 2 call are made?
+rule "cep-engine-schedules-1 outside schedule-01 callIn not null sched_evnt == null, call upto 24 hours after"
+    salience 98
+    agenda-group "pick-schedule"
+    when
+    $secondCall : SecondCallStillValidThreshold()
+    $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+    $scheduled : VisitFact(state == State.AGG_INSERTED_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn != null,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, scheduledFrom.before($inserted.getCallIn()), visit.getScheduleEventSK() == null,
+    diffDates(scheduledFrom,$inserted.getCallIn()) <= $secondCall.getValue())
+    then
+    $scheduled.setState(State.CONTENDER_TO);
+    update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-1 outside schedule-01 by up to 24 hours callIn not null but no sched_evnt_sk indicating unplanned visit : Setting Contender To!");
+
+end
+
+rule "cep-engine-schedules-1 outside schedule-02 callIn null callOut not null schedule before"
+    salience 98
+    agenda-group "pick-schedule"
+    when
+    $deviation : DeviationThreshold()
+    $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+    $scheduled : VisitFact(state == State.AGG_INSERTED_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn == null, callOut != null,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, scheduledFrom.before($inserted.getCallIn()),
+    diffDates(scheduledTo,$inserted.getCallIn()) <= $deviation.getValue())
+    then
+    $scheduled.setState(State.CONTENDER_TO);
+    update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-1 outside schedule-02 callIn null callOut not null : Setting Contender To!");
+end
+
+rule "cep-engine-schedules-1 outside schedule-02 callIn null callOut not null"
+    salience 98
+    agenda-group "pick-schedule"
+    when
+    $deviation : DeviationThreshold()
+    $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+    $scheduled : VisitFact(state == State.AGG_INSERTED_FROM_RESPONSE, $inserted.insertedPatientMatchesScheduled(ani, visit.getPatientID()), callIn == null, callOut != null,
+    scheduledStaffMatchesInserted($inserted.getStaffId()) == State.MATCHED, scheduledFrom.after($inserted.getCallIn()),
+    diffDates(scheduledFrom,$inserted.getCallIn()) <= $deviation.getValue())
+    then
+    $scheduled.setState(State.CONTENDER_TO);
+    update($scheduled);
+    rulesLog.info("DRL::cep-engine-schedules-1 outside schedule-02 callIn null callOut not null : Setting Contender To!");
+end
+
+rule "cep-engine-schedule-10 no matches inside schedules so set new agenda-group schedule only"
+    salience 95
+    agenda-group "pick-schedule"
+    when
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE || state == State.CONTENDER_SCHEDULED )
+        $scheduled : VisitFact( (state==State.CONTENDER_FROM || state == State.CONTENDER_TO), visit.getScheduleEventSK() != null)
+    then
+        retract($inserted)
+
+        $inserted.setState(State.CONTENDER_SCHEDULED);
+        insert( $inserted );
+        drools.setFocus("closest-schedule");
+        insert( new Threshold(Long.valueOf(callPreferences.getDeviationThresholdMinutes() * 60 * 1000)));
+        rulesLog.info("DRL::cep-engine-schedule-10 no matches inside schedules so set new agenda-group : This rule should have set a new agenda group closest-schedule!");
+end
+
+
+rule "cep-engine-schedule-10 no matches inside schedules so set new agenda-group for unplanned visit involved unscheduled only"
+    salience 94
+    agenda-group "pick-schedule"
+    when
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE || state == State.CONTENDER_UNSCHEDULED )
+        $scheduled : VisitFact( (state==State.CONTENDER_FROM || state == State.CONTENDER_TO), visit.getScheduleEventSK() == null)
+    then
+        retract($inserted)
+
+        $inserted.setState(State.CONTENDER_UNSCHEDULED);
+        insert($inserted);
+        drools.setFocus("closest-schedule");
+        insert( new Threshold(Long.valueOf(callPreferences.getSecondCallStillValidThresholdMinutes() * 60 * 1000)));
+        rulesLog.info("DRL::cep-engine-schedule-10 no matches inside schedules so set new agenda-group : This rule should have set a new agenda group closest-schedule!");
+end
+
+rule "cep-engine-schedule-10 no matches inside schedules so set new agenda-group for unplanned visit involved have a schedule also"
+    salience 93
+    agenda-group "pick-schedule"
+    when
+        $inserted : VisitFact(state == State.CONTENDER_SCHEDULED )
+        $scheduled : VisitFact( (state==State.CONTENDER_FROM || state == State.CONTENDER_TO), visit.getScheduleEventSK() == null)
+    then
+        $inserted.setState(State.CONTENDER_UNSCHEDULED);
+        insert($inserted);
+        drools.setFocus("closest-schedule");
+        insert( new Threshold(Long.valueOf(callPreferences.getSecondCallStillValidThresholdMinutes() * 60 * 1000)));
+        rulesLog.info("DRL::cep-engine-schedule-10 no matches inside schedules so set new agenda-group : This rule should have set a new agenda group closest-schedule!");
+end
+
+
+rule "cep-engine-schedule-11 no matches inside schedules no contenders"
+    salience 60
+    agenda-group "pick-schedule"
+    when
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+    then
+        $inserted.setState(State.CREATE_UNPLANNED_VISIT);
+        $inserted.setScheduledFrom($inserted.getCallIn());
+        $inserted.setScheduledTo(CreateDateWithOffset($inserted.getCallIn(), 1));
+        update($inserted);
+        rulesLog.info("DRL::cep-engine-schedule-11-Rev no matches inside schedules no contenders Salience 60  : Create Unplanned Visit!");
+
+end
+

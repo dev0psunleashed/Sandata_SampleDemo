@@ -1,0 +1,115 @@
+package assets;
+import com.sandata.lab.data.model.dl.model.collection.VisitEventDNISGroup;
+import com.sandata.lab.data.model.dl.model.extended.VisitEventExt;
+import java.util.Map
+import org.slf4j.LoggerFactory;
+import com.sandata.lab.rules.vv.log.utils.App;
+import com.sandata.lab.rules.vv.fact.VisitEventFact;
+import com.sandata.lab.rules.vv.log.utils.LoggingUtils;
+import java.util.Date;
+dialect  "mvel"
+
+function void logInfo(String message) {
+    LoggerFactory.getLogger(LoggingUtils.getLogPrefix(LoggingUtils.SUB_APP_CALL_MATCHING_SERVICE_KEYWORD).toString()).info(message);
+}
+
+function void logError(String message) {
+    LoggerFactory.getLogger(LoggingUtils.getLogPrefix(LoggingUtils.SUB_APP_CALL_MATCHING_SERVICE_KEYWORD).toString()).error(message);
+}
+
+function boolean xOfY(int x, int y, String value, String target) {
+    Boolean match = false;
+
+    if (value.length() < x) {
+        return match;
+    }
+
+    if (target.charAt(0) == '0'
+        && target.charAt(1) != '0') {
+        target = target.substring(1, target.length());
+        if (value.charAt(0) == '0'
+            && value.charAt(1) != '0') {
+            value = value.substring(1, value.length());
+
+        }
+        x -= 1;
+    }
+
+    if (target.charAt(0) == '0'
+        && target.charAt(1) == '0') {
+        target = target.substring(2, target.length());
+        if (value.charAt(0) == '0'
+            && value.charAt(1) == '0') {
+            value = value.substring(2, value.length());
+
+        }
+        x -= 2;
+    }
+
+    int limit = (y + 1) - x;
+    limit -= y - value.length();
+
+    for (int i = 0; i < limit; i++) {
+        if (target.contains(value.substring(i, i + x))) {
+            match = true;
+            break;
+        }
+    }
+    return match;
+}
+
+function Boolean isCallWithinDeviationThreshold(Date callDate, Date scheduleDate, Long deviationThresholdMilliseconds) {
+
+     Long callDateMilliseconds = callDate.getTime();
+     Long scheduleDateMilliseconds = scheduleDate.getTime();
+
+     return callDateMilliseconds >= (scheduleDateMilliseconds - deviationThresholdMilliseconds)
+         && callDateMilliseconds <= (scheduleDateMilliseconds + deviationThresholdMilliseconds);
+}
+
+/*
+* This method used to check the callDtime is within the DeviationThreshold (before sched in and after sched out in mins.
+*/
+function Boolean isCallWithinSchedInOut(Date callDate, Date scheduleInDateTime,Date scheduleOutDateTime, Long deviationThresholdMilliseconds) {
+     if(isInCall (callDate,scheduleInDateTime , scheduleOutDateTime)) {
+        return isCallWithinDeviationThreshold (callDate ,scheduleInDateTime, deviationThresholdMilliseconds );
+     } else {
+        return isCallWithinDeviationThreshold (callDate ,scheduleOutDateTime, deviationThresholdMilliseconds );
+     }
+}
+
+
+function Long minutesToMilliseconds(Integer minutes) {
+    Integer milliseconds = minutes * 60 * 1000;
+    return milliseconds.longValue();
+}
+
+//calculate date diff ( in milisecond) between visit date time and schedule in date time/schedule out date time
+//the result of this method, then willbe compare to the pre-configure threshold to indecate the  visit is planned or unplanned.
+function long diffDates(Date d1, Date d2) {
+    long retResult = 0L;
+    if(d1.after(d2)) {
+        retResult = d1.getTime() - d2.getTime();
+        logInfo(String.format("DIFFDATES: First Date is After Second Date (d1.getTime() - d2.getTime() = %d", retResult));
+    } else {
+        retResult = d2.getTime() - d1.getTime();
+        logInfo(String.format("DIFFDATES: First Date is Equal To or Before Second Date (d2.getTime() - d1.getTime() = %d", retResult));
+    }
+
+    return retResult;
+}
+
+
+function Boolean isInCall(Date callDate, Date scheduleInDate, Date scheduleOutDate) {
+    if (callDate.getTime() < scheduleInDate.getTime()) {
+        return true;
+    } else if (callDate.getTime() > scheduleOutDate.getTime()) {
+        return false;
+    } else {
+        Long callInDifference = callDate.getTime() - scheduleInDate.getTime();
+        Long callOutDifference = scheduleOutDate.getTime() - callDate.getTime();
+
+        return callInDifference <= callOutDifference;
+    }
+}
+

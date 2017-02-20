@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+    <cm:property-placeholder id="evvExport.blueprint.placeholder" persistent-id="com.sandata.lab.exports.evv" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+            <cm:property name="activeMQ.username" value="admin" />
+            <cm:property name="activeMQ.password" value="admin" />
+            <cm:property name="thread.pool.size" value="20" />
+            <cm:property name="thread.pool.max.size" value="100" />
+            <cm:property name="thread.pool.max.queue.size" value="-1" />
+            <cm:property name="activeMQ.concurrentConsumers" value="100" />
+            <cm:property name="rest.concurrentConsumers" value="20" />
+            <cm:property name="webservice.url" value="/exports/evv" />
+            <cm:property name="evvExportDelay" value="20s"/>
+            <cm:property name="evvExportPeriod" value="300s"/>
+            <cm:property name="ws_url" value="cxf://https://main-dev-evv.sandata.com/SantraxTransferService/SantraxTransfer.asmx?" />
+            <cm:property name="Accounts" value="[{ bsnEntId: '1', evvAcount: '0221', userName: '0221', password: 'wrongprpm0221', description: 'dev test account' }] "/>
+            <cm:property name="george.account" value="1"/>
+            <cm:property name="evv.account" value="0221"/>
+            <cm:property name="evv.username" value="0221"/>
+            <cm:property name="evv.password" value="prpm0221"/>
+            <cm:property name="evv.description" value="dev test account"/>
+            <cm:property name="filterByANIEnabled" value="0"/>
+            <cm:property name="scheduledEvvExportsRequest" value="activemq:queue:scheduledEvvExportsRequest"/>
+            <cm:property name="santraxTransferService" value="activemq:queue:santraxTransferService"/>
+            <cm:property name="xmlLoggingService" value="activemq:queue:xmlLoggingService"/>
+            <cm:property name="xmlLoggingServiceResponse" value="activemq:queue:xmlLoggingServiceResponse"/>
+            <cm:property name="logResponse" value="0"/>
+        </cm:default-properties>
+    </cm:property-placeholder>
+    <bean id="helper" class="com.sandata.lab.exports.evv.model.Helper" >
+
+            <property  name="prefix" >
+                <map>
+                    <entry key="http://tempuri.org/" value=""></entry>
+                </map>
+            </property>
+    </bean>
+    <bean id="cxfRouteHandler" class="com.sandata.lab.exports.evv.services.CxfRouteHandler" depends-on="appCamelContext" />
+
+    <bean id="formatTransformer" class="com.sandata.lab.common.utils.data.transformer.FormatTransformer" depends-on="appCamelContext" />
+
+    <bean id="evvExportRepository" class="com.sandata.lab.exports.evv.impl.EvvExportRepository" depends-on="appCamelContext" activation="eager">
+        <property name="connectionPoolDataService">
+            <reference
+                    interface="com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService"
+                    availability="mandatory" />
+        </property>
+        <property name="loggerService">
+            <reference
+                    interface="com.sandata.lab.logger.api.LoggerService"
+                    availability="optional" />
+        </property>
+
+    </bean>
+
+    <bean id="appContext" class="com.sandata.lab.exports.evv.app.AppContext"
+          factory-method="initCamelContext" depends-on="appCamelContext">
+        <argument ref="appCamelContext" />
+    </bean>
+
+    <bean id="authenticationInterceptor" class="org.apache.cxf.jaxrs.security.JAASAuthenticationFilter">
+        <property name="contextName" value="karaf"/>
+    </bean>
+
+    <bean id="gsonProvider" class="com.sandata.lab.common.utils.data.provider.GSONProvider"/>
+
+    <!-- connect to the local ActiveMQ broker -->
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="brokerURL" value="${activeMQ.uri}" />
+        <property name="userName" value="${activeMQ.username}" />
+        <property name="password" value="${activeMQ.password}" />
+        <property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+    </bean>
+
+
+    <cxf:rsServer id="rsServer" address="${webservice.url}"
+                  serviceClass="com.sandata.lab.exports.evv.RestfulServices"
+                  loggingFeatureEnabled="true"
+                  loggingSizeLimit="200">
+        <cxf:providers>
+            <ref component-id="authenticationInterceptor"/>
+            <ref component-id="gsonProvider" />
+        </cxf:providers>
+    </cxf:rsServer>
+
+    <camelContext id="appCamelContext" trace="false" streamCache="true" useMDCLogging="true" allowUseOriginalMessage="false" useBlueprintPropertyResolver="true" xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- using Camel properties component and refer to the OSGI-INF.blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <!-- <propertyPlaceholder id="properties" location="OSGI-INF.blueprint:dhs.OSGI-INF.blueprint.placeholder"/>-->
+        <propertyPlaceholder id="properties" location="blueprint:evvExport.blueprint.placeholder"/>
+        <package>com.sandata.lab.exports.evv.routes</package>
+
+        <threadPoolProfile id="evvExportRestThreadPool" poolSize="{{thread.pool.size}}" maxPoolSize="{{thread.pool.max.size}}" maxQueueSize="{{thread.pool.max.queue.size}}"/>
+    </camelContext>
+</blueprint>

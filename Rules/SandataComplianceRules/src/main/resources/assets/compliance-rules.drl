@@ -1,0 +1,288 @@
+import com.sandata.rules.compliance.domain.BusinessEntityComplianceFact;
+import com.sandata.rules.compliance.domain.BusinessEntityComplianceResultFact;
+import com.sandata.rules.compliance.domain.StaffFact;
+import com.sandata.rules.compliance.domain.StaffComplianceFact;
+import com.sandata.rules.compliance.domain.StaffComplianceResult;
+import com.sandata.lab.data.model.dl.model.SchedulePermissionQualifier;
+import com.sandata.lab.data.model.dl.model.StaffItemRequiredFromQualifier;
+import java.util.Date;
+
+dialect  "mvel"
+
+// Check if any StaffFact are missing a StaffComplianceFact and therefore out of compliance.
+rule "Missing StaffComplianceFact"
+    agenda-group "compliance-rules"
+    when
+        $businessEntityComplianceFact : BusinessEntityComplianceFact()
+        $staffFact : StaffFact(businessEntityId == $businessEntityComplianceFact.businessEntityId,
+            serviceName == $businessEntityComplianceFact.serviceName)
+        not StaffComplianceFact(businessEntityId == $staffFact.businessEntityId,
+            staffId == $staffFact.staffId,
+            complianceCode == $businessEntityComplianceFact.businessEntityComplianceCode,
+            businessEntityComplianceType == $businessEntityComplianceFact.businessEntityComplianceType)
+    then
+        System.err.println("StaffFact missing StaffComplianceFact!\n"
+            + $staffFact.toString()
+            + "\n"
+            + $businessEntityComplianceFact.toString());
+        StaffComplianceResult staffComplianceResult = new StaffComplianceResult();
+        staffComplianceResult.setComplianceCode($businessEntityComplianceFact.getBusinessEntityComplianceCode());
+        staffComplianceResult.setBusinessEntityComplianceType($businessEntityComplianceFact.getBusinessEntityComplianceType());
+        staffComplianceResult.setMessage("Missing StaffComplianceFact for StaffFact!\n"
+            + $staffFact.toString()
+            + "\n"
+            + $businessEntityComplianceFact.toString());
+        staffComplianceResult.setSchedulePermissionQualifier(SchedulePermissionQualifier.PREVENT);
+        staffComplianceResult.setStaffFact($staffFact);
+        staffComplianceResult.setCompliant(false);
+        insert(staffComplianceResult)
+end;
+
+// Check if StaffComplianceFact expired date before NOW.
+rule "Staff Compliance Date Expired"
+    agenda-group "compliance-rules"
+    when
+        $businessEntityComplianceFact : BusinessEntityComplianceFact()
+        $staffFact : StaffFact(businessEntityId == $businessEntityComplianceFact.businessEntityId,
+            serviceName == $businessEntityComplianceFact.serviceName)
+        $staffComplianceFact : StaffComplianceFact(continueEvaluation == true,
+            businessEntityId == $staffFact.businessEntityId,
+            staffId == $staffFact.staffId,
+            complianceCode == $businessEntityComplianceFact.businessEntityComplianceCode,
+            businessEntityComplianceType == $businessEntityComplianceFact.businessEntityComplianceType,
+            expirationDate < new Date())
+    then
+        System.err.println("StaffComplianceFact has expired!\n"
+            + $staffFact.toString()
+            + "\n"
+            + $staffComplianceFact.toString()
+            + "\n"
+            + $businessEntityComplianceFact.toString());
+        modify ($staffComplianceFact) { setContinueEvaluation(false) }
+        StaffComplianceResult staffComplianceResult = new StaffComplianceResult();
+        staffComplianceResult.setComplianceCode($businessEntityComplianceFact.getBusinessEntityComplianceCode());
+        staffComplianceResult.setBusinessEntityComplianceType($businessEntityComplianceFact.getBusinessEntityComplianceType());
+        staffComplianceResult.setMessage("StaffComplianceFact has expired!\n"
+            + $staffFact.toString()
+            + "\n"
+            + $staffComplianceFact.toString()
+            + "\n"
+            + $businessEntityComplianceFact.toString());
+        staffComplianceResult.setSchedulePermissionQualifier(SchedulePermissionQualifier.PREVENT);
+        staffComplianceResult.setStaffFact($staffFact);
+        staffComplianceResult.setCompliant(false);
+        insert(staffComplianceResult)
+end;
+
+// Check if StaffComplianceFact receieved date after BusinessEntityComplianceFact required by date.
+rule "Staff Compliance Received Past Required By Date"
+    agenda-group "compliance-rules"
+    when
+       $businessEntityComplianceFact : BusinessEntityComplianceFact()
+       $staffFact : StaffFact(businessEntityId == $businessEntityComplianceFact.businessEntityId,
+            serviceName == $businessEntityComplianceFact.serviceName)
+       $staffComplianceFact : StaffComplianceFact(continueEvaluation == true,
+            businessEntityId == $staffFact.businessEntityId,
+            staffId == $staffFact.staffId,
+            complianceCode == $businessEntityComplianceFact.businessEntityComplianceCode,
+            businessEntityComplianceType == $businessEntityComplianceFact.businessEntityComplianceType,
+            expirationDate > new Date(),
+            (($businessEntityComplianceFact.complianceRequiredByDate != null
+                && $staffComplianceFact.receivedDate > $businessEntityComplianceFact.complianceRequiredByDate)
+            || ($businessEntityComplianceFact.staffItemRequiredFromQualifier == StaffItemRequiredFromQualifier.STAFF_HIRE_DATE
+                && $staffComplianceFact.receivedDate > $staffFact.staffHireDate)
+            || ($businessEntityComplianceFact.staffItemRequiredFromQualifier == StaffItemRequiredFromQualifier.STAFF_VERIFIED_START_DATE
+                && $staffComplianceFact.receivedDate > $staffFact.staffVerifiedStartDate)))
+    then
+        System.err.println("StaffComplianceFact received past required date!\n"
+            + $businessEntityComplianceFact.toString()
+            + "\n"
+            + $staffFact.toString()
+            + "\n"
+            + $staffComplianceFact.toString());
+        modify ($staffComplianceFact) { setContinueEvaluation(false) }
+        StaffComplianceResult staffComplianceResult = new StaffComplianceResult();
+        staffComplianceResult.setComplianceCode($businessEntityComplianceFact.getBusinessEntityComplianceCode());
+        staffComplianceResult.setBusinessEntityComplianceType($businessEntityComplianceFact.getBusinessEntityComplianceType());
+        staffComplianceResult.setMessage("StaffComplianceFact received past required date!\n"
+            + $businessEntityComplianceFact.toString()
+            + "\n"
+            + $staffFact.toString()
+            + "\n"
+            + $staffComplianceFact.toString());
+        staffComplianceResult.setSchedulePermissionQualifier(SchedulePermissionQualifier.PREVENT);
+        staffComplianceResult.setStaffFact($staffFact);
+        staffComplianceResult.setCompliant(false);
+        insert(staffComplianceResult)
+end;
+
+// Check no result is required.
+rule "Compliance Does NOT Require Reading Value Result"
+    agenda-group "compliance-rules"
+    when
+        $businessEntityComplianceFact : BusinessEntityComplianceFact()
+        $staffFact : StaffFact(businessEntityId == $businessEntityComplianceFact.businessEntityId,
+            serviceName == $businessEntityComplianceFact.serviceName)
+        $staffComplianceFact : StaffComplianceFact(continueEvaluation == true,
+            businessEntityId == $staffFact.businessEntityId,
+            staffId == $staffFact.staffId,
+            complianceCode == $businessEntityComplianceFact.businessEntityComplianceCode,
+            businessEntityComplianceType == $businessEntityComplianceFact.businessEntityComplianceType,
+            expirationDate > new Date())
+        not BusinessEntityComplianceResultFact(businessEntityId == $businessEntityComplianceFact.businessEntityId,
+                        businessEntityComplianceCode == $businessEntityComplianceFact.businessEntityComplianceCode)
+    then
+        System.out.println("BusinessEntityComplianceResultFact not required and valid StaffComplianceFact found.\n"
+            + $businessEntityComplianceFact.toString()
+            + "\n"
+            + $staffFact.toString()
+            + "\n"
+            + $staffComplianceFact.toString());
+        StaffComplianceResult staffComplianceResult = new StaffComplianceResult();
+        staffComplianceResult.setComplianceCode($businessEntityComplianceFact.getBusinessEntityComplianceCode());
+        staffComplianceResult.setBusinessEntityComplianceType($businessEntityComplianceFact.getBusinessEntityComplianceType());
+        staffComplianceResult.setMessage("BusinessEntityComplianceResultFact not required and valid StaffComplianceFact found.\n"
+            + $businessEntityComplianceFact.toString()
+            + "\n"
+            + $staffFact.toString()
+            + "\n"
+            + $staffComplianceFact.toString());
+        staffComplianceResult.setSchedulePermissionQualifier(SchedulePermissionQualifier.ALLOW);
+        staffComplianceResult.setStaffFact($staffFact);
+        staffComplianceResult.setCompliant(true);
+        insert(staffComplianceResult)
+end;
+
+// Check Reading Value Result Not Set.
+rule "Staff Compliance Reading Value Result Missing"
+    agenda-group "compliance-rules"
+    when
+        $businessEntityComplianceFact : BusinessEntityComplianceFact()
+        $businessEntityComplianceResultFact : BusinessEntityComplianceResultFact(businessEntityId == $businessEntityComplianceFact.businessEntityId,
+            businessEntityComplianceCode == $businessEntityComplianceFact.businessEntityComplianceCode)
+        $staffFact : StaffFact(businessEntityId == $businessEntityComplianceFact.businessEntityId,
+            serviceName == $businessEntityComplianceFact.serviceName)
+        $staffComplianceFact : StaffComplianceFact(continueEvaluation == true,
+            businessEntityId == $staffFact.businessEntityId,
+            staffId == $staffFact.staffId,
+            complianceCode == $businessEntityComplianceFact.businessEntityComplianceCode,
+            businessEntityComplianceType == $businessEntityComplianceFact.businessEntityComplianceType,
+            expirationDate > new Date(),
+            (complianceResultReadingValue == null || complianceResultReadingValue.isEmpty()))
+    then
+        System.err.println("StaffComplianceFact reading value result missing for BusinessEntityComplianceFact.\n"
+            + $businessEntityComplianceFact.toString()
+            + "\n"
+            + $businessEntityComplianceResultFact.toString()
+            + "\n"
+            + $staffFact.toString()
+            + "\n"
+            + $staffComplianceFact.toString());
+        modify ($staffComplianceFact) { setContinueEvaluation(false) }
+        StaffComplianceResult staffComplianceResult = new StaffComplianceResult();
+        staffComplianceResult.setComplianceCode($businessEntityComplianceFact.getBusinessEntityComplianceCode());
+        staffComplianceResult.setBusinessEntityComplianceType($businessEntityComplianceFact.getBusinessEntityComplianceType());
+        staffComplianceResult.setMessage("StaffComplianceFact reading value result missing for BusinessEntityComplianceFact.\n"
+            + $businessEntityComplianceFact.toString()
+            + "\n"
+            + $businessEntityComplianceResultFact.toString()
+            + "\n"
+            + $staffFact.toString()
+            + "\n"
+            + $staffComplianceFact.toString());
+        staffComplianceResult.setSchedulePermissionQualifier(SchedulePermissionQualifier.PREVENT);
+        staffComplianceResult.setStaffFact($staffFact);
+        staffComplianceResult.setCompliant(false);
+        insert(staffComplianceResult)
+end;
+
+// Check Reading Value Result for Staff not Found for BusinessEntity.
+rule "Staff Compliance Reading Value Result Not Found"
+    agenda-group "compliance-rules"
+    when
+        $businessEntityComplianceFact : BusinessEntityComplianceFact()
+        $businessEntityComplianceResultFact : BusinessEntityComplianceResultFact(businessEntityId == $businessEntityComplianceFact.businessEntityId,
+                    businessEntityComplianceCode == $businessEntityComplianceFact.businessEntityComplianceCode)
+        $staffFact : StaffFact(businessEntityId == $businessEntityComplianceFact.businessEntityId,
+            serviceName == $businessEntityComplianceFact.serviceName)
+        $staffComplianceFact :  StaffComplianceFact(continueEvaluation == true,
+            businessEntityId == $staffFact.businessEntityId,
+            staffId == $staffFact.staffId,
+            complianceCode == $businessEntityComplianceFact.businessEntityComplianceCode,
+            businessEntityComplianceType == $businessEntityComplianceFact.businessEntityComplianceType,
+            expirationDate > new Date())
+        not BusinessEntityComplianceResultFact(businessEntityId == $businessEntityComplianceFact.businessEntityId,
+            businessEntityComplianceCode == $businessEntityComplianceFact.businessEntityComplianceCode,
+            complianceResultReadingValue == $staffComplianceFact.complianceResultReadingValue)
+    then
+        System.err.println("BusinessEntityComplianceResultFact not found for StaffComplianceFact result reading value.\n"
+           + $businessEntityComplianceFact.toString()
+           + "\n"
+           + $businessEntityComplianceResultFact.toString()
+           + "\n"
+           + $staffFact.toString()
+           + "\n"
+           + $staffComplianceFact.toString());
+        modify ($staffComplianceFact) { setContinueEvaluation(false) }
+        StaffComplianceResult staffComplianceResult = new StaffComplianceResult();
+        staffComplianceResult.setComplianceCode($businessEntityComplianceFact.getBusinessEntityComplianceCode());
+        staffComplianceResult.setBusinessEntityComplianceType($businessEntityComplianceFact.getBusinessEntityComplianceType());
+        staffComplianceResult.setMessage("BusinessEntityComplianceResultFact not found for StaffComplianceFact result reading value.\n"
+           + $businessEntityComplianceFact.toString()
+           + "\n"
+           + $businessEntityComplianceResultFact.toString()
+           + "\n"
+           + $staffFact.toString()
+           + "\n"
+           + $staffComplianceFact.toString());
+        staffComplianceResult.setSchedulePermissionQualifier(SchedulePermissionQualifier.PREVENT);
+        staffComplianceResult.setStaffFact($staffFact);
+        staffComplianceResult.setCompliant(false);
+        insert(staffComplianceResult)
+end;
+
+
+// Check the result of the found StaffComplianceFact against BusinessEntityComplianceResultFact.
+rule "Match Staff Compliance Reading Value Result"
+    agenda-group "compliance-rules"
+    no-loop
+    when
+        $businessEntityComplianceFact : BusinessEntityComplianceFact()
+        $businessEntityComplianceResultFact : BusinessEntityComplianceResultFact(businessEntityId == $businessEntityComplianceFact.businessEntityId,
+                    businessEntityComplianceCode == $businessEntityComplianceFact.businessEntityComplianceCode)
+        $staffFact : StaffFact(businessEntityId == $businessEntityComplianceFact.businessEntityId,
+            serviceName == $businessEntityComplianceFact.serviceName)
+        $staffComplianceFact : StaffComplianceFact(continueEvaluation == true,
+            businessEntityId == $staffFact.businessEntityId,
+            staffId == $staffFact.staffId,
+            complianceCode == $businessEntityComplianceFact.businessEntityComplianceCode,
+            businessEntityComplianceType == $businessEntityComplianceFact.businessEntityComplianceType,
+            expirationDate > new Date(),
+            complianceResultReadingValue == $businessEntityComplianceResultFact.complianceResultReadingValue)
+    then
+        System.out.println("Found matching BusinessEntityComplianceResultFact for StaffComplianceFact.\n"
+           + $businessEntityComplianceFact.toString()
+           + "\n"
+           + $businessEntityComplianceResultFact.toString()
+           + "\n"
+           + $staffFact.toString()
+           + "\n"
+           + $staffComplianceFact.toString());
+        modify ($staffComplianceFact) { setContinueEvaluation($businessEntityComplianceResultFact.isCompliant()) }
+        StaffComplianceResult staffComplianceResult = new StaffComplianceResult();
+        staffComplianceResult.setComplianceCode($businessEntityComplianceFact.getBusinessEntityComplianceCode());
+        staffComplianceResult.setBusinessEntityComplianceType($businessEntityComplianceFact.getBusinessEntityComplianceType());
+        staffComplianceResult.setMessage("Found matching BusinessEntityComplianceResultFact for StaffComplianceFact.\n"
+           + $businessEntityComplianceFact.toString()
+           + "\n"
+           + $businessEntityComplianceResultFact.toString()
+           + "\n"
+           + $staffFact.toString()
+           + "\n"
+           + $staffComplianceFact.toString());
+        staffComplianceResult.setSchedulePermissionQualifier($businessEntityComplianceResultFact.getSchedulePermissionQualifier());
+        staffComplianceResult.setStaffFact($staffFact);
+        staffComplianceResult.setCompliant($businessEntityComplianceResultFact.isCompliant());
+        insert(staffComplianceResult)
+end;
+

@@ -1,0 +1,99 @@
+package assets;
+import com.sandata.lab.data.model.dl.model.collection.VisitEventDNISGroup;
+import com.sandata.lab.rules.vv.model.VisitEventDNISGroupWrapper;
+import com.sandata.lab.data.model.dl.model.extended.VisitEventExt;
+import java.util.Map
+import org.slf4j.LoggerFactory;
+import com.sandata.lab.rules.vv.log.utils.App;
+import com.sandata.lab.rules.vv.fact.VisitEventFact;
+dialect  "mvel"
+
+// delete DNIS map when there are no longer any VisitEventDNISGroup.
+rule "Delete DNIS map"
+    agenda-group "call-matching-dnis"
+    when
+        $dnisMap : Map()
+        not VisitEventDNISGroup()
+    then
+        logInfo("deleting DNIS map");
+        retract($dnisMap)
+end;
+
+// NULL or empty DNIS.
+rule "Missing DNIS"
+    agenda-group "call-matching-dnis"
+    when
+        $visitEventDNISGroup : VisitEventDNISGroup(dnis == null
+            || dnis.isEmpty())
+    then
+        logError("DNIS Missing!");
+        retract($visitEventDNISGroup)
+end;
+
+// delete any empty VisitEventDNISGroups.
+rule "Delete empty VisitEventDNISGroup"
+    agenda-group "call-matching-dnis"
+    when
+        $visitEventDNISGroup : VisitEventDNISGroup(visitEvents == null
+            || visitEvents.isEmpty())
+    then
+        logInfo("deleting empty VisitEventDNISGroup");
+        retract($visitEventDNISGroup)
+end;
+
+// Invalid DNIS.
+rule "Business Entity Mapping by DNIS NOT found"
+    agenda-group "call-matching-dnis"
+    when
+        $dnisMap : Map()
+        $visitEventDNISGroup : VisitEventDNISGroup(dnis != null,
+            !dnis.isEmpty(),
+            dnis not memberOf $dnisMap.keySet())
+    then
+        logError("Invalid DNIS! All the calls that belong to this DNIS won't be inserted/updated to GEOR");
+        VisitEventDNISGroupWrapper visitEventDNISGroupWrapper = new VisitEventDNISGroupWrapper();
+        visitEventDNISGroupWrapper.setVisitEventDNISGroup($visitEventDNISGroup);
+        visitEventDNISGroupWrapper.setInvalidDNIS(true);
+        insert(visitEventDNISGroupWrapper);
+        retract($visitEventDNISGroup)
+end;
+
+
+// Removing VisitEvent without a visitEventDateTime."
+rule "Remove VisitEvent without visitEventDateTime"
+    agenda-group "call-matching-dnis"
+    when
+        $dnisMap : Map()
+        $visitEventDNISGroup : VisitEventDNISGroup(dnis != null,
+            !dnis.isEmpty(),
+            dnis memberOf $dnisMap.keySet())
+        $visitEventExt : VisitEventExt(visitEventDatetime == null) from $visitEventDNISGroup.visitEvents
+    then
+        logError("Removing VisitEvent with missing visitEventDateTime!");
+        retract($visitEventDNISGroup)
+        $visitEventDNISGroup.getVisitEvents().remove($visitEventExt);
+        insert($visitEventDNISGroup)
+end;
+
+
+// DNIS to business entity mapping found.  Convert and insert VisitEventFact.
+rule "Business Entity Mapping by DNIS found"
+    agenda-group "call-matching-dnis"
+    when
+        $dnisMap : Map()
+        $visitEventDNISGroup : VisitEventDNISGroup(dnis != null,
+            !dnis.isEmpty(),
+            dnis memberOf $dnisMap.keySet())
+        $visitEventExt : VisitEventExt(visitEventDatetime != null) from $visitEventDNISGroup.visitEvents
+    then
+        logInfo("Valid DNIS Found and VisitEventFact created!");
+        VisitEventFact visitEventFact = new VisitEventFact();
+        visitEventFact.setSid($visitEventExt.getSid());
+        visitEventFact.setVisitEventExt($visitEventExt);
+        visitEventFact.setBusinessEntityId((String) $dnisMap.get($visitEventDNISGroup.getDnis()));
+        insert(visitEventFact)
+        retract($visitEventDNISGroup)
+        $visitEventDNISGroup.getVisitEvents().remove($visitEventExt);
+        insert($visitEventDNISGroup)
+
+end;

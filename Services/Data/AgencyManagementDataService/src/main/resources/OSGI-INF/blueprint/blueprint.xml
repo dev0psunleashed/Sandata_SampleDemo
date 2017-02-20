@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+    <cm:property-placeholder id="restOracleApp.blueprint.placeholder" persistent-id="com.sandata.lab.rest.am" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+            <cm:property name="activeMQ.username" value="admin" />
+            <cm:property name="activeMQ.password" value="admin" />
+            <cm:property name="thread.pool.size" value="20" />
+            <cm:property name="thread.pool.max.size" value="100" />
+            <cm:property name="thread.pool.max.queue.size" value="-1" />
+            <cm:property name="activeMQ.concurrentConsumers" value="100" />
+            <cm:property name="rest.concurrentConsumers" value="20" />
+            <cm:property name="app.tenant.key.conf.staff.id.setting" value="MW_GEN_AGENCY_STAFF_ID_SETTINGS" />
+            <cm:property name="app.tenant.key.conf.patient.id.setting" value="MW_GEN_AGENCY_PATIENT_ID_SETTINGS" />
+            <cm:property name="app.tenant.key.last.gen.staff.id" value="MW_LAST_GEN_AGENCY_STAFF_ID" />
+            <cm:property name="app.tenant.key.last.gen.patient.id" value="MW_LAST_GEN_AGENCY_PATIENT_ID" />
+            
+            <cm:property name="app.tenant.key.conf.staff.id.setting.value" value="{&quot;MaxLength&quot;:&quot;10&quot;,&quot;MinLength&quot;:&quot;1&quot;,&quot;Type&quot;:&quot;NUMERIC&quot;,&quot;PadWithLeadingZeros&quot;:&quot;false&quot;,&quot;FixedLength&quot;:9,&quot;FixedLengthStartDigit&quot;:9}" />
+            <cm:property name="app.tenant.key.conf.patient.id.setting.value" value="{&quot;MaxLength&quot;:&quot;10&quot;,&quot;MinLength&quot;:&quot;1&quot;,&quot;Type&quot;:&quot;NUMERIC&quot;,&quot;PadWithLeadingZeros&quot;:&quot;false&quot;,&quot;FixedLength&quot;:9,&quot;FixedLengthStartDigit&quot;:9}" />
+            <cm:property name="app.tenant.key.last.gen.staff.id.value">
+                <value>
+                	SELECT STAFF_ID, STAFF_SK FROM STAFF WHERE STAFF.BE_ID = '%s' AND STAFF_SK = (SELECT MAX(STAFF_SK) FROM STAFF WHERE BE_ID = '%s')
+                </value>
+            </cm:property> 
+            <cm:property name="app.tenant.key.last.gen.patient.id.value">
+                <value>
+                	SELECT PT_ID,PT_SK FROM PT WHERE PT.BE_ID = '%s' AND PT_SK = (SELECT MAX(PT_SK) FROM PT WHERE BE_ID = '%s')
+                </value>
+            </cm:property> 
+            <cm:property name="webservice.url" value="/data/service/am" />
+        </cm:default-properties>
+    </cm:property-placeholder>
+    
+    <!-- configuration mapping for generated staff/patient id -->
+    <bean id="generatedIDConfigMapping" class="com.sandata.lab.rest.am.model.GeneratedIDConfigMapping" > 
+        <property name="configMap"> 
+            <map> 
+        		<entry key="${app.tenant.key.conf.staff.id.setting}" value="${app.tenant.key.conf.staff.id.setting.value}" />
+                <entry key="${app.tenant.key.conf.patient.id.setting}" value="${app.tenant.key.conf.patient.id.setting.value}" />
+	            <entry key="${app.tenant.key.last.gen.staff.id}" value="${app.tenant.key.last.gen.staff.id.value}" />
+	            <entry key="${app.tenant.key.last.gen.patient.id}" value="${app.tenant.key.last.gen.patient.id.value}" /> 
+            </map> 
+        </property> 
+    </bean>
+
+    <bean id="cxfRouteHandler" class="com.sandata.lab.rest.am.services.CxfRouteHandler" depends-on="appCamelContext" />
+
+    <bean id="formatTransformer" class="com.sandata.lab.common.utils.data.transformer.FormatTransformer" depends-on="appCamelContext" />
+
+    <bean id="oracleDataServiceApi" class="com.sandata.lab.rest.am.impl.OracleDataService" depends-on="appCamelContext" activation="eager">
+        <property name="connectionPoolDataService">
+            <reference
+                    interface="com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService"
+                    availability="mandatory" />
+        </property>
+    </bean>
+
+    <bean id="oracleFindDataServiceApi" class="com.sandata.lab.rest.am.impl.OracleFindDataService"  depends-on="appCamelContext" activation="eager">
+        <property name="connectionPoolDataService">
+            <reference
+                    interface="com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService"
+                    availability="mandatory" />
+        </property>
+    </bean>
+
+    <bean id="osgiDataService" class="com.sandata.lab.rest.am.impl.OSGIDataService" depends-on="oracleFindDataServiceApi">
+        <property name="oracleFindDataService" ref="oracleFindDataServiceApi" />
+    </bean>
+
+    <bean id="reportRestDataService" class="com.sandata.lab.rest.am.impl.ReportRestDataService" depends-on="oracleDataServiceApi">
+        <property name="oracleDataService" ref="oracleDataServiceApi" />
+    </bean>
+
+    <bean id="adminRestDataService" class="com.sandata.lab.rest.am.impl.AdminRestDataService" depends-on="oracleDataServiceApi">
+        <property name="oracleDataService" ref="oracleDataServiceApi" />
+    </bean>
+
+    <bean id="restDataService" class="com.sandata.lab.rest.am.impl.RestDataService" depends-on="oracleDataServiceApi">
+        <property name="oracleDataService" ref="oracleDataServiceApi" />
+        <property name="generatedIDConfigMapping" ref="generatedIDConfigMapping" />
+    </bean>
+
+    <bean id="appContext" class="com.sandata.lab.rest.am.app.AppContext"
+          factory-method="initCamelContext" depends-on="appCamelContext">
+        <argument ref="appCamelContext" />
+    </bean>
+
+    <bean id="authenticationInterceptor" class="org.apache.cxf.jaxrs.security.JAASAuthenticationFilter">
+        <property name="contextName" value="karaf"/>
+    </bean>
+
+    <bean id="gsonProvider" class="com.sandata.lab.common.utils.data.provider.CustomEnumGSONProvider"/>
+
+    <!-- connect to the local ActiveMQ broker -->
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="brokerURL" value="${activeMQ.uri}" />
+        <property name="userName" value="${activeMQ.username}" />
+        <property name="password" value="${activeMQ.password}" />
+        <property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+    </bean>
+
+    <cxf:rsServer id="rsServer" address="${webservice.url}"
+                  serviceClass="com.sandata.lab.rest.am.RestfulServices"
+                  loggingFeatureEnabled="true"
+                  loggingSizeLimit="20">
+        <cxf:providers>
+            <ref component-id="authenticationInterceptor"/>
+            <ref component-id="gsonProvider" />
+        </cxf:providers>
+    </cxf:rsServer>
+
+    <camelContext id="appCamelContext" trace="true" streamCache="true" useBlueprintPropertyResolver="true" xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- using Camel properties component and refer to the OSGI-INF.blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <!-- <propertyPlaceholder id="properties" location="OSGI-INF.blueprint:dhs.OSGI-INF.blueprint.placeholder"/>-->
+        <propertyPlaceholder id="properties" location="blueprint:restOracleApp.blueprint.placeholder"/>
+        <package>com.sandata.lab.rest.am.routes</package>
+
+        <threadPoolProfile id="agencyManagementThreadPool" poolSize="{{thread.pool.size}}" maxPoolSize="{{thread.pool.max.size}}" maxQueueSize="{{thread.pool.max.queue.size}}"/>
+    </camelContext>
+</blueprint>

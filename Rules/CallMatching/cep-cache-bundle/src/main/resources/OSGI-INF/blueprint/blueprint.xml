@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:camel="http://camel.apache.org/schema/blueprint"
+	xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+   xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+       http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd">
+
+	<!-- property files in fuse/etc/com.sandata.lab.callmatching.cfg -->
+	<cm:property-placeholder id="cep.engine.cache.blueprint.placeholder" persistent-id="com.sandata.lab.rules" update-strategy="none">
+		<cm:default-properties>
+			<cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+			<cm:property name="activeMQ.username" value="admin" />
+			<cm:property name="activeMQ.password" value="admin" />
+			<cm:property name="activeMQ.concurrentConsumers" value="100" />
+		</cm:default-properties>
+	</cm:property-placeholder>
+
+	<bean id="appContext" class="com.sandata.lab.rules.cache.app.AppContext" factory-method="InitCamelContext"
+          depends-on="cacheContext">
+        <argument ref="cacheContext" />
+    </bean>
+
+	<bean id="callPreferencesSvc" class="com.sandata.lab.rules.cache.service.CallPreferencesSvc"
+		init-method="startUp" destroy-method="destroy" depends-on="cacheContext">
+	</bean>
+	<service ref="callPreferencesSvc" interface="com.sandata.lab.rules.cache.service.ICallPreferencesSvc" />
+
+	<!-- connect to the local ActiveMQ broker -->
+
+	<bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="${activeMQ.uri}" />
+		<property name="userName" value="${activeMQ.username}" />
+		<property name="password" value="${activeMQ.password}" />
+	</bean>
+	<bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+		<property name="connectionFactory" ref="connectionFactory"/>
+	</bean>
+	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent" depends-on="jmsConfig">
+		<property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+		<property name="configuration" ref="jmsConfig"/>
+	</bean>
+	<!--to expose via jmx
+	<bean  id="ehCacheManagementService" class="net.sf.ehcache.management.ManagementService" init-method="init">
+		<argument>
+			<bean class="net.sf.ehcache.CacheManager" factory-method="getInstance"/>
+		</argument>
+		<argument>
+			<bean class="org.springframework.jmx.support.JmxUtils" factory-method="locateMBeanServer"/>
+		</argument>
+		<argument value="true"/>
+		<argument value="true"/>
+		<argument value="true"/>
+		<argument value="true"/>
+	</bean>
+	-->
+	<!-- to replicate across servers
+	<bean id="getQueue" class="java.lang.String">
+		<argument value="replicationGetQueue" />
+	</bean>
+
+	<bean id="getTopic" class="java.lang.String">
+		<argument value="replicationTopic"/>
+	</bean>
+	<bean id="queueConnection1" factory-ref="connectionFactory" factory-method="createQueueConnection" class="javax.jms.QueueConnection" />
+	<bean id="topicConnection1" factory-ref="connectionFactory" factory-method="createTopicConnection" class="javax.jms.TopicConnection" />
+	<bean id="queue1" class="org.apache.activemq.command.ActiveMQQueue">
+		<argument ref="getQueue" />
+	</bean>
+	<bean id="topic1" class="org.apache.activemq.command.ActiveMQTopic">
+		<argument ref="getTopic" />
+	</bean>
+
+	<bean id="jmsListener1" class="net.sf.ehcache.distribution.jms.JMSCacheReplicator">
+		<argument index="0" value="true" />
+		<argument index="1" value="true" />
+		<argument index="2" value="true" />
+		<argument index="3" value="true" />
+		<argument index="4" value="false" />
+		<argument index="5" value="0" />
+	</bean>
+
+	<bean id="jmsLoader1" class="com.sandata.lab.rules.cache.replication.CEPWrappedJMSCacheLoader">
+		<argument index="0" ref="queueConnection1" />
+		<argument index="1" ref="queue1" />
+		<argument index="2" value="AUTO_ACKNOWLEDGE" />
+		<argument index="3" value="30000" />
+	</bean>
+
+	<bean id="cacheManagerFactory1" class="com.sandata.lab.rules.cache.replication.CEPCacheManagerFactory">
+		<argument index="0" value="ehcache_cep.xml" />
+		<argument index="1" ref="topicConnection1" />
+		<argument index="2" ref="topic1" />
+		<argument index="3" ref="queueConnection1" />
+		<argument index="4" ref="queue1" />
+	</bean>
+
+	<bean id="eventListenerRegistry1" class="org.apache.camel.component.cache.CacheEventListenerRegistry">
+		<argument>
+			<list>
+				<ref component-id="jmsListener1" />
+			</list>
+		</argument>
+	</bean>
+
+	<bean id="cacheLoaderRegistry1" class="org.apache.camel.component.cache.CacheLoaderRegistry">
+		<argument>
+			<list>
+				<ref component-id="jmsLoader1"/>
+			</list>
+		</argument>
+	</bean>
+	-->
+  <camel:camelContext id="cacheContext" useBlueprintPropertyResolver="true" useMDCLogging="true" trace="true" streamCache="true" >
+	  	<!-- using Camel properties component and refer to the blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <camel:propertyPlaceholder id="properties" location="blueprint:cep.engine.cache.blueprint.placeholder" />
+        <camel:package>com.sandata.lab.rules.cache.routes</camel:package>
+
+  </camel:camelContext>
+
+</blueprint>

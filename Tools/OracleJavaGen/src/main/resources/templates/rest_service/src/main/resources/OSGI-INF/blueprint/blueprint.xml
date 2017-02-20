@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+    <cm:property-placeholder id="restOracleApp.blueprint.placeholder" persistent-id="__GROUP_ID__" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+            <cm:property name="activeMQ.username" value="admin" />
+            <cm:property name="activeMQ.password" value="admin" />
+            <cm:property name="activeMQ.concurrentConsumers" value="100" />
+            <cm:property name="thread.pool.size" value="20" />
+            <cm:property name="thread.pool.max.size" value="100" />
+            <cm:property name="thread.pool.max.queue.size" value="-1" />
+            <cm:property name="rest.concurrentConsumers" value="20" />
+            <cm:property name="db.name" value="sdbdev1" />
+            <cm:property name="db.server" value="stxdevdb.sandata.com" />
+            <cm:property name="db.port" value="1526" />
+            <cm:property name="db.user" value="coredata" />
+            <cm:property name="db.password" value="z3U0kCdbdN" />
+            <cm:property name="db.initial.pool.size" value="5" />
+            <cm:property name="db.min.pool.size" value="5" />
+            <cm:property name="db.max.pool.size" value="20" />
+            <cm:property name="db.max.statement.size" value="20" />
+            <cm:property name="db.inactive.timeout.seconds" value="60" />
+            <cm:property name="webservice.url" value="/data/service/__REST_VERSION__/__REST_PATH__" />
+            <!-- TODO: Add Additional Properties Here -->
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="cxfRouteHandler" class="__GROUP_ID__.services.CxfRouteHandler" depends-on="appContext" />
+
+    <bean id="sandataOracleConnectionBean" class="com.sandata.lab.common.oracle.db.connection.SandataOracleConnection" init-method="initConnection" depends-on="appCamelContext">
+        <property name="databaseName" value="${db.name}" />
+        <property name="serverName" value="${db.server}" />
+        <property name="portNumber" value="${db.port}" />
+        <property name="user" value="${db.user}" />
+        <property name="password" value="${db.password}" />
+        <property name="initialPoolSize" value="${db.initial.pool.size}" />
+        <property name="minPoolSize" value="${db.min.pool.size}" />
+        <property name="maxPoolSize" value="${db.max.pool.size}" />
+        <property name="maxStatementSize" value="${db.max.statement.size}" />
+        <property name="inactiveTimeoutSeconds" value="${db.inactive.timeout.seconds}" />
+    </bean>
+
+    <bean id="oracleDataServiceApi" class="__GROUP_ID__.impl.OracleDataService"  depends-on="sandataOracleConnectionBean">
+        <property name="sandataOracleConnection" ref="sandataOracleConnectionBean" />
+    </bean>
+
+    <bean id="restDataService" class="__GROUP_ID__.impl.RestDataService" depends-on="oracleDataServiceApi">
+        <property name="oracleDataService" ref="oracleDataServiceApi" />
+    </bean>
+
+    <bean id="appContext" class="__GROUP_ID__.app.AppContext"
+          factory-method="initCamelContext" depends-on="appCamelContext">
+        <argument ref="appCamelContext" />
+    </bean>
+
+    <bean id="authenticationInterceptor" class="org.apache.cxf.jaxrs.security.JAASAuthenticationFilter">
+        <property name="contextName" value="karaf"/>
+    </bean>
+
+    <bean id="gsonProvider" class="com.sandata.lab.common.utils.data.provider.GSONProvider"/>
+
+    <!-- connect to the local ActiveMQ broker -->
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="brokerURL" value="${activeMQ.uri}" />
+        <property name="userName" value="${activeMQ.username}" />
+        <property name="password" value="${activeMQ.password}" />
+        <property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+    </bean>
+
+    <cxf:rsServer id="rsServer" address="${webservice.url}"
+                  serviceClass="__GROUP_ID__.__REST_CLASS_NAME__"
+                  loggingFeatureEnabled="true"
+                  loggingSizeLimit="20">
+        <cxf:providers>
+            <ref component-id="authenticationInterceptor"/>
+            <ref component-id="gsonProvider" />
+        </cxf:providers>
+    </cxf:rsServer>
+
+    <camelContext id="appCamelContext" trace="true" streamCache="true" useBlueprintPropertyResolver="true" xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- using Camel properties component and refer to the OSGI-INF.blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <!-- <propertyPlaceholder id="properties" location="OSGI-INF.blueprint:dhs.OSGI-INF.blueprint.placeholder"/>-->
+        <propertyPlaceholder id="properties" location="blueprint:restOracleApp.blueprint.placeholder"/>
+        <package>__GROUP_ID__.routes</package>
+
+        <threadPoolProfile id="__GROUP_ID__ThreadPool" poolSize="{{thread.pool.size}}" maxPoolSize="{{thread.pool.max.size}}" maxQueueSize="{{thread.pool.max.queue.size}}"/>
+    </camelContext>
+</blueprint>

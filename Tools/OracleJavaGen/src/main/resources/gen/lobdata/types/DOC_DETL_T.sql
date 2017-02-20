@@ -1,0 +1,20 @@
+--------------------------------------------------------
+--  DDL for Table DOC_DETL
+--------------------------------------------------------
+DROP TYPE DOC_DET_TAB FORCE;
+/
+
+CREATE or REPLACE
+TYPE DOC_DET_T AS OBJECT
+(
+"DOC_DET_SK" NUMBER(38,0),
+"REC_CREATE_TMSTP" DATE,
+"REC_UPDATE_TMSTP" DATE,
+"DOC_SK" NUMBER(38,0),
+"DOC_DET_PROPTY_KEY_NAME" VARCHAR2(50 BYTE),
+"DOC_DET_PROPTY_KEY_VAL" VARCHAR2(1000 BYTE)
+)
+/
+
+CREATE TYPE DOC_DET_TAB AS TABLE OF DOC_DET_T;
+/

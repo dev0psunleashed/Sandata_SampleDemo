@@ -1,0 +1,24 @@
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    <mapping>
+        <class-a>com.sandata.lab.exports.staff.model.Check</class-a>
+        <class-b>com.sandata.lab.data.model.dl.model.PayrollInput</class-b>
+            <field>
+                <a>voucherNumber</a>
+                <b>electronicFundsTransferTransactionIdentifier</b>
+            </field>
+            <field>
+                <a>grossAmount</a>
+                <b>grossPayAmount</b>
+            </field>
+            <field>
+                <a>netAmount</a>
+                <b>netPayAmount</b>
+            </field>
+            <field>
+                <a>periodEnd</a>
+                <b>weekEndDate</b>
+            </field>
+    </mapping>
+</mappings>

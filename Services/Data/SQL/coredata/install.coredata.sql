@@ -1,0 +1,16 @@
+@@"./index/create_index.sql";
+@@"./types/types.sql";
+@@"./exceptions/pkg_exceptions.sql";
+@@"./history/pkg_hist.sql";
+@@"./account_manager/pkg_am_util.sql";
+@@"./auth/pkg_auth_util.sql";
+@@"./billing/pkg_billing_util.sql";
+@@"./business_entity/pkg_bsn_util.sql";
+@@"./lob/pkg_be_lob.sql";
+@@"./payroll/pkg_pr_util.sql";
+@@"./staff/pkg_staff_util.sql";
+@@"./schedule/pkg_schedule_util.sql"
+@@"./patient/pkg_patient_util.sql"
+@@"./visit/pkg_visit_util.sql"
+@@"./docxwalk/pkg_docxwalk_util.sql"
+@@"./admin/pkg_admin_util.sql"

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+               
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+
+    <cm:property-placeholder id="call.matching.services.blueprint.placeholder"
+                             persistent-id="com.sandata.lab.rules.vv.call.matching.services" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616"/>
+            <cm:property name="activeMQ.username" value="admin"/>
+            <cm:property name="activeMQ.password" value="admin"/>
+            <cm:property name="activeMQ.concurrentConsumers" value="100"/>
+            <cm:property name="exchange.exception.redelivery.delay" value="10000"/>
+            <cm:property name="exchange.exception.maximum.redeliveries" value="0"/>
+            <cm:property name="visit.event.dnis.agenda.group" value="call-matching-dnis"/>
+            <cm:property name="visit.event.schedule.agenda.group" value="call-matching-schedule"/>
+            <cm:property name="visit.event.staff.agenda.group" value="call-matching-staff"/>
+            <cm:property name="visit.event.patient.agenda.group" value="call-matching-patient"/>
+            <cm:property name="visit.event.aggregation.time" value="30000"/>
+            <cm:property name="thread.pool.size" value="20" />
+            <cm:property name="thread.pool.max.size" value="100" />
+            <cm:property name="thread.pool.max.queue.size" value="-1" />
+            <cm:property name="jms.provider.url" value="http-remoting://localhost:8080" />
+            <cm:property name="jms.remote.connection.factory" value="jms/RemoteConnectionFactory" />
+            <cm:property name="jms.user.name" value="jmsuser" />
+            <cm:property name="jms.user.pwd" value="123456" />
+
+            <!-- for wildfly/kie-server rest auth info and url -->
+            <cm:property name="wildfly.kie.server.user" value="kieuser" />
+            <cm:property name="wildfly.kie.server.pwd" value="123456" />
+            <cm:property name="wildfly.kie.server.root.url" value="http://localhost:8080/kie-server-6.5.0.Final-ee7/services/rest/server" />
+            <cm:property name="wildfly.kie.container.id" value="callmatchingkie" />
+            <cm:property name="call.matching.kie.session.name" value="callMatchingSession" />
+
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="traceFormatter" class="org.apache.camel.processor.interceptor.DefaultTraceFormatter">
+        <property name="showBody" value="false"/>
+        <property name="showHeaders" value="false"/>
+    </bean>
+
+    <!-- connect to the local ActiveMQ broker -->
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="brokerURL" value="${activeMQ.uri}"/>
+        <property name="userName" value="${activeMQ.username}"/>
+        <property name="password" value="${activeMQ.password}"/>
+        <property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+    </bean>
+
+    <!-- Redis Template -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate" depends-on="callMatchingServiceContext" init-method="afterPropertiesSet">
+        <property name="connectionFactory">
+            <reference
+                    interface="com.sandata.lab.redis.connection.SandataRedisConnectionFactory"
+                    availability="mandatory" />
+        </property>
+    </bean>
+
+    <!-- Sandata Redis Cache Service -->
+    <bean id="sandataRedisCacheService" class="com.sandata.lab.redis.services.impl.SandataRedisCacheService" depends-on="redisTemplate">
+        <argument value="CallMatchingService"/>
+        <argument value="600"/>
+        <argument ref="redisTemplate"/>
+    </bean>
+
+    <!-- EVV Redis Call Store -->
+    <bean id="callMatchingRedisStore" class=" com.sandata.lab.rules.call.matching.service.redis.CallMatchingRedisStore" depends-on="sandataRedisCacheService">
+        <property name="sandataRedisService" ref="sandataRedisCacheService"/>
+    </bean>
+
+    <bean id="callValidator" class="com.sandata.lab.rules.call.matching.service.utils.CallValidator" depends-on="callMatchingRedisStore">
+        <property name="callMatchingStore" ref="callMatchingRedisStore" />
+    </bean>
+  
+
+    <camelContext id="callMatchingServiceContext" trace="true" streamCache="true" useBlueprintPropertyResolver="true"
+                  xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- using Camel properties component and refer to the OSGI-INF.blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <!-- <propertyPlaceholder id="properties" location="OSGI-INF.blueprint:dhs.OSGI-INF.blueprint.placeholder"/>-->
+        <propertyPlaceholder id="properties" location="blueprint:call.matching.services.blueprint.placeholder"/>
+        <package>com.sandata.lab.rules.call.matching.service.routes</package>
+        <threadPoolProfile id="sandataVvRulesMatchingServiceThreadPool" poolSize="{{thread.pool.size}}" maxPoolSize="{{thread.pool.max.size}}" maxQueueSize="{{thread.pool.max.queue.size}}"/>
+    </camelContext>
+</blueprint>

@@ -1,0 +1,72 @@
+SELECT T6.PATIENT_PHONE AS ANI,T4.STAFF_ID,T5.PATIENT_ID,T3.VISIT_EVNT_DTIME,T3.VISIT_EVNT_SK,T2.VISIT_SK,
+        T1.SCHED_EVNT_SK,T1.BSN_ENT_ID,T5.PATIENT_SK,T4.STAFF_SK,T1.SCHED_EVNT_START_DTIME,T1.SCHED_EVNT_END_DTIME,
+        T2.VISIT_ACT_START_TMSTP,T2.VISIT_ACT_END_TMSTP,T2.VISIT_ADJ_START_TMSTP,T2.VISIT_ADJ_END_TMSTP,T1.SCHED_EVNT_ID
+
+        FROM (SELECT SCHED_EVNT_SK,BSN_ENT_ID,PATIENT_ID,STAFF_ID,SCHED_EVNT_START_DTIME,SCHED_EVNT_END_DTIME,
+                     SCHED_EVNT_ID,REC_TERM_TMSTP,CURR_REC_IND
+              FROM SCHED_EVNT
+                WHERE BSN_ENT_ID = '1'
+                      AND SCHED_EVNT_START_DTIME IS NOT NULL
+                      AND SCHED_EVNT_END_DTIME IS NOT NULL
+                      AND SCHED_EVNT_START_DTIME BETWEEN
+                          TO_DATE('2015-12-21 00:00:00', 'YYYY-MM-DD HH24:MI:SS')
+                          AND TO_DATE('2016-01-31 00:00:00', 'YYYY-MM-DD HH24:MI:SS')
+                          AND ((TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31') AND CURR_REC_IND = 1)) T1
+
+                      LEFT JOIN (SELECT PATIENT_SK,PATIENT_ID,BSN_ENT_ID,REC_TERM_TMSTP,CURR_REC_IND
+                        FROM PATIENT
+                          WHERE BSN_ENT_ID = '1'
+                              AND PATIENT_ID IS NOT NULL
+                              AND ((TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31') AND CURR_REC_IND = 1)) T5
+                      ON T1.PATIENT_ID = T5.PATIENT_ID
+
+                      LEFT JOIN (SELECT PATIENT_ID,PATIENT_PHONE,REC_TERM_TMSTP,CURR_REC_IND
+                        FROM PATIENT_CONTACT_PHONE
+                          WHERE PATIENT_PHONE_PRMY_IND = 1
+                              AND ((TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31') AND CURR_REC_IND = 1)) T6
+                      ON T5.PATIENT_ID = T6.PATIENT_ID
+
+                      LEFT JOIN (SELECT SCHED_EVNT_SK,VISIT_SK,VISIT_ACT_START_TMSTP,VISIT_ACT_END_TMSTP,
+                                        VISIT_ADJ_START_TMSTP,VISIT_ADJ_END_TMSTP,REC_TERM_TMSTP,CURR_REC_IND
+                        FROM VISIT
+                          WHERE ((TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31') AND CURR_REC_IND = 1)) T2
+                      ON T1.SCHED_EVNT_SK = T2.SCHED_EVNT_SK
+
+                      LEFT JOIN (SELECT VISIT_EVNT_SK,VISIT_SK,VISIT_EVNT_DTIME,REC_TERM_TMSTP,CURR_REC_IND
+                        FROM VISIT_EVNT
+                          WHERE ((TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31') AND CURR_REC_IND = 1)) T3
+                      ON T2.VISIT_SK = T3.VISIT_SK
+
+                      RIGHT OUTER JOIN (SELECT STAFF_SK,STAFF_ID,BSN_ENT_ID,REC_TERM_TMSTP,CURR_REC_IND
+                        FROM STAFF
+                              WHERE BSN_ENT_ID = 1
+                                  AND STAFF_ID = '365090666'
+                                  AND ((TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31') AND CURR_REC_IND = 1)) T4
+                      ON T1.STAFF_ID = T4.STAFF_ID
+
+                      UNION SELECT V3.ANI,V3.STAFF_ID,V3.PATIENT_ID,V3.VISIT_EVNT_DTIME,V3.VISIT_EVNT_SK,V2.VISIT_SK,V2.SCHED_EVNT_SK,
+                                  NULL AS BSN_ENT_SK,V2.PATIENT_SK,V2.STAFF_SK,V2.VISIT_ACT_START_TMSTP AS SCHED_EVNT_START_DTIME,
+                                  TO_DATE(V2.VISIT_ACT_START_TMSTP,'YYYY-MM-DD HH24:MI:SS')+1/24 AS SCHED_EVNT_END_DTIME,
+                                  V2.VISIT_ACT_START_TMSTP,V2.VISIT_ACT_END_TMSTP, V2.VISIT_ADJ_START_TMSTP,V2.VISIT_ADJ_END_TMSTP,
+                                  NULL AS SCHED_EVNT_ID
+
+                        FROM (SELECT VISIT_SK,SCHED_EVNT_SK,STAFF_SK,PATIENT_SK,VISIT_ACT_START_TMSTP,VISIT_ACT_END_TMSTP,VISIT_ADJ_START_TMSTP,
+                                  VISIT_ADJ_END_TMSTP,REC_TERM_TMSTP,CURR_REC_IND
+                                  FROM VISIT
+                                    WHERE SCHED_EVNT_SK IS NULL
+                                      AND VISIT_ACT_START_TMSTP IS NOT NULL
+                                      AND VISIT_ACT_START_TMSTP BETWEEN TO_DATE('2015-12-21 00:00:00', 'YYYY-MM-DD HH24:MI:SS')
+                                      AND TO_DATE('2016-01-31 00:00:00', 'YYYY-MM-DD HH24:MI:SS')
+                                      AND ((TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31') AND CURR_REC_IND = 1)) V2
+
+                            LEFT JOIN (SELECT ANI,VISIT_EVNT_SK,VISIT_SK,STAFF_ID,PATIENT_ID,VISIT_EVNT_DTIME,REC_TERM_TMSTP,CURR_REC_IND
+                              FROM VISIT_EVNT
+                                WHERE ((TO_CHAR(REC_TERM_TMSTP, 'YYYY-MM-DD') = '9999-12-31') AND CURR_REC_IND = 1)) V3
+                            ON V2.VISIT_SK = V3.VISIT_SK
+
+                            LEFT JOIN (SELECT STAFF_ID,STAFF_SK
+                              FROM STAFF
+                                WHERE STAFF_ID = '365090666') V4
+                            ON V3.STAFF_ID = V4.STAFF_ID
+
+ORDER BY VISIT_EVNT_DTIME,SCHED_EVNT_START_DTIME,SCHED_EVNT_END_DTIME;

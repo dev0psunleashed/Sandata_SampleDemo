@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<features name="quartz-datasource-repository">
+    <feature name="quartz-datasource" version="${project.version}" description="Quartz Datasource Service">
+        <feature dependency="true" version="${jndi.version}">jndi</feature>
+
+        <bundle start-level="63">
+            mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${servicemix.bundles.version}
+        </bundle>
+    </feature>
+</features>

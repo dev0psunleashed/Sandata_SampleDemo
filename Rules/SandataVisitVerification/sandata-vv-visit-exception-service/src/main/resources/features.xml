@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="${project.artifactId}-repository">
+    <feature name="${project.artifactId}" version="${project.version}" start-level="60" description="Visit verification call matching service">
+        <feature dependency="true">camel-core</feature>
+        <feature dependency="true">camel-quartz</feature>
+        <feature>camel-spring</feature>
+        <bundle start-level="60">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${servicemix.bundles.version}</bundle>
+        <bundle start-level="83">mvn:commons-lang/commons-lang/${commons.lang.version}</bundle>
+    </feature>
+</features>

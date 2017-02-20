@@ -1,0 +1,69 @@
+CREATE OR REPLACE PACKAGE PKG_ADMIN_UTIL IS
+  FUNCTION DEL_ADMIN_STAFF_BY_AD_STAFF_ID(v_bsn_ent_id VARCHAR2, v_admin_staff_id VARCHAR2) RETURN NUMBER;
+  
+  FUNCTION DEL_ADMIN_STAFF_REL_BY_AD_S_ID(v_bsn_ent_id VARCHAR2, v_admin_staff_id VARCHAR2) RETURN NUMBER;
+  FUNCTION DEL_ADMIN_STAFF_ROLE_BY_ID(v_bsn_ent_id VARCHAR2, v_admin_staff_id VARCHAR2) RETURN NUMBER;
+END PKG_ADMIN_UTIL;
+/
+
+CREATE OR REPLACE PACKAGE BODY PKG_ADMIN_UTIL IS
+  FUNCTION DEL_ADMIN_STAFF_BY_AD_STAFF_ID(v_bsn_ent_id VARCHAR2, v_admin_staff_id VARCHAR2) RETURN NUMBER
+  AS
+  BEGIN
+    UPDATE ADMIN_STAFF
+    SET CURR_REC_IND = 0, REC_TERM_TMSTP = CURRENT_DATE
+    WHERE
+      UPPER(ADMIN_STAFF_ID) = v_admin_staff_id
+      AND BE_ID = v_bsn_ent_id
+      AND CURR_REC_IND = 1;
+      
+    RETURN SQL%ROWCOUNT; 
+    
+  EXCEPTION
+    WHEN OTHERS THEN
+      RETURN -1;
+  
+  END DEL_ADMIN_STAFF_BY_AD_STAFF_ID;
+  
+------------------------------------------------------------------------
+  FUNCTION DEL_ADMIN_STAFF_REL_BY_AD_S_ID(v_bsn_ent_id VARCHAR2, v_admin_staff_id VARCHAR2) RETURN NUMBER
+  AS
+  BEGIN
+    UPDATE ADMIN_STAFF_REL
+    SET CURR_REC_IND = 0, REC_TERM_TMSTP = CURRENT_DATE
+    WHERE
+      UPPER(ADMIN_STAFF_ID) = v_admin_staff_id
+      AND BE_ID = v_bsn_ent_id
+      AND CURR_REC_IND = 1;
+      
+    RETURN SQL%ROWCOUNT; 
+    
+  EXCEPTION
+    WHEN OTHERS THEN
+      RETURN -1;
+  
+  END DEL_ADMIN_STAFF_REL_BY_AD_S_ID;
+ 
+
+------------------------------------------------------------------------
+  FUNCTION DEL_ADMIN_STAFF_ROLE_BY_ID(v_bsn_ent_id VARCHAR2, v_admin_staff_id VARCHAR2) RETURN NUMBER
+  AS
+  BEGIN
+    UPDATE ADMIN_STAFF_ROLE_XREF
+    SET CURR_REC_IND = 0, REC_TERM_TMSTP = CURRENT_DATE
+    WHERE
+      UPPER(ADMIN_STAFF_ID) = v_admin_staff_id
+      AND BE_ID = v_bsn_ent_id
+      AND CURR_REC_IND = 1;
+      
+    RETURN SQL%ROWCOUNT; 
+    
+  EXCEPTION
+    WHEN OTHERS THEN
+      RETURN -1;
+  
+  END DEL_ADMIN_STAFF_ROLE_BY_ID;
+  
+END PKG_ADMIN_UTIL;
+
+/

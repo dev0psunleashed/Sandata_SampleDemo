@@ -1,0 +1,316 @@
+package com.sandata.lab.rules.schedules;
+
+import com.sandata.lab.rules.call.model.VisitFact;
+import com.sandata.lab.rules.call.model.State;
+import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.lang.Long;
+
+function long diffDates2(Date d1, Date d2) {
+    if(d1.after(d2)) {
+        return d1.getTime() - d2.getTime();
+    }
+    else
+    {
+        return d2.getTime() - d1.getTime();
+    }
+}
+
+
+declare Threshold
+    value : Long @key
+end
+
+
+
+rule "cep-engine-schedule-20 new agenda-group"
+    salience 90
+    agenda-group "closest-schedule"
+    when
+        eval(true)
+    then
+
+end
+
+rule "cep-engine-schedule-20 find closest match by threshold from for scheduled"
+    salience 85
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_FROM,
+        diffDates2(scheduledFrom, $inserted.getCallIn()) < $threshold.getValue())
+    then
+        $threshold.setValue(Long.valueOf(diffDates2($scheduled.getScheduledFrom(), $inserted.getCallIn())));
+        update($threshold);
+        update($scheduled);
+
+    LoggerFactory.getLogger("RulesCallMatching").info("Set Threshold -> from and recalculate for scheduled");
+
+end
+
+rule "cep-engine-schedule-20b find closest match by threshold for unplanned"
+    salience 80
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $scheduled : VisitFact(state == State.CONTENDER_FROM,
+        diffDates2(scheduledFrom, $inserted.getCallIn()) < $threshold.getValue())
+    then
+        $threshold.setValue(Long.valueOf(diffDates2($scheduled.getScheduledFrom(), $inserted.getCallIn())));
+        update($threshold);
+        update($scheduled);
+
+    LoggerFactory.getLogger("RulesCallMatching").info("Set Threshold -> from and recalculate");
+
+end
+
+rule "cep-engine-schedule-21 find closest match by threshold to for scheduled"
+    salience 85
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_TO,
+        diffDates2(scheduledTo, $inserted.getCallIn()) < $threshold.getValue())
+    then
+        $threshold.setValue(Long.valueOf(diffDates2($scheduled.getScheduledTo(), $inserted.getCallIn())));
+        update($threshold);
+        update($scheduled);
+
+    LoggerFactory.getLogger("RulesCallMatching").info("Set Threshold -> to and recalculate for scheduled");
+
+end
+rule "cep-engine-schedule-21b find closest match by threshold to for unplanned"
+    salience 80
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $scheduled : VisitFact( state == State.CONTENDER_TO,
+        diffDates2(scheduledTo, $inserted.getCallIn()) < $threshold.getValue())
+    then
+        $threshold.setValue(Long.valueOf(diffDates2($scheduled.getScheduledTo(), $inserted.getCallIn())));
+        update($threshold);
+        update($scheduled);
+
+    LoggerFactory.getLogger("RulesCallMatching").info("Set Threshold -> to and recalculate for unplanned");
+
+end
+
+rule "cep-engine-schedule-11 reduce contenders from for scheduled"
+    salience 85
+    agenda-group "closest-schedule"
+    when
+        $threshold : Long()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_FROM, diffDates2(scheduledFrom, $inserted.getCallIn()) > $threshold)
+    then
+        retract($scheduled);
+        LoggerFactory.getLogger("RulesCallMatching").info("From Contender retracted for scheduled");
+end
+
+rule "cep-engine-schedule-11b reduce contenders from for unplanned"
+    salience 80
+    agenda-group "closest-schedule"
+    when
+        $threshold : Long()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $scheduled : VisitFact(state == State.CONTENDER_FROM, diffDates2(scheduledFrom, $inserted.getCallIn()) > $threshold)
+    then
+        retract($scheduled);
+        LoggerFactory.getLogger("RulesCallMatching").info("From Contender retracted for unplanned");
+end
+
+rule "cep-engine-schedule-12 reduce contenders to for scheduled"
+    salience 85
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_TO, diffDates2(scheduledTo, $inserted.getCallIn()) > $threshold.getValue())
+    then
+        retract($scheduled);
+        LoggerFactory.getLogger("RulesCallMatching").info("To Contender retracted for scheduled");
+end
+
+rule "cep-engine-schedule-12b reduce contenders to for unplanned"
+    salience 80
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $scheduled : VisitFact(state == State.CONTENDER_TO, diffDates2(scheduledTo, $inserted.getCallIn()) > $threshold.getValue())
+    then
+        retract($scheduled);
+        LoggerFactory.getLogger("RulesCallMatching").info("To Contender retracted for unplanned");
+end
+
+
+rule "cep-engine-schedule-13 reduce contenders to for scheduled"
+    salience 85
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_TO, diffDates2(scheduledTo, $inserted.getCallIn()) > $threshold.getValue())
+    then
+        retract($scheduled);
+        LoggerFactory.getLogger("RulesCallMatching").info("To Contender retracted for scheduled");
+end
+
+rule "cep-engine-schedule-13b reduce contenders to for unplanned"
+    salience 80
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $scheduled : VisitFact(state == State.CONTENDER_TO, diffDates2(scheduledTo, $inserted.getCallIn()) > $threshold.getValue())
+    then
+        retract($scheduled);
+        LoggerFactory.getLogger("RulesCallMatching").info("To Contender retracted for unplanned");
+end
+
+rule "cep-engine-schedule-14 split decision pick contender for scheduled"
+    salience 85
+    agenda-group "closest-schedule"
+    when
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $schedule1 : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_FROM)
+        $schedule2 : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_TO, diffDates2(scheduledTo, $inserted.getCallIn()) == diffDates2($schedule1.getScheduledFrom(), $inserted.getCallIn()))
+    then
+        retract($schedule2);
+        LoggerFactory.getLogger("RulesCallMatching").info("To Contender retracted for scheduled");
+end
+
+rule "cep-engine-schedule-14b split decision pick contender for unplanned"
+    salience 80
+    agenda-group "closest-schedule"
+    when
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $schedule1 : VisitFact(state == State.CONTENDER_FROM)
+        $schedule2 : VisitFact(state == State.CONTENDER_TO, diffDates2(scheduledTo, $inserted.getCallIn()) == diffDates2($schedule1.getScheduledFrom(), $inserted.getCallIn()))
+    then
+        retract($schedule2);
+        LoggerFactory.getLogger("RulesCallMatching").info("To Contender retracted for unplanned");
+end
+
+
+rule "cep-engine-schedule-20 found closest match by threshold from for scheduled"
+    salience 83
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_FROM,
+        diffDates2(scheduledFrom, $inserted.getCallIn()) == $threshold.getValue())
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallCallIn($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($threshold);
+        retract($inserted);
+        update($scheduled);
+        LoggerFactory.getLogger("RulesCallMatching").info("Set Threshold -> from and recalculate for scheduled");
+end
+rule "cep-engine-schedule-20b found closest match by threshold from for unplanned"
+    salience 78
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE)
+        $scheduled : VisitFact(state == State.CONTENDER_FROM,
+        diffDates2(scheduledFrom, $inserted.getCallIn()) == $threshold.getValue())
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallCallIn($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($threshold);
+        retract($inserted);
+        update($scheduled);
+        LoggerFactory.getLogger("RulesCallMatching").info("Set Threshold -> from and recalculate for unplanned");
+end
+
+rule "cep-engine-schedule-21 found closest match by threshold to and from not null or to is null for scheduled"
+    salience 83
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE  )
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_TO,
+        diffDates2(scheduledTo, $inserted.getCallIn()) == $threshold.getValue(),
+        (callIn != null || callOut == null))
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        retract($threshold);
+        update($scheduled);
+        LoggerFactory.getLogger("RulesCallMatching").info("cep-engine-schedule-20 found closest match by threshold to call in not null or call out null for scheduled");
+end
+rule "cep-engine-schedule-21b found closest match by threshold to and from not null or to is null for unplanned"
+    salience 78
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE  )
+        $scheduled : VisitFact(state == State.CONTENDER_TO,
+        diffDates2(scheduledTo, $inserted.getCallIn()) == $threshold.getValue(),
+        (callIn != null || callOut == null))
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        retract($threshold);
+        update($scheduled);
+        LoggerFactory.getLogger("RulesCallMatching").info("cep-engine-schedule-20 found closest match by threshold to call in not null or call out null for unplanned");
+end
+
+rule "cep-engine-schedule-22 found closest match by threshold to and from null and to not null for scheduled"
+    salience 83
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE )
+        $scheduled : VisitFact(visit.getScheduleEventSK() != null, state == State.CONTENDER_TO,
+        diffDates2(scheduledTo, $inserted.getCallIn()) == $threshold.getValue(),
+        (callIn == null && callOut != null))
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallIn($scheduled.getCallOut());
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        retract($threshold);
+        update($scheduled);
+        LoggerFactory.getLogger("RulesCallMatching").info("cep-engine-schedule-20 found closest match by threshold to callIn null and callout not null for scheduled");
+end
+rule "cep-engine-schedule-22b found closest match by threshold to and from null and to not null for unplanned"
+    salience 78
+    agenda-group "closest-schedule"
+    when
+        $threshold : Threshold()
+        $inserted : VisitFact(state == State.AGG_WAITING_FOR_RESPONSE )
+        $scheduled : VisitFact(state == State.CONTENDER_TO,
+        diffDates2(scheduledTo, $inserted.getCallIn()) == $threshold.getValue(),
+        (callIn == null && callOut != null))
+    then
+        $inserted.setState(State.MATCHED);
+        $scheduled.setState(State.MATCHED);
+        $scheduled.setCallIn($scheduled.getCallOut());
+        $scheduled.setCallCallOut($inserted.getCallCallIn());
+        $scheduled.addTaskList($inserted.getTaskList());
+        retract($inserted);
+        retract($threshold);
+        update($scheduled);
+        LoggerFactory.getLogger("RulesCallMatching").info("cep-engine-schedule-20 found closest match by threshold to callIn null and callout not null for unplanned");
+end

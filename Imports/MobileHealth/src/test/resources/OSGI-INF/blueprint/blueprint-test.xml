@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+    
+    <bean id="appContext" class="com.sandata.up.commons.app.AppContext" factory-method="InitCamelContext"
+          depends-on="mobileHealthContext">
+        <argument ref="mobileHealthContext"/>
+    </bean>
+    
+    <cm:property-placeholder persistent-id="com.sandata.services.mobilehealth" id="mobileHealth.blueprint.placeholder" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="project.name" value="MobileHealth"/>
+
+            <cm:property name="delay" value="10"/>
+
+            <!-- Settings for LENS database  -->
+            <cm:property name="db.lens.server" value="NDSI1"/>
+            <cm:property name="db.lens.database" value="lens_dev"/>
+            <cm:property name="db.lens.login" value="talend_dev_user"/>
+            <cm:property name="db.lens.password" value="Talend!d3v"/>
+            <cm:property name="db.lens.pool.initial" value="5"/>
+            <cm:property name="db.lens.pool.max" value="20"/>
+            <cm:property name="db.lens.pool.idle" value="5"/>
+            <cm:property name="db.lens.additionalParams" value=""/>
+
+            <!-- Settings for SAM database  -->
+            <cm:property name="db.sam.server" value="nhdev2-sql"/>
+            <cm:property name="db.sam.database" value="Nhomeadmin51"/>
+            <cm:property name="db.sam.login" value="talend_act"/>
+            <cm:property name="db.sam.password" value="mBSVri90wp"/>
+            <cm:property name="db.sam.pool.initial" value="5"/>
+            <cm:property name="db.sam.pool.max" value="20"/>
+            <cm:property name="db.sam.pool.idle" value="5"/>
+            <cm:property name="db.sam.additionalParams" value=""/>
+            
+            <!-- Common settings used for all Agencies' database  -->
+            <!-- <cm:property name="db.agen.login" value="talend_act"/>
+            <cm:property name="db.agen.password" value="mBSVri90wp"/> -->
+            <cm:property name="db.agen.login" value="mssqltestuser"/>
+            <cm:property name="db.agen.password" value="test123"/>
+            <cm:property name="db.agen.schema" value="dbo"/>
+            <cm:property name="db.agen.sp.import" value="usp_MobileHealthImport_Insert"/>
+            <cm:property name="db.agen.sp.processdata" value="uspProcessMobileHealthData"/>
+
+            <!-- Configs for DownloadFile Route -->
+            <cm:property name="process.downloadfile.isUsedlocalWorkDir" value="false"/>
+            <cm:property name="process.downloadfile.folder.inbox" value="file://D:/TestFile/inbox"/>
+            <cm:property name="process.downloadfile.folder.save" value="file://D:/TestFile/save"/>
+            <cm:property name="process.downloadfile.file.ext.init" value=".init"/>
+            <cm:property name="process.downloadfile.file.ext.done" value=".done"/>
+            <cm:property name="process.downloadfile.file.ext.error" value=".error"/>
+            <cm:property name="process.downloadfile.file.cc" value="20"/>
+            
+            <!-- Configs for MobileHealthNotify Route -->
+            <cm:property name="process.notify.scheduler.cron" value="0+0+0/2+?+*+*"/>
+            <cm:property name="process.notify.mobilelogtable" value="etl_log_mobilehealth"/>
+            <cm:property name="process.notify.email.linebreak" value="&lt;BR&gt;"/>
+            <cm:property name="process.notify.email.from" value="administrator@sandata.com"/>
+            <cm:property name="process.notify.email.recipients" value="khang.le@sandata.com"/>
+            <cm:property name="process.notify.email.subject" value="mobileHealth Notification Mail"/>
+            <cm:property name="process.notify.email.template" value="&lt;html&gt;&lt;body&gt;mobileHealth failed as: {linebreak}{content} &lt;/body&gt;&lt;/html&gt;"/>
+
+            <!-- Configs for remote connections retry -->
+            <cm:property name="connection.attempt" value="3"/>
+            <cm:property name="connection.attempt.delay" value="20000"/>
+            
+            <!-- Quartz2 Job store props config --> 
+                
+            <cm:property name="org.quartz.scheduler.instanceName" value="MobileHealth" />
+            <cm:property name="org.quartz.scheduler.instanceId" value="AUTO" />
+                
+            <cm:property name="org.quartz.scheduler.rmi.export" value="false" />
+            <cm:property name="org.quartz.scheduler.rmi.proxy" value="false" />
+            <!-- Enable JMX features --> 
+            <cm:property name="org.quartz.scheduler.jmx.export" value="true" />
+            
+            <cm:property name="org.quartz.scheduler.jobFactory.class" value="org.quartz.simpl.SimpleJobFactory" />
+            <cm:property name="org.quartz.threadPool.class" value="org.quartz.simpl.SimpleThreadPool" />
+            <cm:property name="org.quartz.threadPool.threadCount" value="5" />
+
+            <cm:property name="org.quartz.jobStore.class" value="org.quartz.impl.jdbcjobstore.JobStoreTX" />
+            <cm:property name="org.quartz.jobStore.useProperties" value="false" />
+            <cm:property name="org.quartz.jobStore.dataSource" value="quartzDataSource" />
+            <cm:property name="org.quartz.jobStore.tablePrefix" value="QRTZ_" />
+            <cm:property name="org.quartz.jobStore.isClustered" value="true" />     
+            <!-- <cm:property name="org.quartz.jobStore.driverDelegateClass" value="org.quartz.impl.jdbcjobstore.StdJDBCDelegate" /> -->
+            <cm:property name="org.quartz.jobStore.driverDelegateClass" value="org.quartz.impl.jdbcjobstore.oracle.OracleDelegate" />
+            <cm:property name="org.quartz.dataSource.quartzDataSource.jndiURL" value="osgi:service/jdbc/quartz_datasource" />   
+                
+            <cm:property name="files.regex.exclude" value="(?i).*TEST.*"/>
+            
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <camelContext id="mobileHealthContext" useBlueprintPropertyResolver="true" trace="false" streamCache="true" managementNamePattern="#name#-#version#"
+                  xmlns="http://camel.apache.org/schema/blueprint">
+        <propertyPlaceholder id="properties" location="blueprint:mobileHealth.blueprint.placeholder" />
+        <package>com.sandata.services.mobilehealth.routes</package>
+    </camelContext>
+
+</blueprint>

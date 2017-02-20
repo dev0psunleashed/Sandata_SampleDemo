@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OracleDataService.java</title>
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+  <link rel='stylesheet' type='text/css' href='../../../../../../../coverage.css'/>
+  <link rel='shortcut icon' type='image/png' href='../../../../../../../logo.png'/>
+  <script type='text/javascript' src='../../../../../../../coverage.js'></script>
+  <script type='text/javascript' src='../../../../../../../prettify.js'></script>
+</head>
+<body onload='prettyPrint()'>
+  <table cellpadding='0' cellspacing='1'>
+    <caption>Authentication Service\src\main\java\com\sandata\lab\security\auth\services\oracle\OracleDataService.java</caption>
+    <tr>
+      <td class='line'>1</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>package com.sandata.lab.security.auth.services.oracle;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'></td><td>&nbsp;</td>
+      <td><pre class='imports prettyprint' onclick='showHideLines(this)'><div>import com.sandata.lab.common.utils.data.DataMapper;
+import com.sandata.lab.common.utils.exception.SandataRuntimeException;
+import com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService;
+import com.sandata.lab.dl.db.pool.utils.constants.ConnectionType;
+import com.sandata.lab.security.auth.api.OracleService;
+import oracle.jdbc.OracleTypes;
+import oracle.sql.ARRAY;
+import oracle.sql.ArrayDescriptor;
+
+import java.sql.*;
+
+</div><span>import ...</span></pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>15</td><td class='count'>1</td>
+      <td><pre class='prettyprint covered' id='l15s0'>public class OracleDataService implements OracleService {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>17</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    protected ConnectionPoolDataService connectionPoolDataService;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>19</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public Connection getOracleConnection() throws SandataRuntimeException {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>20</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l20s0'>        return connectionPoolDataService.getConnection(ConnectionType.METADATA);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>21</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>23</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public ConnectionPoolDataService getConnectionPoolDataService() {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>24</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l24s0'>        return connectionPoolDataService;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>25</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>27</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public void setConnectionPoolDataService(ConnectionPoolDataService connectionPoolDataService) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>28</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l28s0'>        this.connectionPoolDataService = connectionPoolDataService;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>29</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l29s0'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>31</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @Override</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>32</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public Object executeGet(String packageName, String methodName, String className, Object... params)</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>33</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            throws SandataRuntimeException {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>35</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l35s0'>        Connection connection = null;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>36</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l36s0'>        CallableStatement callableStatement = null;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>37</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l37s0'>        ResultSet resultSet = null;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>39</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>41</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l41s0'>            connection = connectionPoolDataService.getConnection();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>42</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l42s0'>            connection.setAutoCommit(false);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>44</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l44s0'>            ArrayDescriptor des = ArrayDescriptor.createDescriptor("COREDATA.NUMBER_ARRAY", connection);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>45</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l45s0'>            ARRAY primaryKeysArray = new ARRAY(des, connection, params);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>47</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l47s0'>            String callMethod = String.format("{?=call %s.%s(?)}", packageName, methodName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>48</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l48s0'>            callableStatement = connection.prepareCall(callMethod);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>49</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l49s0'>            callableStatement.registerOutParameter(1, OracleTypes.CURSOR);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>50</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l50s0'>            callableStatement.setArray(2, primaryKeysArray);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>51</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l51s0'>            callableStatement.execute();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>53</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l53s0'>            resultSet = (ResultSet)callableStatement.getObject(1);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>55</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l55s0'>            Object result = new DataMapper().map(resultSet, className);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>57</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l57s0'>            connection.commit();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>59</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l59s0'>            return result;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>61</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l61s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>63</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Rollback</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>64</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l64s0' title='Executions: 0' class='uncovered'>if (connection != null)</span> {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>66</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>67</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l67s0'>                    connection.rollback();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>68</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>69</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l69s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>70</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l70s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>71</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l71s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>72</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>74</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l74s0'>            throw new SandataRuntimeException(String.format("[%s][%s][%s]: %s: %s",</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>75</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                    packageName, methodName, className,</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>76</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                    e.getClass().getName(), e.getMessage()));</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>78</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        } finally {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>80</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the ResultSet</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>81</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l81s0' title='Executions: 0' class='uncovered'>if (resultSet != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>82</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>83</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l83s0'>                    resultSet.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>84</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>85</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l85s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>86</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l86s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>87</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l87s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>88</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>90</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the Statement</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>91</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l91s0' title='Executions: 0' class='uncovered'>if (callableStatement != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>92</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>93</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l93s0'>                    callableStatement.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>94</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>95</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l95s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>96</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l96s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>97</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l97s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>98</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>100</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the Connection</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>101</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l101s0' title='Executions: 0' class='uncovered'>if (connection != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>102</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>103</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l103s0'>                    connection.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>104</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>105</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l105s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>106</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l106s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>107</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l107s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>108</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>109</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>110</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>112</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @Override</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>113</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public Object executeGet(String packageName, String methodName, String className, int sequenceKey) throws SandataRuntimeException {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>115</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l115s0'>        Connection connection = null;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>116</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l116s0'>        CallableStatement callableStatement = null;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>117</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l117s0'>        ResultSet resultSet = null;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>119</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>121</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l121s0'>            connection = connectionPoolDataService.getConnection();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>122</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l122s0'>            connection.setAutoCommit(false);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>124</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l124s0'>            String callMethod = String.format("{?=call %s.%s(?)}", packageName, methodName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>125</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l125s0'>            callableStatement = connection.prepareCall(callMethod);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>126</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l126s0'>            callableStatement.registerOutParameter(1, OracleTypes.CURSOR);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>127</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l127s0'>            callableStatement.setInt(2, sequenceKey);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>128</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l128s0'>            callableStatement.execute();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>129</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l129s0'>            resultSet = (ResultSet)callableStatement.getObject(1);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>131</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l131s0'>            Object result = new DataMapper().map(resultSet, className);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>133</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l133s0'>            connection.commit();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>135</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l135s0'>            return result;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>137</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l137s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>139</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Rollback</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>140</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l140s0' title='Executions: 0' class='uncovered'>if (connection != null)</span> {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>142</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>143</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l143s0'>                    connection.rollback();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>144</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>145</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l145s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>146</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l146s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>147</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l147s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>148</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>150</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l150s0'>            throw new SandataRuntimeException(String.format("[%s][%s][%s]: %s: %s",</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>151</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                    packageName, methodName, className,</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>152</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                    e.getClass().getName(), e.getMessage()));</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>154</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        } finally {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>156</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the ResultSet</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>157</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l157s0' title='Executions: 0' class='uncovered'>if (resultSet != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>158</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>159</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l159s0'>                    resultSet.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>160</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>161</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l161s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>162</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l162s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>163</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l163s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>164</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>166</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the Statement</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>167</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l167s0' title='Executions: 0' class='uncovered'>if (callableStatement != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>168</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>169</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l169s0'>                    callableStatement.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>170</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>171</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l171s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>172</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l172s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>173</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l173s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>174</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>176</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the Connection</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>177</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l177s0' title='Executions: 0' class='uncovered'>if (connection != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>178</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>179</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l179s0'>                    connection.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>180</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>181</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l181s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>182</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l182s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>183</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l183s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>184</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>185</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>186</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>188</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @Override</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>189</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public int execute(String packageName, String methodName, int sequenceKey) throws SandataRuntimeException {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>191</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l191s0'>        Connection connection = null;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>192</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l192s0'>        CallableStatement callableStatement = null;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>194</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>196</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l196s0'>            connection = connectionPoolDataService.getConnection();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>197</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l197s0'>            connection.setAutoCommit(false);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>199</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l199s0'>            String callMethod = String.format("{?=call %s.%s(?)}", packageName, methodName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>200</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l200s0'>            callableStatement = connection.prepareCall(callMethod);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>201</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l201s0'>            callableStatement.registerOutParameter(1, OracleTypes.INTEGER);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>202</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l202s0'>            callableStatement.setInt(2, sequenceKey);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>203</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l203s0'>            callableStatement.execute();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>204</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l204s0'>            int result = (Integer)callableStatement.getObject(1);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>206</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l206s0'>            connection.commit();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>208</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l208s0'>            return result;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>210</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l210s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>212</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Rollback</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>213</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l213s0' title='Executions: 0' class='uncovered'>if (connection != null)</span> {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>215</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>216</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l216s0'>                    connection.rollback();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>217</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>218</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l218s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>219</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l219s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>220</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l220s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>221</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>223</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l223s0'>            throw new SandataRuntimeException(String.format("[%s][%s]: %s: %s",</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>224</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                    packageName, methodName,</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>225</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                    e.getClass().getName(), e.getMessage()));</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>227</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        } finally {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>229</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the Statement</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>230</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l230s0' title='Executions: 0' class='uncovered'>if (callableStatement != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>231</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>232</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l232s0'>                    callableStatement.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>233</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>234</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l234s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>235</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l235s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>236</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l236s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>237</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>239</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the Connection</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>240</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l240s0' title='Executions: 0' class='uncovered'>if (connection != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>241</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>242</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l242s0'>                    connection.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>243</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>244</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l244s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>245</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l245s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>246</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l246s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>247</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>248</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>249</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>251</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @Override</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>252</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public int execute(String packageName, String methodName, Object jpubType) throws SandataRuntimeException {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>254</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l254s0'>        Connection connection = null;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>255</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l255s0'>        CallableStatement callableStatement = null;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>257</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>259</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l259s0'>            connection = connectionPoolDataService.getConnection();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>260</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l260s0'>            connection.setAutoCommit(false);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>262</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l262s0'>            String callMethod = String.format("{?=call %s.%s(?)}", packageName, methodName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>263</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l263s0'>            callableStatement = connection.prepareCall(callMethod);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>264</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l264s0'>            callableStatement.registerOutParameter(1, OracleTypes.INTEGER);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>265</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l265s0'>            callableStatement.setObject(2, jpubType);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>266</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l266s0'>            callableStatement.execute();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>267</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l267s0'>            int result = (Integer)callableStatement.getObject(1);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>269</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l269s0'>            connection.commit();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>271</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l271s0'>            return result;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>273</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l273s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>275</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Rollback</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>276</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l276s0' title='Executions: 0' class='uncovered'>if (connection != null)</span> {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>278</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>279</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l279s0'>                    connection.rollback();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>280</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>281</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l281s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>282</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l282s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>283</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l283s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>284</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>286</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l286s0'>            throw new SandataRuntimeException(String.format("[%s][%s]: %s: %s",</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>287</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                    packageName, methodName,</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>288</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                    e.getClass().getName(), e.getMessage()));</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>290</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        } finally {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>292</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the Statement</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>293</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l293s0' title='Executions: 0' class='uncovered'>if (callableStatement != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>294</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>295</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l295s0'>                    callableStatement.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>296</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>297</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l297s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>298</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l298s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>299</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l299s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>300</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>302</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the Connection</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>303</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l303s0' title='Executions: 0' class='uncovered'>if (connection != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>304</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>305</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l305s0'>                    connection.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>306</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>307</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l307s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>308</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l308s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>309</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l309s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>310</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>311</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>312</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>314</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    @Override</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>315</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public int execute(Connection connection, String packageName, String methodName, Object jpubType) throws SandataRuntimeException {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>317</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l317s0'>        CallableStatement callableStatement = null;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>319</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>321</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l321s0'>            String callMethod = String.format("{?=call %s.%s(?)}", packageName, methodName);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>322</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l322s0'>            callableStatement = connection.prepareCall(callMethod);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>323</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l323s0'>            callableStatement.registerOutParameter(1, OracleTypes.INTEGER);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>324</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l324s0'>            callableStatement.setObject(2, jpubType);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>325</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l325s0'>            callableStatement.execute();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>326</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l326s0'>            int result = (Integer)callableStatement.getObject(1);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>327</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l327s0'>            return result;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>328</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>329</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l329s0'>        catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>331</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // NOTE: Rollback (if necessary) should be handled by caller since they passed in the connection...</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>332</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l332s0'>            throw new SandataRuntimeException(String.format("[%s][%s]: %s: %s",</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>333</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                    packageName, methodName,</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>334</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                    e.getClass().getName(), e.getMessage()));</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>336</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        } finally {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>338</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the Statement</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>339</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l339s0' title='Executions: 0' class='uncovered'>if (callableStatement != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>340</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>341</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l341s0'>                    callableStatement.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>342</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>343</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l343s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>344</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l344s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>345</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l345s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>346</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>347</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>348</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>350</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    public Object getEntitiesForId(final String sql, final String className, final Object... params) throws SandataRuntimeException {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>352</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l352s0'>        Connection connection = null;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>353</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l353s0'>        PreparedStatement preparedStatement = null;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>354</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l354s0'>        ResultSet resultSet = null;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>356</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        try {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>358</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l358s0'>            connection = connectionPoolDataService.getConnection();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>359</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l359s0'>            connection.setAutoCommit(false);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>361</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l361s0'>            preparedStatement = connection.prepareStatement(sql);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>363</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l363s0'>            int index = 1;</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>364</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l364s0' title='Executions: 0' class='uncovered'>for (Object object</span> : <span id='l364s1' title='Executions: 0' class='uncovered'>params)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>365</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l365s0'>                preparedStatement.setObject(index++, object);</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>366</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>368</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l368s0'>            resultSet = preparedStatement.executeQuery();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>370</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l370s0'>            Object result = new DataMapper().map(resultSet, className);</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>372</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l372s0'>            connection.commit();</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>374</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l374s0'>            return result;</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>376</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l376s0'>        } catch (Exception e) {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>378</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Rollback</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>379</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l379s0' title='Executions: 0' class='uncovered'>if (connection != null)</span> {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>381</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>382</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l382s0'>                    connection.rollback();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>383</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>384</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l384s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>385</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l385s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>386</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l386s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>387</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>389</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l389s0'>            throw new SandataRuntimeException(String.format("%s: %s",</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>390</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                    e.getClass().getName(), e.getMessage()));</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>392</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        } finally {</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>394</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the ResultSet</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>395</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l395s0' title='Executions: 0' class='uncovered'>if (resultSet != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>396</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>397</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l397s0'>                    resultSet.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>398</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>399</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l399s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>400</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l400s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>401</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l401s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>402</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>404</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the statement</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>405</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l405s0' title='Executions: 0' class='uncovered'>if (preparedStatement != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>406</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>407</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l407s0'>                    preparedStatement.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>408</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>409</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l409s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>410</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l410s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>411</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l411s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>412</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr><td class='line'></td><td colspan='2'>&nbsp;</td></tr>
+    <tr>
+      <td class='line'>414</td><td>&nbsp;</td>
+      <td><pre class='comment'>            // Close the connection</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>415</td><td class='count'>0</td>
+      <td><pre class='prettyprint jmp'>            <span id='l415s0' title='Executions: 0' class='uncovered'>if (connection != null)</span> {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>416</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                try {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>417</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l417s0'>                    connection.close();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>418</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>419</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l419s0'>                catch (SQLException sqle) {</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>420</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l420s0'>                    sqle.printStackTrace();</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>421</td><td class='count'>0</td>
+      <td><pre class='prettyprint uncovered' id='l421s0'>                }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>422</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>            }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>423</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>        }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>424</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>    }</pre></td>
+    </tr>
+    <tr>
+      <td class='line'>425</td><td>&nbsp;</td>
+      <td><pre class='prettyprint'>}</pre></td>
+    </tr>
+  </table>
+</body>
+</html>

@@ -1,0 +1,208 @@
+package com.sandata.lab.rules;
+import com.sandata.lab.rules.call.model.VisitFact;
+import com.sandata.lab.rules.call.model.Schedule;
+import com.sandata.lab.rules.call.model.State;
+import com.sandata.lab.data.model.dl.model.VisitTaskList;
+import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory
+import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.List
+import java.util.Iterator;
+import java.lang.Boolean;
+
+global ch.qos.logback.classic.Logger visitExcpLog;
+
+
+rule "cep-visit-exceptions-visit-scheduled-with-no-calls-000-3"
+    salience 1000
+   when
+        $visit : VisitFact(stateIsLessThan(State.VISIT_SCHEDULED_WITH_NO_CALLS), visit.getScheduleEventSK() != null, callIn == null, callOut == null)
+
+   then
+    $visit.setState(State.VISIT_SCHEDULED_WITH_NO_CALLS);
+    update($visit);
+    visitExcpLog.info(String.format("cep-engine-visit-exception.drl::%s::%s","RulesVisitExceptions::cep-visit-exceptions-visit-scheduled-with-no-calls-003::", "Adding Unscheduled Exception" ));
+end
+
+rule "cep-visit-exceptions-loaded-vr-1"
+    salience 999
+   when
+        $visit : VisitFact(stateIsLessThan(State.VISIT_SCHEDULED_WITH_NO_CALLS))
+   then
+    $visit.setState(State.LOADED_VR_1);
+    update($visit);
+
+    end
+
+rule "cep-visit-exceptions-unkown-staff-001-2"
+    salience 998
+   when
+        $visit : VisitFact(stateIsLessThan(State.UNKNOWN_STAFF), staffIsNullOrZeros())
+   then
+        $visit.setState(State.UNKNOWN_STAFF);
+        update($visit);
+        visitExcpLog.info(String.format("cep-engine-visit-exception.drl::%s::%s","RulesVisitExceptions::cep-visit-exceptions-unkown-staff-001::", "Adding Unknown Staff Exception"));
+end
+
+rule "cep-visit-exceptions-loaded-vr-2"
+    salience 997
+   when
+        $visit : VisitFact(stateIsLessThan(State.UNKNOWN_STAFF))
+   then
+    $visit.setState(State.LOADED_VR_2);
+    update($visit);
+
+    end
+
+rule "cep-visit-exceptions-unkown-patient-002-1"
+    salience 995
+   when
+        $visit : VisitFact(stateIsLessThan(State.UNKNOWN_PATIENT), visit.getPatientID() == null)
+   then
+        $visit.setState(State.UNKNOWN_PATIENT);
+        update($visit);
+        visitExcpLog.info(String.format("cep-engine-visit-exception.drl::%s::%s", "RulesVisitExceptions::cep-visit-exceptions-unkown-patient-002::", "Adding Unknown Patient Exception" ));
+end
+rule "cep-visit-exceptions-loaded-vr-3"
+    salience 994
+   when
+        $visit : VisitFact(stateIsLessThan(State.UNKNOWN_PATIENT))
+   then
+    $visit.setState(State.LOADED_VR_3);
+    update($visit);
+
+    end
+
+rule "cep-visit-exceptions-unscheduled-003-6"
+    salience 990
+   when
+        $visit : VisitFact(stateIsLessThan(State.UNSCHEDULED), visit.getScheduleEventSK() == null)
+   then
+        $visit.setState(State.UNSCHEDULED);
+        update($visit);
+        visitExcpLog.info(String.format("cep-engine-visit-exception.drl::%s::%s","RulesVisitExceptions::cep-visit-exceptions-unscheduled-006::", "Adding Unscheduled Exception"));
+end
+rule "cep-visit-exceptions-loaded-vr-4"
+    salience 985
+   when
+        $visit : VisitFact(stateIsLessThan(State.UNSCHEDULED))
+   then
+    $visit.setState(State.LOADED_VR_4);
+    update($visit);
+
+    end
+
+rule "cep-visit-exceptions-visit-with-no-incalls-004-4"
+   salience 980
+   when
+        $visit : VisitFact(stateIsLessThan(State.NO_IN_CALLS), callIn == null, visit.getVisitAdjustedStartTimestamp() == null)
+
+   then
+    $visit.setState(State.NO_IN_CALLS);
+    update($visit);
+    visitExcpLog.info(String.format("cep-engine-visit-exception.drl::%s::%s", "RulesVisitExceptions::cep-visit-exceptions-visit-with-no-incalls-004::", "Adding Visit With No In Calls Exception"));
+end
+rule "cep-visit-exceptions-loaded-vr-5"
+    salience 975
+   when
+        $visit : VisitFact(stateIsLessThan(State.NO_IN_CALLS))
+   then
+    $visit.setState(State.LOADED_VR_5);
+    update($visit);
+
+    end
+
+rule "cep-visit-exceptions-visit-with-no-outcalls-005"
+      salience 970
+      when
+           $visit : VisitFact(stateIsLessThan(State.NO_OUT_CALLS), callOut == null, visit.getVisitAdjustedEndTimestamp() == null)
+      then
+       $visit.setState(State.NO_OUT_CALLS);
+       update($visit);
+       visitExcpLog.info(String.format("cep-engine-visit-exception.drl::%s::%s", "RulesVisitExceptions::cep-visit-exceptions-visit-with-no-outcalls-005::", "Adding Visit with no outcalls Exception"));
+end
+
+rule "cep-visit-exceptions-loaded-vr-6"
+    salience 965
+   when
+        $visit : VisitFact(stateIsLessThan(State.NO_OUT_CALLS))
+   then
+    $visit.setState(State.LOADED_VR_6);
+    update($visit);
+
+    end
+
+rule "cep-visit-exceptions-visit-missing-tasks-009"
+    salience 960
+   when
+        $visit : VisitFact( stateIsLessThan(State.MISSING_TASKS), visit.visitTaskList.isEmpty())
+   then
+        $visit.setState(State.MISSING_TASKS);
+        update($visit);
+        visitExcpLog.info(String.format("cep-engine-visit-exception.drl::%s::%s", "RulesVisitExceptions::cep-visit-exceptions-visit-missing-tasks-009::", "Adding Missing Task Exception" ));
+end
+rule "cep-visit-exceptions-loaded-vr-7"
+    salience 955
+   when
+        $visit : VisitFact(stateIsLessThan(State.MISSING_TASKS))
+   then
+    $visit.setState(State.LOADED_VR_7);
+    update($visit);
+
+    end
+
+rule "cep-visit-exceptions-visit-missing-critical-tasks-010"
+    salience 950
+   when
+        $visit : VisitFact( stateIsLessThan(State.MISSING_CRITICAL_TASKS), !visit.visitTaskList.isEmpty(), isMissingCriticalTasks())
+   then
+        $visit.setState(State.MISSING_CRITICAL_TASKS);
+        update($visit);
+        visitExcpLog.info(String.format("cep-engine-visit-exception.drl::%s::%s", "RulesVisitExceptions::cep-visit-exceptions-visit-missing-critical-tasks-010::", "Adding Missing Critical Tasks Exception"));
+end
+rule "cep-visit-exceptions-loaded-vr-8"
+    salience 945
+   when
+        $visit : VisitFact(stateIsLessThan(State.MISSING_CRITICAL_TASKS))
+   then
+    $visit.setState(State.LOADED_VR_8);
+    update($visit);
+
+    end
+
+rule "cep-visit-exceptions-missing-reason-codes-022"
+    salience 940
+   when
+        $visit : VisitFact(stateIsLessThan(State.MISSING_REASON_CODES), visit.changeReasonCode == null, visit.recordUpdatedBy != null, (visit.recordUpdatedBy != "VisitEventRepository" || visit.changeReasonMemo != "Updated: Call Matching Logic") )
+   then
+        $visit.setState(State.MISSING_REASON_CODES);
+        update($visit);
+        retract($visit);
+        visitExcpLog.info(String.format("cep-engine-visit-exception.drl::%s::%s","RulesVisitExceptions::cep-visit-exceptions-missing-reason-codes-022::", "Adding Missing Reason Codes Exception"));
+end
+rule "cep-visit-exceptions-loaded-vr-9"
+    salience 935
+   when
+        $visit : VisitFact(stateIsLessThan(State.MISSING_REASON_CODES))
+   then
+    $visit.setState(State.LOADED_VR_9);
+    update($visit);
+    retract($visit);
+
+    end
+
+/*
+    VISIT_SCHEDULED_WITH_NO_CALLS
+    UNKNOWN_STAFF,
+	UNKNOWN_PATIENT,
+	UNSCHEDULED,
+	NO_IN_CALLS,
+	NO_OUT_CALLS,
+	MISSING_TASKS,
+	MISSING_CRITICAL_TASKS,
+	MISSING_REASON_CODES,
+	ACTUAL_HOURS_EXCEED_SCHEDULED_HOURS,
+	UNMATCHED_PAYROLL_AND_SCHEDULED_HOURS,
+*/

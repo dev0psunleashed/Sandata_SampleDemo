@@ -1,0 +1,13 @@
+<mappings xmlns="http://dozer.sourceforge.net"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
+    <mapping>
+        <class-a>com.sandata.lab.data.model.dl.model.StaffTraining</class-a>
+        <class-b>com.sandata.lab.data.model.dl.model.StaffTrainingClassEventEnrollment</class-b>
+
+        <field>
+            <a>staffTrainingStartDatetime</a>
+            <b>staffTrainingStartDatetime</b>
+        </field>
+    </mapping>
+</mappings>

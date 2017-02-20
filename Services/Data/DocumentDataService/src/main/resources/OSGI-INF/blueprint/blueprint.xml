@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:camel="http://camel.apache.org/schema/blueprint"
+           xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+           xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+           xsi:schemaLocation="
+                http://www.osgi.org/xmlns/blueprint/v1.0.0
+                http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                http://camel.apache.org/schema/blueprint
+                http://camel.apache.org/schema/blueprint/camel-blueprint.xsd
+                http://cxf.apache.org/blueprint/jaxrs
+                http://cxf.apache.org/schemas/blueprint/jaxrs.xsd">
+
+    <cm:property-placeholder id="restApp.blueprint.placeholder" persistent-id="com.sandata.lab.dl.doc" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+            <cm:property name="activeMQ.username" value="admin" />
+            <cm:property name="activeMQ.password" value="admin" />
+            <cm:property name="thread.pool.size" value="20" />
+            <cm:property name="thread.pool.max.size" value="100" />
+            <cm:property name="thread.pool.max.queue.size" value="-1" />
+            <cm:property name="activeMQ.concurrentConsumers" value="100" />
+            <cm:property name="rest.concurrentConsumers" value="20" />
+            <cm:property name="webservice.url" value="/data/service/document" />
+            <cm:property name="doc.settings.cache.path" value="target/sandata-document-data-service/cache" />
+            <cm:property name="doc.settings.backup.path" value="target/sandata-document-data-service/backup" />
+            <cm:property name="doc.settings.status.path" value="target/sandata-document-data-service/status" />
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <bean id="cxfRouteHandler" class="com.sandata.lab.dl.doc.services.CxfRouteHandler" depends-on="appCamelContext" />
+
+    <bean id="formatTransformer" class="com.sandata.lab.common.utils.data.transformer.FormatTransformer" depends-on="appCamelContext" />
+
+    <bean id="documentServiceSettings" class="com.sandata.lab.dl.doc.settings.DocumentServiceSettings" depends-on="appCamelContext">
+        <property name="documentCachePath" value="${doc.settings.cache.path}" />
+        <property name="documentBackupPath" value="${doc.settings.backup.path}" />
+        <property name="documentStatusPath" value="${doc.settings.status.path}" />
+    </bean>
+
+    <bean id="oracleDocumentServiceApi" class="com.sandata.lab.dl.doc.services.oracle.DocumentOracleRepositoryService" depends-on="appCamelContext" activation="eager">
+        <property name="connectionPoolDataService">
+            <reference
+                    interface="com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService"
+                    availability="mandatory" />
+        </property>
+        <property name="resultSetTransformer" ref="resultTransformer" />
+    </bean>
+
+    <bean id="oracleServiceApi" class="com.sandata.lab.dl.doc.services.oracle.MainOracleRepositoryService" depends-on="appCamelContext" activation="eager">
+        <property name="connectionPoolDataService">
+            <reference
+                    interface="com.sandata.lab.dl.db.pool.api.ConnectionPoolDataService"
+                    availability="mandatory" />
+        </property>
+        <property name="resultSetTransformer" ref="resultTransformer" />
+    </bean>
+
+    <bean id="documentTransformer" class="com.sandata.lab.dl.doc.impl.data.DocumentDataTransformer"/>
+    <bean id="resultTransformer" class="com.sandata.lab.dl.doc.services.oracle.ResultSetTransformer"/>
+
+    <bean id="documentService" class="com.sandata.lab.dl.doc.impl.DocumentService" depends-on="oracleDocumentServiceApi">
+        <property name="documentOracleRepositoryService" ref="oracleDocumentServiceApi" />
+        <property name="documentDataTransformer" ref="documentTransformer" />
+        <property name="crosswalkService" ref="crossWalkService" />
+    </bean>
+
+    <bean id="crossWalkService" class="com.sandata.lab.dl.doc.impl.CrosswalkService" depends-on="oracleServiceApi">
+        <property name="mainOracleRepositoryService" ref="oracleServiceApi" />
+        <property name="documentDataTransformer" ref="documentTransformer" />
+    </bean>
+
+    <bean id="appContext" class="com.sandata.lab.dl.doc.app.AppContext"
+          factory-method="initCamelContext" depends-on="appCamelContext">
+        <argument ref="appCamelContext" />
+    </bean>
+
+    <bean id="authenticationInterceptor" class="org.apache.cxf.jaxrs.security.JAASAuthenticationFilter">
+        <property name="contextName" value="karaf"/>
+    </bean>
+
+    <bean id="gsonProvider" class="com.sandata.lab.common.utils.data.provider.CustomEnumGSONProvider"/>
+
+    <!-- connect to the local ActiveMQ broker -->
+    <bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="${activeMQ.uri}" />
+        <property name="userName" value="${activeMQ.username}" />
+        <property name="password" value="${activeMQ.password}" />
+    </bean>
+    <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent" depends-on="jmsConfig">
+        <property name="concurrentConsumers" value="${activeMQ.concurrentConsumers}"/>
+        <property name="configuration" ref="jmsConfig"/>
+    </bean>
+
+    <cxf:rsServer id="rsServer" address="${webservice.url}"
+                  serviceClass="com.sandata.lab.dl.doc.RestfulServices"
+                  loggingFeatureEnabled="true"
+                  loggingSizeLimit="20">
+        <cxf:providers>
+            <ref component-id="authenticationInterceptor"/>
+            <ref component-id="gsonProvider" />
+        </cxf:providers>
+    </cxf:rsServer>
+
+    <camelContext id="appCamelContext" trace="true" streamCache="true" useBlueprintPropertyResolver="true" xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- using Camel properties component and refer to the OSGI-INF.blueprint property placeholder by its id -->
+        <!-- http://camel.apache.org/properties.html : inside camelContext {{}} : outside camelContext ${} -->
+        <!-- <propertyPlaceholder id="properties" location="OSGI-INF.blueprint:dhs.OSGI-INF.blueprint.placeholder"/>-->
+        <propertyPlaceholder id="properties" location="blueprint:restApp.blueprint.placeholder"/>
+        <package>com.sandata.lab.dl.doc.routes</package>
+
+        <threadPoolProfile id="documentRestThreadPool" poolSize="{{thread.pool.size}}" maxPoolSize="{{thread.pool.max.size}}" maxQueueSize="{{thread.pool.max.queue.size}}"/>
+    </camelContext>
+</blueprint>

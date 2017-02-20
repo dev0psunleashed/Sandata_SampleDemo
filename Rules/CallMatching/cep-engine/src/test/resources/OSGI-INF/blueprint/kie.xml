@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:kie="http://drools.org/schema/kie-aries-blueprint/1.0.0"
+           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+           xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0
+           http://drools.org/schema/kie-aries-blueprint/1.0.0 http://drools.org/schema/kie-aries-blueprint/1.0.0
+           http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd">
+
+
+    <bean id="ruleListener" class="com.sandata.lab.rules.call.matching.listeners.CEPWML" />
+    <bean id="scheduleListener" class="com.sandata.lab.rules.call.matching.listeners.VisitWMListener" />
+    <bean id="callPreferences" class="com.sandata.lab.rules.call.model.CallPreferences"/>
+    <kie:kmodule id="callMatchingModule">
+        <kie:kbase name="ceprules" packages="com.sandata.lab.rules" eventProcessingMode="stream" equalsBehavior="equality"  >
+            <kie:ksession name="ksessioncallMatching1" listeners-ref="listeners" type="stateful">
+
+                <!--<kie:fileLogger file="C:\\fuse\\jboss-fuse-6.1.0.redhat-379\\data\\log\\cep-engine-drools-log1.log" threaded="true" interval="10000"/>-->
+                <kie:batch>
+                    <!--kie:set-global identifier="callPreferences" ref="callPreferences"/-->
+                    <kie:fire-all-rules />
+                </kie:batch>
+            </kie:ksession>
+        </kie:kbase>
+        <kie:kbase name="factrules" packages="com.sandata.lab.rules.staff" equalsBehavior="equality" default="true" >
+            <kie:ksession name="ksessioncallMatching2" listeners-ref="listeners" type="stateful">
+
+                <!--<kie:fileLogger file="C:\\fuse\\jboss-fuse-6.1.0.redhat-379\\data\\log\\cep-engine-drools-log1.log" threaded="true" interval="10000"/>-->
+                <kie:batch>
+                    <!--<kie:set-global identifier="callPreferences" ref="callPreferences"/>-->
+                    <kie:fire-all-rules />
+                </kie:batch>
+            </kie:ksession>
+        </kie:kbase>
+        <kie:kbase name="cepschedule" packages="com.sandata.lab.rules.schedules" equalsBehavior="equality" >
+            <kie:ksession name="ksession-cepschedule" listeners-ref="scheduleListeners" type="stateful">
+                <!--<kie:fileLogger file="C:\\fuse\\jboss-fuse-6.1.0.redhat-379\\data\\log\\cep-engine-drools-log1.log" threaded="true" interval="10000"/>-->
+                <kie:batch>
+                    <!--<kie:set-global identifier="callPreferences" ref="callPreferences"/>-->
+                    <kie:fire-all-rules />
+                </kie:batch>
+            </kie:ksession>
+        </kie:kbase>
+
+    </kie:kmodule>
+    <kie:eventListeners id="listeners">
+        <kie:ruleRuntimeEventListener ref="ruleListener"/>
+    </kie:eventListeners>
+    <kie:eventListeners id="scheduleListeners">
+        <kie:ruleRuntimeEventListener ref="scheduleListener"/>
+    </kie:eventListeners>
+    <cm:property-placeholder id="cep.engine.blueprint.placeholder" persistent-id="com.sandata.lab.rules" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="activeMQ.uri" value="tcp://localhost:61616" />
+            <cm:property name="activeMQ.username" value="admin" />
+            <cm:property name="activeMQ.password" value="admin" />
+            <cm:property name="activeMQ.concurrentConsumers" value="10" />
+            <cm:property name="activeMQ.endpoint.AGGREGATE_VISIT_EVENTS_FROM" value="activemq:queue:AGGREGATE_VISIT_EVENTS?concurrentConsumers=1&amp;maxMessagesPerTask=1&amp;destination.consumer.exclusive=true&amp;destination.consumer.priority=10" />
+            <cm:property name="activeMQ.endpoint.AGGREGATE_VISIT_EVENTS_TO" value="activemq:queue:AGGREGATE_VISIT_EVENTS" />
+            <cm:property name="activeMQ.endpoint.SCHEDULE_EVENT_RESPONSE" value="activemq:queue:SCHEDULE_EVENT_RESPONSE" />
+            <cm:property name="activeMQ.endpoint.CREATE_VISIT_EVENT_RESPONSE" value="activemq:queue:CREATE_VISIT_EVENT_RESPONSE" />
+            <cm:property name="activeMQ.endpoint.CREATE_VISIT_EVENT_REQUEST" value="activemq:queue:CREATE_VISIT_EVENT_REQUEST" />
+            <cm:property name="activeMQ.endpoint.CEP_ENGINE_VISITS" value="activemq:queue:CEP_ENGINE_VISITS" />
+
+        </cm:default-properties>
+    </cm:property-placeholder>
+    <!-- <bean id="kiePostProcessor" class="org.kie.spring.KModuleBeanFactoryPostProcessor"/>-->
+</blueprint>
